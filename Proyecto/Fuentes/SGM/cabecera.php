@@ -21,21 +21,31 @@ if(isset($_SESSION['usuario']) == FALSE)
 <script type="text/javascript">
 
     function CerrarSesion(){
-        window.location.href = "IniSes/logout.php";
+        Ir("IniSes/logout.php");
     }
     
     function Ir(ruta){
         window.location.href = ruta;
     }
+    
+    function MisDatos(){
+        Ir("misdatos.php");
+    }
+    
+    function Main(){
+        Ir("main.php");
+    }
+    
 </script>
 </head>  
 <body>  
-    
+
 <div class="navbar navbar-default" >
   <div class="navbar-inner btn-primary">
     <a class="brand" href="#">Proyecto SGM</a>
     <ul class="nav" style="float: right">
-      <li class="active"><a href="#"><?php echo "Bienvenido ". $_SESSION['usuario'] ?></a></li>
+      <li class="active"><a href="javascript:Main();"><?php echo "Bienvenido ". $_SESSION['usuario'] ?></a></li>
+      <li><a href="javascript:MisDatos();">Mis Datos</a></li>
       <li><a href="javascript:CerrarSesion();">Cerrar Sesión</a></li>
     </ul>
   </div>

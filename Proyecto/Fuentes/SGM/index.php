@@ -3,7 +3,7 @@
 // Para direccionar si ya se ha iniciado sesión
 if(isset($_SESSION['usuario']) == TRUE)
 {
-    header("Location: proyecto.php");
+    header("Location: main.php");
     exit();
 }
 ?>

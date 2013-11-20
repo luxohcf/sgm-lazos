@@ -1,6 +1,6 @@
 <?php
 
-include('..\DA\Usuario.DA.class.php');
+include('../DA/Usuario.DA.class.php');
 /********************************************************  
 * Clase UsuarioBO
 * Autor: Luxo Lizama 

@@ -1,6 +1,6 @@
 <?php
 
-include('..\Ent\Usuario.class.php');
+include('../Ent/Usuario.class.php');
 /********************************************************  
 * Clase UsuarioDA Autor: Luxo Lizama 
 ********************************************************/  

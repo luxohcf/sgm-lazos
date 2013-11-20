@@ -1,7 +1,13 @@
 <?php
 
 require("cabecera.php");
-include("menu.php")
+include("menu.php");
+
+if(!ValidaAcceso("proyecto.php", $_SESSION["paginas"]))
+{
+    echo $V_ACCES_DENIED;
+    exit();
+}
 
 ?>
 
