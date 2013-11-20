@@ -6,4 +6,29 @@ function generar_clave($longitud){
        preg_replace($cadena, "", md5(rand())), 
        0, $longitud); 
 } 
+
+
+function ValidaAcceso($pagina, $datos){
+    
+    foreach ($datos as $titulo => $opciones) 
+    {
+      foreach ($opciones as $grupo) 
+      {
+          foreach ($grupo as $opcion) 
+          {
+              if(strpos($opcion['RUTA'], $pagina) !== FALSE)
+              {
+                  return TRUE;
+              } 
+          }
+      }
+    }
+    return FALSE;
+}
+
+function debug($var){
+    $msg = "<span>".var_dump($var)."</span>";
+    return $msg;
+}
+
 ?>

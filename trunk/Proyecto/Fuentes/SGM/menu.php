@@ -2,10 +2,6 @@
 <?php
 
 require_once("config/parametros.php");
-/*
-echo "<span>";
-echo var_dump($_SESSION);
-echo "</span>";*/
 
 $usu_id = $_SESSION["id_usuario"];
 // Generar Menu
@@ -81,7 +77,10 @@ if($mySqli->affected_rows > 0)
     <div class="span3">
         <div id="myAccordion" class="accordion">
                 
-<?php               
+<?php    
+
+$_SESSION['paginas'] = $Menu;
+          
 $x = 1;
 foreach ($Menu as $titulo => $opciones) 
 {
@@ -115,4 +114,15 @@ foreach ($Menu as $titulo => $opciones)
         </div>
     </div>
     <div class="span9">
+        
+        
+<?php
+// Para depurar
+if($V_DEPURAR){
+    debug($_SESSION);
+}
+
+?>
+        
+        
         
