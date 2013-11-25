@@ -7,6 +7,13 @@ function generar_clave($longitud){
        0, $longitud); 
 } 
 
+function generar_Hash($clave, $llave)
+{
+	//$salt = "$2a$07$" + $llave + "$";
+	//return crypt($clave, $salt);
+	return "123456";
+}
+
 
 function ValidaAcceso($pagina, $datos){
     

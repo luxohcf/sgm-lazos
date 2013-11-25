@@ -42,7 +42,7 @@ if(isset($_SESSION['usuario']) == TRUE)
                     }
                     else
                     {
-                        window.location.href = "proyecto.php";
+                        window.location.href = "main.php";
                     }
                 });
             }
@@ -82,7 +82,7 @@ if(isset($_SESSION['usuario']) == TRUE)
      });
     </script>
 </head>  
-<body>  
+<body>
     
 <div class="navbar navbar-default" >
   <div class="navbar-inner btn-primary">
