@@ -18,6 +18,7 @@ $V_HOST = $xml->Host;
 $V_USER = $xml->User;
 $V_PASS = $xml->Password;
 $V_BBDD = $xml->BBDD;*/
+$V_LLAVE = "ragnarok";
 $V_ACCES_DENIED = "<div class='row-fluid'> 
            <div class='title span12'>
               <h1>Usted no cuenta con los permisos para acceder a esta p&aacute;gina</h1>
@@ -29,9 +30,9 @@ $V_ACCES_DENIED = "<div class='row-fluid'>
            </div>
         </div>";
 
-/*
-debug($xml);
-*/
+
+/*debug($xml);*/
+
 $V_HOST = "mysql.hostinger.es";
 $V_USER = "u643183889_sgm";
 $V_PASS = "sgmlazos";
@@ -39,17 +40,5 @@ $V_BBDD = "u643183889_sgm";
 
 $V_DEPURAR = FALSE;
 
-/* Variables para mostrar trazas */
-$depurar = FALSE; 
-if($xml->depurarSQL == "1")
-{
-    $depurar = TRUE;
-}
-$depurarMax = FALSE; 
-if($xml->depurarDUMP == "1")
-{
-    $depurarMax = TRUE;
-    error_reporting(E_ALL | E_STRICT);
-}
 
 ?>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- Ambiente testing -->
+<!-- Ambiente testing 
 <Conexion>
 	<Host>mysql.hostinger.es</Host>
 	<User>u643183889_sgm</User>
@@ -7,8 +7,8 @@
 	<BBDD>u643183889_sgm</BBDD>
 	<depurarSQL>1</depurarSQL>
 	<depurarDUMP>0</depurarDUMP>
-</Conexion>
-<!-- Ambiente desarrollo
+</Conexion>-->
+<!-- Ambiente desarrollo-->
 <Conexion>
 	<Host>localhost</Host>
 	<User>sgm</User>
@@ -17,4 +17,3 @@
 	<depurarSQL>1</depurarSQL>
 	<depurarDUMP>0</depurarDUMP>
 </Conexion>	
--->

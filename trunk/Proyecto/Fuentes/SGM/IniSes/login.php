@@ -1,73 +1,49 @@
 <?php
+require_once("../config/parametros.php");
 
-require("../config/parametros.php");
-require("../BO/Usuario.BO.class.php");
-
-$nombre = $_POST['name'];
 $pass   = $_POST['pass'];
 $id     = str_replace(" ", "", $_POST['name']);
-
-$Usuario = array();
-$Usuario['ID_USUARIO'] = (isset($id))?$id:"";
-$Usuario['PASSWORD'] = (isset($pass))?$pass:"";
-$Usuario["FLAG_ACTIVO"] = 1;
+$pass   = generar_Hash($pass, $V_LLAVE);
 
 $data = array();
-$aErrores = array();
 
-$obj = new UsuarioBO();
+$query = "SELECT `usu_id`,`usu_nombre` FROM `tsg_usuario` WHERE `usu_rut` = '$id' AND `usu_pass` = '$pass' AND `usu_activo` = 1 ";
+$usu_id;
+$nombre;
 
-/* Validar si los datos son correctos */
-if($obj->bExisteUsuario($Usuario, $aErrores) == TRUE)
+$mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+if($mySqli->connect_errno)
 {
-    /* Si todo ok crear el usuario en sesion */ 
-    if($obj->bBuscarUsuario($Usuario, $aErrores) == TRUE){
-        @session_start();
-        $_SESSION['usuario'] = $nombre;
-        $_SESSION['id_usuario'] = $Usuario[0]["ID_USUARIO"];
-        $data["error"] = FALSE;    
-    }
-    else
-    {
-        if($depurar == TRUE)
-        {
-            $data["html"] = "Nombre de usuario o contraseña invalidos - ".$aErrores["SQL"];
-        }
-        else 
-        {
-            $data["html"] = "Nombre de usuario o contraseña invalidos";  
-        }
-        $data["error"] = TRUE;
-    }
+    $data["Error conexion MySql"] = $mySqli->connect_error;
+}
+
+$res = $mySqli->query($query);
+
+if($mySqli->affected_rows > 0) // Si los datos son validos
+{
+	while($row = $res->fetch_assoc())
+	{
+		$nombre = $row['usu_nombre'];
+		$usu_id = $row['usu_id'];
+	}
+	$mySqli->close();
+	
+	@session_start(); // Guardo la sesion
+    $_SESSION['usuario'] = $nombre;
+    $_SESSION['id_usuario'] = $usu_id;
+    $data["error"] = FALSE; 
 }
 else /* Si no lo son retornar un mensaje */
 {
-    if($depurar == TRUE)
+    if($V_DEPURAR == TRUE)
     {
-        $data["html"] = "Nombre de usuario o contraseña invalidos - ".$aErrores["SQL"];
+        $data["html"] = "Nombre de usuario o contraseña invalidos - ".$query;
     }
     else 
     {
         $data["html"] = "Nombre de usuario o contraseña invalidos";  
     }
 	$data["error"] = TRUE;
-}
-
-if($depurarMax == TRUE)
-{
-    var_dump($_POST);
-    var_dump($obj);
-    var_dump($_SERVER);
-    var_dump($sXmlConfig);
-    var_dump($xml);
-    var_dump($url);
-    var_dump($V_HOST);
-    var_dump($V_USER);
-    var_dump($V_PASS);
-    var_dump($V_BBDD);
-    var_dump($data);
-    var_dump($Usuario);
-    var_dump($aErrores);
 }
 
 echo json_encode($data);

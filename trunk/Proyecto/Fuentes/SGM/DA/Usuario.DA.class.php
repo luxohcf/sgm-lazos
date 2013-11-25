@@ -234,6 +234,9 @@ public function bBuscarUsuario(&$Usuario, &$aErrores)
 		    $aErrores["Error conexion MySql"] = $mySqli->connect_error;
 		}
 		$res = $mySqli->query($query);
+		
+		@session_start();
+		$_SESSION["DA-sql"] = $query;
 
 		if($mySqli->affected_rows > 0)
 		{
