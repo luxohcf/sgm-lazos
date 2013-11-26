@@ -46,11 +46,12 @@ if($mySqli->affected_rows > 0)
     $y = 0;
     $flag = TRUE;
     $titulo = "";
-    $Usuario = array();
+    
     while($row = $res->fetch_assoc())
     {
         if($titulo != $row['TITULO_PADRE']){
             $x = 0;
+            $y = 0;
             $flag = TRUE;
         }
         if($flag){
@@ -79,7 +80,7 @@ if($mySqli->affected_rows > 0)
                 
 <?php    
 
-$_SESSION['paginas'] = $Menu;
+//$_SESSION['paginas'] = $Menu;
           
 $x = 1;
 foreach ($Menu as $titulo => $opciones) 
@@ -116,13 +117,6 @@ foreach ($Menu as $titulo => $opciones)
     <div class="span9">
         
         
-<?php
-// Para depurar
-if($V_DEPURAR){
-    debug($_SESSION);
-}
-
-?>
-        
+   
         
         

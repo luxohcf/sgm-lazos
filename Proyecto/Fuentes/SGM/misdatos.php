@@ -1,5 +1,5 @@
 <?php
-@session_start();
+
 require("cabecera.php");
 include("menu.php");
 
@@ -12,8 +12,6 @@ $query = "SELECT `usu_nombre`,
 				 `usu_direccion`, `usu_correo`, `usu_rut`
 		  FROM `tsg_usuario` 
 		  WHERE `usu_id` = '$usu_id' AND `usu_activo` = 1";
-
-//$_SESSION["mxkamk"] = $query;
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 $res = $mySqli->query($query);
@@ -32,9 +30,6 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 	}
 	$mySqli->close();
 }
-
-
-
 
 ?>
 
@@ -114,16 +109,19 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 		});
 
 		$("#btnCambiaPass").click(function() {
-
+			
+			var passA = $("#txtPassActual").val();
 			var passN = $("#txtPassNueva").val();
 			var passV = $("#txtPassConfirmar").val();
 			
 			// Validaciones de datos
-			if (!validaFormatoPass(passN) || !validaFormatoPass(passV) || (passN != passV)) {
+			if (!validaFormatoPass(passA) || !validaFormatoPass(passN) || !validaFormatoPass(passV) || (passN != passV)) {
 				// mostrar error
-				MostrarError("Contraseña invalida, o no coinciden", null);
+				var errs = ["- Longitud máxima 20 caracteres", "- Longitud minima 4 caracteres", "- Alfa-numerica"];
+				MostrarError("Contraseña invalida, o no coinciden", errs);
 				$("#txtPassNueva").val("");
 				$("#txtPassConfirmar").val("");
+				$("#txtPassActual").val("");
 			} 
 			else // Enviar post al servidor 
 			{
@@ -148,6 +146,24 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 		});
 
 	});
+	
+	var flag1 = true;
+    
+    function OcultaPass()
+    {
+        if(flag1 == true)
+        {
+            $("#btnOcultaPass").removeClass( "icon-chevron-down" ).addClass( "icon-chevron-up" );
+            $(".filtroAvanzado").show();
+            flag1 = false;
+        }   
+        else
+        {
+            $("#btnOcultaPass").removeClass( "icon-chevron-up" ).addClass( "icon-chevron-down" );
+            $(".filtroAvanzado").hide();
+            flag1 = true;
+        }
+    }
 
 </script>
 
@@ -168,8 +184,6 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" value="<?php echo $usuario["usu_nombre"]; ?>" name="txtNombre">
 			<label>Apellido</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" value="<?php echo $usuario["usu_apellido"]; ?>" name="txtApellido" >
-			<label>Nueva Contraseña</label>
-			<input type="password" placeholder="" class="input-xlarge" id="txtPassNueva" name="txtPassNueva">
 		</div>
 		<div class="span5">
 			<label>Teléfono</label>
@@ -178,28 +192,52 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 			<input type="text" placeholder="" class="input-xlarge" id="txtDireccion" value="<?php echo $usuario["usu_direccion"]; ?>" name="txtDireccion" >
 			<label>Correo</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtCorreo" value="<?php echo $usuario["usu_correo"]; ?>" name="txtCorreo">
+		</div>
+		<div class="span1"></div>
+	</div>
+	
+	<div>
+		&nbsp;
+	</div>
+	
+	<div class="row-fluid pagination-centered">
+		<div class="span4"></div>
+		<div class="span1">
+			<button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
+				Guardar
+			</button>
+		</div>
+		<div class="span2">
+			<div>Cambiar Contraseña</div>
+		</div>
+		<div class="span1">
+			<a class="btn btn-info" href="javascript:OcultaPass();"><i id="btnOcultaPass" class="icon-chevron-down"></i></a>
+		</div>
+		<div class="span4"></div>	
+	</div>
+	
+	<div>
+		&nbsp;
+	</div>
+	
+	<div class="row-fluid filtroAvanzado">
+		<div class="span1"></div>
+		<div class="span5">
+			<label>Contraseña Actual</label>
+			<input type="password" placeholder="" class="input-xlarge" id="txtPassActual" name="txtPassActual">
+			<label>Nueva Contraseña</label>
+			<input type="password" placeholder="" class="input-xlarge" id="txtPassNueva" name="txtPassNueva">
 			<label>Confirmar Contraseña</label>
 			<input type="password" placeholder="" class="input-xlarge" id="txtPassConfirmar" name="txtPassConfirmar">
+			<button type="button" class="btn btn-lg btn-primary" id="btnCambiaPass">
+				Cambiar Contraseña
+			</button>
+		</div>
+		<div class="span5">
 		</div>
 		<div class="span1"></div>
 	</div>
 </fieldset>
-
-<div>
-	&nbsp;
-</div>
-<div class="row-fluid">
-	<div class="container theme-showcase pagination-centered">
-		<p>
-			<button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
-				Guardar
-			</button>
-			<button type="button" class="btn btn-lg btn-primary" id="btnCambiaPass">
-				Cambiar Contraseña
-			</button>
-		</p>
-	</div>
-</div>
 
 <div>
 	&nbsp;
