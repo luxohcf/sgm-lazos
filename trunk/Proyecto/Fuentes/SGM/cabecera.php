@@ -13,7 +13,7 @@ if(isset($_SESSION['usuario']) == FALSE)
 <html lang="en">   
 <head>   
 <meta charset="utf-8">   
-<title>Proyecto SGM</title>     
+<title><?php echo $V_TITULO; ?></title>     
 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">  
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -29,6 +29,12 @@ if(isset($_SESSION['usuario']) == FALSE)
     @import "css/DT/jquery.dataTables_themeroller.css";
     
 </style>
+<!-- Select -->
+<link href="css/bootstrap-select.css" rel="stylesheet" />
+<script src="js/bootstrap-select.js" type="text/javascript"></script>
+<!-- DatePicker -->
+<link href="css/datepicker.css" rel="stylesheet" />
+<script src="js/bootstrap-datepicker.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -111,7 +117,10 @@ if(isset($_SESSION['usuario']) == FALSE)
 	$(function() {
 		$(".filtroAvanzado").hide();
 		
-		$('#dvLoading' ).dialog({
+		
+		$('#dvLoading').hide();
+		
+		/*$('#dvLoading' ).dialog({
 	  	    autoOpen: false,
 			width: 300,
 			height: 260,
@@ -120,17 +129,32 @@ if(isset($_SESSION['usuario']) == FALSE)
 			beforeclose: function (event, ui) { return false; },
     		dialogClass: "noclose"
 	  	});
+	  	
+	  	$('#dvLoading').hide();
 		
 		$("body").on({
 		    ajaxStart: function() { 
 		        $(this).addClass("loading");
-		        $('#dvLoading').dialog( "open" );
+		        //$('#dvLoading').dialog( "open" );
+		        $('#dvLoading').show();
 		    },
 		    ajaxStop: function() { 
 		        $(this).removeClass("loading"); 
-		        $('#dvLoading').dialog( "close" );
+		        //$('#dvLoading').dialog( "close" );
+		        $('#dvLoading').hide();
 		    }    
-	  	});
+	  	}); */
+	  	
+	  	$('.selectpicker').selectpicker({
+
+        });
+        
+        $('.txtFecha').datepicker({
+            format: "dd/mm/yyyy",
+            todayBtn: "linked",
+            language: "es",
+            endDate: "+"
+        });
 	  	
 	});
 
@@ -242,19 +266,19 @@ if(isset($_SESSION['usuario']) == FALSE)
 <body>
 <form id="FormPrincipal">
 
-<div id="dvLoading" class="modal" style="text-align: center">
-	<p>Espere un momento mientras se realiza la acción</p>
-	<div>&nbsp;</div>
-    <img src="css/ajax-loader.gif" />
+<div id="dvLoading" class="overlay">
+    <center>
+		<img src="css/loading.gif" alt="Cargando...." />
+	</center>
 </div>
 
 <div class="navbar navbar-default" >
   <div class="navbar-inner btn-primary">
-    <a class="brand" href="#">Proyecto SGM</a>
+    <a class="brand" href="#"><?php echo $V_TITULO; ?></a>
     <ul class="nav" style="float: right">
-      <li class="active"><a href="javascript:Main();"><?php echo "Bienvenido ". $_SESSION['usuario'] ?></a></li>
-      <li><a href="javascript:MisDatos();">Mis Datos</a></li>
-      <li><a href="javascript:CerrarSesion();">Cerrar Sesión</a></li>
+      <li class="active"><a href="javascript:Main();"><i class="icon-user"></i><?php echo " Bienvenido ". $_SESSION['usuario'] ?></a></li>
+      <li><a href="javascript:MisDatos();"><i class="icon-home"></i> Mis Datos</a></li>
+      <li><a href="javascript:CerrarSesion();"><i class="icon-off"></i> Cerrar Sesión</a></li>
     </ul>
   </div>
 </div>

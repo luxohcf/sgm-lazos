@@ -1,13 +1,12 @@
 <?php
 require("../config/parametros.php");
-$depurar = 0; // Cambiar a 1 para ver el detalle
 $data = array();
-$aErrores = array();
 $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
 
 $pass = (isset($_POST['txtPassNueva']))? $_POST['txtPassNueva'] : NULL;
+$passActual = (isset($_POST['txtPassActual']))? $_POST['txtPassActual'] : NULL;
 
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
@@ -17,10 +16,12 @@ if($mySqli->connect_errno)
 }
 
 $pass = generar_Hash($pass, $V_LLAVE);
+$passActual = generar_Hash($passActual, $V_LLAVE);
 
-if(strlen($usu_id) > 0 && strlen($pass) > 0)
+if(strlen($usu_id) > 0 && strlen($pass) > 0 && strlen($passActual) > 0)
 {
-	$querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
+	$querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id AND `usu_pass` = '$passActual' AND `usu_activo` = 1 ";
+	
 	$res = $mySqli->query($querySelect);
 		
 	if($mySqli->affected_rows > 0) // No existe el nombre
@@ -59,7 +60,7 @@ if(strlen($usu_id) > 0 && strlen($pass) > 0)
 	    }
 	}
 	else{
-		$msg = "No existe el usuario";
+		$msg = "Contraseña invalida";
 		$data["estado"] = "KO";
 	}
 }
@@ -69,9 +70,9 @@ else{
 }
 
 
-if($depurar == TRUE)
+if($V_DEPURAR == TRUE)
 {
-    $data["html"] = "$msg - $querySelect - $queryInsUsu - $queryUpdUsu ";
+    $data["html"] = "$msg - $querySelect - $queryUpdUsu ";
 }
 else 
 {
