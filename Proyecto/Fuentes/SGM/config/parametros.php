@@ -32,6 +32,8 @@ $V_ACCES_DENIED = "<div class='row-fluid'>
         </div>";
 
 $V_TITULO = "Proyecto SGM";
+$V_EXT_VALIDAS = "doc,docx,xls,xlsx,jpg,png,pdf";
+$V_MAXIMO_MB = "2";
 
 /* Ambiente testing */
 
@@ -64,10 +66,28 @@ class Utilidades
         $this->V_BBDD=$V_BBDD;
     }
     
-    public function GeneraSelectClientes($nombre){
+    public function GeneraSelectClientes($nombre, $multiple = false, $buscar = false, $size = 0){
             
         $html  = "<label>Cliente</label>";
-        $html .= "<select class=\"selectpicker\" name=\"$nombre\" id=\"$nombre\" multiple data-size=\"5\" data-live-search=\"true\">";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
         
         $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
         $query = "SELECT `cli_id`, `cli_empresa`, `cli_rut` FROM `tsg_cliente` WHERE `cli_activo` = 1 ";
@@ -91,7 +111,7 @@ class Utilidades
     public function GeneraSelectDestacado($nombre){
         $html  = "<label>Destacado</label>";
         $html .= "<select class=\"selectpicker\" name=\"$nombre\" id=\"$nombre\" data-size=\"3\" data-live-search=\"false\">";
-        $html .= "<option data-icon=\"icon-list\" selected >Seleccione...</option>";
+        $html .= "<option data-icon=\"icon-list\" value='-1' selected >Seleccione...</option>";
         $html .= "<option data-icon=\"icon-star\" value='1'>Destacados</option>";
         $html .= "<option data-icon=\"icon-star-empty\" value='0'>No Destacados</option>";
         $html .= "</select>";
@@ -99,9 +119,27 @@ class Utilidades
         return $html;
     }
     
-    public function GeneraSelectTipoProyecto($nombre){
+    public function GeneraSelectTipoProyecto($nombre, $multiple = false, $buscar = false, $size = 0){
         $html  = "<label>Tipo Proyecto</label>";
-        $html .= "<select class=\"selectpicker\" name=\"$nombre\" id=\"$nombre\" multiple data-size=\"5\" data-live-search=\"true\">";
+		$html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
         
         $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
         $query = "SELECT `tip_id`, `tip_nombre` FROM `sqi_tipo_proyecto` WHERE `tip_activo` = 1 ";
@@ -122,9 +160,28 @@ class Utilidades
         return $html;
     }
     
-    public function GeneraSelectJefeProyecto($nombre){
+    public function GeneraSelectJefeProyecto($nombre, $multiple = false, $buscar = false, $size = 0){
         $html  = "<label>Jefe de Proyecto</label>";
-        $html .= "<select class=\"selectpicker\" name=\"$nombre\" id=\"$nombre\" multiple data-size=\"5\" data-live-search=\"true\">";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+		
         
         $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
         $query = "SELECT DISTINCT usu.usu_id, usu.usu_nombre, usu.usu_apellido
@@ -149,9 +206,27 @@ class Utilidades
         return $html;
     }
 
-    public function GeneraSelectEstadoProyecto($nombre){
+    public function GeneraSelectEstadoProyecto($nombre, $multiple = false, $buscar = false, $size = 0){
         $html  = "<label>Estado Proyecto</label>";
-        $html .= "<select class=\"selectpicker\" name=\"$nombre\" id=\"$nombre\" multiple data-size=\"5\" data-live-search=\"true\">";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
         
         $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
         $query = "SELECT est_id, est_nombre
@@ -183,6 +258,6 @@ class Utilidades
 
 // http://silviomoreto.github.io/bootstrap-select/
 // http://eternicode.github.io/bootstrap-datepicker/
-
+// http://bootboxjs.com/
 
 ?>

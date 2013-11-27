@@ -174,23 +174,33 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 	</legend>
 
 	<div id="divErrores" style="width: 60%;"></div>
-
+	
+	<div class="row-fluid">
+		<div class="span9"></div>
+		<div class="span2">
+			<div>Cambiar Contraseña</div>
+		</div>
+		<div class="span1">
+			<a class="btn btn-info" href="javascript:OcultaPass();"><i id="btnOcultaPass" class="icon-chevron-down"></i></a>
+		</div>
+	</div>
+		
 	<div class="row-fluid">
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Rut</label>
 			<input type="text" placeholder="" class="input-xlarge disabled" value="<?php echo $usuario["rut"]; ?>" name="rut" disabled >
-			<label>Nombre</label>
+			<label><div>Nombre(s) <small class="text-error req">*</small></div></label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" value="<?php echo $usuario["usu_nombre"]; ?>" name="txtNombre">
-			<label>Apellido</label>
+			<label><div>Apellido(s) <small class="text-error req">*</small></div></label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" value="<?php echo $usuario["usu_apellido"]; ?>" name="txtApellido" >
 		</div>
 		<div class="span5">
-			<label>Teléfono</label>
+			<label><div>Teléfono <small class="text-error req">*</small></div></label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtTelefono" value="<?php echo $usuario["usu_telefono"]; ?>" name="txtTelefono">
 			<label>Dirección</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtDireccion" value="<?php echo $usuario["usu_direccion"]; ?>" name="txtDireccion" >
-			<label>Correo</label>
+			<label><div>Correo <small class="text-error req">*</small></div></label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtCorreo" value="<?php echo $usuario["usu_correo"]; ?>" name="txtCorreo">
 		</div>
 		<div class="span1"></div>
@@ -207,13 +217,8 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 				Guardar
 			</button>
 		</div>
-		<div class="span2">
-			<div>Cambiar Contraseña</div>
-		</div>
-		<div class="span1">
-			<a class="btn btn-info" href="javascript:OcultaPass();"><i id="btnOcultaPass" class="icon-chevron-down"></i></a>
-		</div>
-		<div class="span4"></div>	
+		
+		<div class="span7"></div>	
 	</div>
 	
 	<div>
@@ -223,11 +228,11 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 	<div class="row-fluid filtroAvanzado">
 		<div class="span1"></div>
 		<div class="span5">
-			<label>Contraseña Actual</label>
+			<label><div>Contraseña Actual <small class="text-error req">*</small></div></label>
 			<input type="password" placeholder="" class="input-xlarge" id="txtPassActual" name="txtPassActual">
-			<label>Nueva Contraseña</label>
+			<label><div>Nueva Contraseña <small class="text-error req">*</small></div></label>
 			<input type="password" placeholder="" class="input-xlarge" id="txtPassNueva" name="txtPassNueva">
-			<label>Confirmar Contraseña</label>
+			<label><div>Confirmar Contraseña <small class="text-error req">*</small></div></label>
 			<input type="password" placeholder="" class="input-xlarge" id="txtPassConfirmar" name="txtPassConfirmar">
 			<button type="button" class="btn btn-lg btn-primary" id="btnCambiaPass">
 				Cambiar Contraseña

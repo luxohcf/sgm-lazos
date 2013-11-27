@@ -1,5 +1,6 @@
 <?php
 @session_start();
+require_once("config/parametros.php");
 // Para no permitir ingresar si no se ha iniciado sesión
 if(isset($_SESSION['usuario']) == FALSE)
 {
@@ -35,6 +36,8 @@ if(isset($_SESSION['usuario']) == FALSE)
 <!-- DatePicker -->
 <link href="css/datepicker.css" rel="stylesheet" />
 <script src="js/bootstrap-datepicker.js" type="text/javascript"></script>
+<!-- Dialogos -->
+<script src="js/bootbox.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -84,6 +87,14 @@ if(isset($_SESSION['usuario']) == FALSE)
 	function ValidaTexto(texto){
 		
 		if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s\'\-\.]{1,255}$/.test(texto)) {
+			return false;
+		}
+		return true;
+	}
+	
+	function ValidaAlfaNumerico(texto){
+		
+		if (!/^[a-zA-ZáéíóúÁÉÍÓÚñ0-9\s\'\-\.\(\)]{1,255}$/.test(texto)) {
 			return false;
 		}
 		return true;
@@ -150,7 +161,7 @@ if(isset($_SESSION['usuario']) == FALSE)
         });
         
         $('.txtFecha').datepicker({
-            format: "dd/mm/yyyy",
+            format: "dd-mm-yyyy",
             todayBtn: "linked",
             language: "es",
             endDate: "+"

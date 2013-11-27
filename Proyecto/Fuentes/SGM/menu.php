@@ -80,7 +80,7 @@ if($mySqli->affected_rows > 0)
                 
 <?php    
 
-//$_SESSION['paginas'] = $Menu;
+$_SESSION['paginas'] = $Menu;
           
 $x = 1;
 foreach ($Menu as $titulo => $opciones) 
