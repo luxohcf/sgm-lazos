@@ -3,11 +3,12 @@
 require ("cabecera.php");
 include ("menu.php");
 
-/*if(!ValidaAcceso("proyecto.php", $_SESSION["paginas"]))
- {
- echo $V_ACCES_DENIED;
- exit();
- }*/
+if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
+{
+	echo $V_ACCES_DENIED;
+	exit();
+}
+
 ?>
 
 <script type="text/javascript" >
@@ -60,34 +61,105 @@ include ("menu.php");
 		});
 		
 		$("#btnLimpiarProyecto").click(function(){
-            // Pendiente
+            $("#txtCodigoProyecto").val("");
+            $("#txtNombreProyecto").val("");
+            $("#txtFechaInicioDesde").val("");
+            $("#txtFechaTerminoDesde").val("");
+            $("#txtFechaGarantiaDesde").val("");
+            $("#txtFechaInicioHasta").val("");
+            $("#txtFechaTerminoHasta").val("");
+            $("#txtFechaGarantiaHasta").val("");
+            $("#ddlDestacado").val("");
+            $("#ddlJefeProyecto").val("");
+            $("#ddlCliente").val("");
+            $("#ddlTipoProyecto").val("");
+            $('.selectpicker').selectpicker('deselectAll');
+            oTabla.fnReloadAjax();
         });
 
 	}); 
 	
-	function ValidarFiltros(){
-	    // Pendiente
-	    return true;
+	function ValidarFiltros()
+	{
+		var errores = [];
+		
+	    var txtCodigoProyecto = $("#txtCodigoProyecto").val();
+	    if(txtCodigoProyecto != ""){
+	    	if(!ValidaNumerico(txtCodigoProyecto)){
+	    		errores.push(" - El código de proyecto es inválido.");
+	    	}
+	    }
+	    
+	    var txtNombreProyecto = $("#txtNombreProyecto").val();
+	    if(txtNombreProyecto != ""){
+	    	if(!ValidaTexto(txtNombreProyecto)){
+	    		errores.push(" - El nombre de proyecto es inválido.");
+	    	}
+	    }
+
+	    if(errores.length > 0)
+		{
+			MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
-	function ModificarProyecto(idProyecto){
-	    // Pendiente
+	function ModificarProyecto(idProyecto)
+	{
+	    Ir("modificar_proyecto.php?idProyecto="+idProyecto);
 	}
 	
-	function NoDestacarProyecto(idProyecto){
-	    // Pendiente
+	function NoDestacarProyecto(idProyecto)
+	{
+		var opcion = $("#fila"+idProyecto).val();
+		
+		if(opcion != "0")
+		{
+			MarcarProyecto(idProyecto,0);
+			$("#fila"+idProyecto).removeClass("icon-star").addClass("icon-star-empty");
+			$("#fila"+idProyecto).val("0");	
+		}
+		else
+		{
+			MarcarProyecto(idProyecto,1);
+			$("#fila"+idProyecto).removeClass("icon-star-empty").addClass("icon-star");
+			$("#fila"+idProyecto).val("1");
+		}
 	}
 	
-	function DestacarProyecto(idProyecto){
-        // Pendiente
+	function DestacarProyecto(idProyecto)
+	{
+		var opcion = $("#fila"+idProyecto).val();
+		
+		if(opcion == "1")
+		{
+			MarcarProyecto(idProyecto,0);
+			$("#fila"+idProyecto).removeClass("icon-star").addClass("icon-star-empty");
+			$("#fila"+idProyecto).val("0");
+		}
+		else
+		{
+			MarcarProyecto(idProyecto,1);
+			$("#fila"+idProyecto).removeClass("icon-star-empty").addClass("icon-star");
+			$("#fila"+idProyecto).val("1");
+		}
+    }
+    
+    function MarcarProyecto(idProyecto, marca){
+    	$.post("./BO/MarcarProyecto.php", {idProyecto: idProyecto, marca: marca});
     }
 </script>
 
 <!--  -->
 <fieldset>
-	<legend>
-		Filtros de Búsqueda
-	</legend>
+	<legend>Filtros de Búsqueda</legend>
+	
+	<div id="divErrores" style="width: 60%;"></div>
+	
 	<div class="row-fluid">
 		<div class="span9"></div>
 		<div class="span2">
@@ -110,8 +182,8 @@ include ("menu.php");
 		<div class="span5">
 <?php
     $obj = new Utilidades($V_HOST,$V_USER,$V_PASS,$V_BBDD);
-    echo $obj->GeneraSelectJefeProyecto("ddlJefeProyecto");
-    echo $obj->GeneraSelectClientes("ddlCliente");
+    echo $obj->GeneraSelectJefeProyecto("ddlJefeProyecto", true,true,5);
+    echo $obj->GeneraSelectClientes("ddlCliente", true,true,5);
  ?>
 		</div>
 		<div class="span1"></div>
@@ -128,7 +200,7 @@ include ("menu.php");
             
 <?php
     echo $obj->GeneraSelectDestacado("ddlDestacado");
-    echo $obj->GeneraSelectEstadoProyecto("ddlEstadoProyecto");
+    echo $obj->GeneraSelectEstadoProyecto("ddlEstadoProyecto", true,true,5);
  ?>
 		</div>
 		<div class="span5">
@@ -140,14 +212,13 @@ include ("menu.php");
             <input type="text" class="txtFecha" id="txtFechaGarantiaHasta" name="txtFechaGarantiaHasta">
             
 <?php
-    echo $obj->GeneraSelectTipoProyecto("ddlTipoProyecto");
+    echo $obj->GeneraSelectTipoProyecto("ddlTipoProyecto", true,true,5);
  ?>
 
 		</div>
 		<div class="span1"></div>
 	</div>
 </fieldset>
-
 <div>
 	&nbsp;
 </div>
@@ -164,9 +235,6 @@ include ("menu.php");
 	</div>
 </div>
 
-<div>
-	&nbsp;
-</div>
 <fieldset>
 	<legend>
 		Resultados
