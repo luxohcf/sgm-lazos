@@ -34,7 +34,6 @@ CREATE TABLE sqi_tipo_proyecto (
   tip_usu_creador varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Usuario creador',
   tip_fecha_creacion datetime NOT NULL COMMENT 'Fecha de creación',
   tip_fecha_modificacion datetime DEFAULT NULL COMMENT 'Fecha de modificación',
-  tsg_proyecto_historicoprh_id int(10) NOT NULL,
   PRIMARY KEY (tip_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tipo de proyecto' AUTO_INCREMENT=1 ;
 
@@ -201,7 +200,7 @@ CREATE TABLE tsg_modulo (
   mod_fecha_creacion datetime NOT NULL COMMENT 'Fecha de creación',
   mod_fecha_modificacion datetime DEFAULT NULL COMMENT 'Fecha de modificación',
   mod_id_mod_padre int(11) DEFAULT NULL,
-  mod_ruta_imagen varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  mod_ruta_imagen varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (mod_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de módulos' AUTO_INCREMENT=10 ;
 
@@ -354,12 +353,12 @@ CREATE TABLE tsg_usuario (
   usu_id int(10) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único de la tabla',
   usu_nombre varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre',
   usu_apellido varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Apellido del usuario',
-  usu_telefono tinyint(10) NOT NULL COMMENT 'teléfono del usuario',
+  usu_telefono int(10) NOT NULL COMMENT 'teléfono del usuario',
   usu_direccion varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Dirección del Usuario',
   usu_fecha_crea datetime NOT NULL COMMENT 'Fecha de creación, se usara la secuencia de timestamp para guardar la hora y la fecha.',
   usu_fecha_mod datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'fecha de modificación, se guardará con la secuencia timestamp para guardar la hora y la fecha de la modificación.',
   usu_rut varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'se define el rut del usuario, se considera como varchar ya que contienen número y caracteres.',
-  usu_pass varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  usu_pass varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   usu_correo varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'correo electrónico del usuario',
   usu_activo int(2) NOT NULL COMMENT 'se deja la tabla de usuario con la opción para saber si el usuario esta activo o inactivo, en la BD de mostrara oculto si se elimino por sistema. (1 o 0)',
   PRIMARY KEY (usu_id)
@@ -408,17 +407,10 @@ INSERT INTO tsg_usuario_tsg_rol (tsg_usuariousu_id, tsg_rolrol_id) VALUES
 --
 
 --
--- Filtros para la tabla sqi_tipo_proyecto
---
-ALTER TABLE sqi_tipo_proyecto
-  ADD CONSTRAINT FKsqi_tipo_p791418 FOREIGN KEY (tsg_proyecto_historicoprh_id) REFERENCES tsg_proyecto_historico (prh_id);
-
---
 -- Filtros para la tabla tsg_comentario_proyecto
 --
 ALTER TABLE tsg_comentario_proyecto
   ADD CONSTRAINT FKtsg_coment436168 FOREIGN KEY (tsg_usuariousu_id) REFERENCES tsg_usuario (usu_id),
-  ADD CONSTRAINT FKtsg_coment782628 FOREIGN KEY (tsg_archivoarc_id) REFERENCES tsg_archivo (arc_id),
   ADD CONSTRAINT FKtsg_coment854003 FOREIGN KEY (tsg_proyectopro_id) REFERENCES tsg_proyecto (pro_id);
 
 --
