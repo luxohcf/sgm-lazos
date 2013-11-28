@@ -1,12 +1,16 @@
 <?php
 
-include("cabecera.php");
-include("menu.php");
+include ("cabecera.php");
+include ("menu.php");
 
-if(!ValidaAcceso("crear_usuario.php", $_SESSION["paginas"]))
-{
-    echo $V_ACCES_DENIED;
-    exit();
+$usu_id = $_SESSION["id_usuario"];
+$Usuario = array();
+
+$idUsuario = $_GET["idUsuario"];
+
+if ($idUsuario == NULL || $usu_id == NULL || strlen($idUsuario) < 1) {
+	echo $V_ACCES_DENIED;
+	exit();
 }
 
 ?>
@@ -15,7 +19,7 @@ if(!ValidaAcceso("crear_usuario.php", $_SESSION["paginas"]))
 $(function() {
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/CrearUsuario.php", $('#FormPrincipal').serialize(),
+            $.post("./BO/ModificarsUsuario.php", $('#FormPrincipal').serialize(),
                 function(data) {
                     var obj = jQuery.parseJSON(data);
                     
@@ -35,6 +39,11 @@ $(function() {
             });
         }
     });
+    
+    $("#btnPerfiles").click(function(){
+    	var IdUsuario = "<?php echo $idUsuario; ?>";
+    	$().redirect('asignar_perfiles.php', {'IdUsuario': IdUsuario});
+    });
 });
 
 function Limpiar(){
@@ -42,24 +51,24 @@ function Limpiar(){
 }
 
 function ValidarDatos(){
-      var errores = [];
-      
-      // Pendiente
-      
-      if(errores.length > 0)
-      {
-        MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
-        return false;
-      }
-      else
-      {
-        return true;
-      }
-    }
+  var errores = [];
+  
+  // Pendiente
+  
+  if(errores.length > 0)
+  {
+    MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
 </script>
 <!--  -->
 <fieldset>
-    <legend>Crear Usuario</legend>
+    <legend>Modificar Usuario</legend>
     
     <div id="divErrores" style="width: 60%;"></div>
     
@@ -120,9 +129,18 @@ function ValidarDatos(){
 <div class="row-fluid">
     <div class="container theme-showcase pagination-centered">
         <p>
-            <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
-                Crear Usuario
-            </button>
+        	<button type="button" class="btn btn-lg btn-primary" id="btnPerfiles">
+				Asignar Perfiles
+			</button>
+			<button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
+				Guardar
+			</button>
+			<button type="button" class="btn btn-lg btn-primary" id="btnVolver">
+				Volver
+			</button>
+			<button type="button" class="btn btn-lg btn-danger" id="btnEliminar">
+				Eliminar
+			</button>
         </p>
     </div>
 </div>

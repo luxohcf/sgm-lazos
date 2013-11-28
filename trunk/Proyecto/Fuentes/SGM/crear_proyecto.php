@@ -3,7 +3,7 @@
 include("cabecera.php");
 include("menu.php");
 
-if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
+if(!ValidaAcceso("crear_proyecto.php", $_SESSION["paginas"]))
 {
     echo $V_ACCES_DENIED;
     exit();
@@ -16,30 +16,61 @@ $(function() {
     
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/CrearProyecto.php", $('#FormPrincipal').serialize(),
-                function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    
-                    var msj = obj.html;
-                    var sub_msj = obj.errores; 
-                    
-                    var estado =  obj.estado;
-                    if(estado == 'OK') // Exito
-                    {
-                        MostrarExito(msj, sub_msj);
-                        Limpiar();
+            
+            bootbox.dialog({
+              message: "¿Seguro que desea crear el proyecto?",
+              title: null,
+              buttons: {
+                Si: {
+                  label: "Si",
+                  className: "btn-success",
+                  callback: function() {
+                    $.post("./BO/CrearProyecto.php", $('#FormPrincipal').serialize(),
+                        function(data) {
+                            var obj = jQuery.parseJSON(data);
+                            
+                            var msj = obj.html;
+                            var sub_msj = obj.errores; 
+                            
+                            var estado =  obj.estado;
+                            if(estado == 'OK') // Exito
+                            {
+                                MostrarExito(msj, sub_msj);
+                                Limpiar();
+                            }
+                            else // Error
+                            {
+                                MostrarError(msj, sub_msj);
+                            }
+                        });
                     }
-                    else // Error
-                    {
-                        MostrarError(msj, sub_msj);
-                    }
+                },
+                No: {
+                  label: "No",
+                  className: "btn-info",
+                  callback: function() {
+                    
+                  }
+                }
+              }
             });
         }
     });
+    
+    $("#btnLimpiar").click(function(){
+        Limpiar();
+    })
+    
 });
 
 function Limpiar(){
-    // Pendiente
+    $("#txtNombreProyecto").val("");
+    $("#txtDuracion").val("");
+    $("#txtDescripcion").val("");
+    $("#txtFechaInicio").val("");
+    $("#txtFechaTermino").val("");
+    $("#txtFechaGarantia").val("");
+    $('.selectpicker').selectpicker('deselectAll');
 }
 
 function ValidarDatos(){
@@ -57,8 +88,10 @@ function ValidarDatos(){
       
       var descripcion = $("#txtDescripcion").val();
       
-      if(!ValidaAlfaNumerico(descripcion)){
-        errores.push(" - La descripción es inválida.");
+      if(descripcion != ""){
+          if(!ValidaAlfaNumerico(descripcion)){
+            errores.push(" - La descripción es inválida.");
+          }
       }
       
       var txtFechaInicio = $("#txtFechaInicio").val();
@@ -94,7 +127,7 @@ function ValidarDatos(){
 <fieldset>
     <legend>Crear Proyecto</legend>
     
-    <div id="divErrores" style="width: 60%;"></div>
+    <div id="divErrores" style="width: 70%;"></div>
     
 <div class="row-fluid">
     <div class="span1"></div>
@@ -116,10 +149,7 @@ function ValidarDatos(){
         echo $obj -> GeneraSelectClientes("ddlCliente", false, true, 5);
         ?>
 
-        <label>
-            <div>
-                Descripción <small class="text-error req">*</small>
-            </div></label>
+        <label>Descripción</label>
         <textarea rows="3" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
           
     </div>

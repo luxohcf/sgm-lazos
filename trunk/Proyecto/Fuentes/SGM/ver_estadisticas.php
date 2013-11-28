@@ -1,94 +1,138 @@
 <?php
 
-include("cabecera.php");
-include("menu.php")
+require ("cabecera.php");
+include ("menu.php");
 
+if (!ValidaAcceso("ver_estadisticas.php", $_SESSION["paginas"])) {
+	echo $V_ACCES_DENIED;
+	exit();
+}
 ?>
+
+<script type="text/javascript" >
+	$(function() {
+		
+		$("#btnBuscar").click(function() {
+
+			if (ValidarFiltros()) {
+				
+			}
+		});
+		
+
+		$("#btnLimpiar").click(function() {
+			
+		});
+
+	});
+
+	function ValidarFiltros() {
+		var errores = [];
+
+		if (errores.length > 0) {
+			MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:", errores);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+</script>
+
+<!--  -->
 <fieldset>
-    <legend>
-        Filtros Estadísticas
-    </legend>
-    <div class="row-fluid">
-        <div class="span1"></div>
-        <div class="span5">
+	<legend>
+		Filtros de Búsqueda
+	</legend>
 
-            <label>
-                <div>
-                    Nombre Proyecto
-                </div></label>
-            <select name="Gender" id="DropdownGender" class="input-xlarge">
-                <option value=""> -- Seleccione -- </option>
-                <option value="">GORE12</option>
-                <option value="">Inacap</option>
-                <option value="">CORFO</option>
-                <option value="">Gobierno regional de la Araucanía</option>
-                <option value="">...</option>
-            </select>
-            <label>
-                <div>
-                    Encargado del Proyecto
-                </div></label>
-            <select name="Gender" id="DropdownGender" class="input-xlarge">
-                <option value=""> -- Seleccione -- </option>
-                <option value="">Pedro Lizana</option>
-                <option value="">Juan Vallegos</option>
-                <option value="">Héctor Padilla</option>
-                <option value="">Solange Sierra</option>
-                <option value="">...</option>
-            </select>
-            <label>Fecha de Inicio*</label>
-            <input type="date" placeholder="Seleccione Fecha" class="input-xlarge">
+	<div id="divErrores" style="width: 60%;"></div>
 
-        </div>
-        <div class="span5">
-            <label>Fecha de Término*</label>
-            <input type="date" placeholder="Seleccione Fecha" class="input-xlarge">
-            <label>
-                <div>
-                    Clientes
-                </div></label>
-            <input type="text" placeholder="Cliente" class="input-xlarge">
-            <label>
-                <div>
-                    Ticket
-                </div></label>
-            <input type="text" placeholder="Ingrese Ticket" class="input-xlarge">
-        </div>
-        <div class="span1"></div>
-    </div>
+	<div class="row-fluid">
+		<div class="span9"></div>
+		<div class="span2">
+			<div id="txtbtnFiltros">
+				Búsqueda Avanzada
+			</div>
+		</div>
+		<div class="span1">
+			<a class="btn btn-info" href="javascript:OcultaFiltros();"><i id="btnFiltros" class="icon-chevron-down"></i></a>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span1"></div>
+		<div class="span5">
+			<?php
+			$obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+			echo $obj->GeneraSelectProyectos("ddlProyecto", true, true, 5);
+			echo $obj->GeneraSelectTipoProyecto("ddlProyecto", true, true, 5);
+			
+			?>
+		</div>
+		<div class="span5">
+			<?php
+			echo $obj->GeneraSelectCategoriaSolicitud("ddlCategoria", true, true, 5);
+			echo $obj->GeneraSelectEstadoSolicitud("ddlEstadoSolicitud", true, true, 5);
+			?>
+		</div>
+		<div class="span1"></div>
+	</div>
+	<div class="row-fluid filtroAvanzado">
+		<div class="span1"></div>
+		<div class="span5">
+			<label>Fecha desde</label>
+			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<label>Fecha hasta</label>
+			<input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+		</div>
+		<div class="span5">
+			<?php
+			echo $obj->GeneraSelectClientes("ddlCliente", true, true, 5);
+			?>
+		</div>
+		<div class="span1"></div>
+	</div>
 </fieldset>
 <div>
-    &nbsp;
+	&nbsp;
 </div>
-<div class="row">
-    <div class="container theme-showcase pagination-centered">
-        <p>
-            <button type="button" class="btn btn-lg btn-primary">
-                Buscar
-            </button>
-            <button type="button" class="btn btn-lg btn-primary">
-                Limpiar
-            </button>
-        </p>
-    </div>
+<div class="row-fluid">
+	<div class="container theme-showcase pagination-centered">
+		<p>
+			<button type="button" class="btn btn-lg btn-primary" id="btnBuscar">
+				Buscar
+			</button>
+			<button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
+				Limpiar
+			</button>
+		</p>
+	</div>
 </div>
-<div>
-    &nbsp;
-</div>
-<fieldset>
-    <legend>
-        Resultados Gráficos
-    </legend>
-    <div class="row-fluid pagination-centered">
-        <div class="span12">
-            <img src="css/images/grafico.jpg" />
-        </div>
 
-    </div>
-</fieldset>
+<fieldset>
+	<legend>
+		Resultados
+	</legend>
+	<div class="row-fluid">
+		<div  class="span12">
+			<!-- Informe -->
+		</div>
+	</div>
+	<fieldset>
+
 <div>
-    &nbsp;
+	&nbsp;
 </div>
 <div>
-    &nbsp;
+	&nbsp;
 </div>
+
+<!-- Hiddens -->
+<div style="display: none;">
+	
+</div>
+
+<?php
+
+include ("footer.php");
+?>
+

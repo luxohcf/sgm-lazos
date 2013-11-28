@@ -135,23 +135,43 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 		
 		$("#btnGuardar").click(function(){
 			if(ValidarDatos()){
-				$.post("./BO/ModificarDatosProyecto.php", $('#FormPrincipal').serialize(),
-					function(data) {
-					   	var obj = jQuery.parseJSON(data);
-				   		
-				   		var msj = obj.html;
-				   		var sub_msj = obj.errores; 
-				   		
-				   		var estado =  obj.estado;
-				   		if(estado == 'OK') // Exito
-				   		{
-				   			MostrarExito(msj, sub_msj);
-				   		}
-				   		else // Error
-				   		{
-				   			MostrarError(msj, sub_msj);
-				   		}
-			    });
+			    
+			    bootbox.dialog({
+                  message: "¿Seguro que desea modificar el proyecto?",
+                  title: null,
+                  buttons: {
+                    Si: {
+                      label: "Si",
+                      className: "btn-success",
+                      callback: function() {
+                        $.post("./BO/ModificarDatosProyecto.php", $('#FormPrincipal').serialize(),
+                            function(data) {
+                                var obj = jQuery.parseJSON(data);
+                                
+                                var msj = obj.html;
+                                var sub_msj = obj.errores; 
+                                
+                                var estado =  obj.estado;
+                                if(estado == 'OK') // Exito
+                                {
+                                    MostrarExito(msj, sub_msj);
+                                }
+                                else // Error
+                                {
+                                    MostrarError(msj, sub_msj);
+                                }
+                            });
+                        }
+                    },
+                    No: {
+                      label: "No",
+                      className: "btn-info",
+                      callback: function() {
+                        
+                      }
+                    }
+                  }
+                });
 			}
 		});
 		
@@ -200,12 +220,44 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 		$("#btnGuardaObservacion").click(function(){
 			
 			// Pendiente
-			// Validar datos
-			// guardar
-			oTabla.fnReloadAjax();
+			var obs = $("#txtObservacion").val();
+			
+			if(ValidaTexto(obs)){
+			    // Validar datos
+			    if(ValidaArchivo())
+			    {
+    			    $.post("./BO/GuardarObservacionProyecto.php", $('#FormPrincipal').serialize(),
+                        function(data) {
+                            var obj = jQuery.parseJSON(data);
+                            
+                            var msj = obj.html;
+                            var sub_msj = obj.errores; 
+                            
+                            var estado =  obj.estado;
+                            if(estado == 'OK') // Exito
+                            {
+                                MostrarExito(msj, sub_msj);
+                            }
+                            else // Error
+                            {
+                                MostrarError(msj, sub_msj);
+                            }
+                            oTabla.fnReloadAjax();
+                    });
+                }
+			}
+			else
+			{
+			    // Mostrar error
+			}
 		});
 
 	});
+	
+	function ValidaArchivo(){
+	    // Pendiente
+	    return true;
+	}
 	
 	function ValidarDatos(){
 	  var errores = [];
@@ -293,11 +345,11 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 		</div>
 		<div class="span5">
 
-			<label>Fecha de inicio</label>
+			<label>Fecha de Inicio</label>
 			<input type="text" class="txtFecha" id="txtFechaInicio" name="txtFechaInicio" value="<?php echo $proyecto["pro_fecha_ini"]; ?>">
-			<label>Fecha de término</label>
+			<label>Fecha de Término</label>
 			<input type="text" class="txtFecha" id="txtFechaTermino" name="txtFechaTermino" value="<?php echo $proyecto["pro_fecha_term"]; ?>">
-			<label>Fecha de garantía</label>
+			<label>Fecha de Garantía</label>
 			<input type="text" class="txtFecha" id="txtFechaGarantia" name="txtFechaGarantia" value="<?php echo $proyecto["pro_fecha_garan"]; ?>">
 
 			<?php
