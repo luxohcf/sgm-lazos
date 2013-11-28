@@ -1,44 +1,134 @@
 <?php
 
 include("cabecera.php");
+include("menu.php");
 
-include("menu.php")
+if(!ValidaAcceso("crear_cliente.php", $_SESSION["paginas"]))
+{
+    echo $V_ACCES_DENIED;
+    exit();
+}
 
 ?>
+<script type="text/javascript">
+
+$(function() {
+    $("#btnGuardar").click(function(){
+        if(ValidarDatos()){
+            $.post("./BO/CrearCliente.php", $('#FormPrincipal').serialize(),
+                function(data) {
+                    var obj = jQuery.parseJSON(data);
+                    
+                    var msj = obj.html;
+                    var sub_msj = obj.errores; 
+                    
+                    var estado =  obj.estado;
+                    if(estado == 'OK') // Exito
+                    {
+                        MostrarExito(msj, sub_msj);
+                        Limpiar();
+                    }
+                    else // Error
+                    {
+                        MostrarError(msj, sub_msj);
+                    }
+            });
+        }
+    });
+});
+
+function Limpiar(){
+    // Pendiente
+}
+
+function ValidarDatos(){
+      var errores = [];
+      
+      // Pendiente
+      
+      if(errores.length > 0)
+      {
+        MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+</script>
 <!--  -->
-<div class="row">
-    <div class="span6">
-        <fieldset>
-            <legend>Crear Cliente</legend>
-            <center>
-            <label><div>Nombre <small class="text-error req">*</small></div></label>
-            <input type="text" placeholder="Ingrese Nombre" class="input-xlarge"><br>
-            <label><div>Apellido<small class="text-error req">*</small></div></label>
-            <input type="text" placeholder="Ingrese Apellido" class="input-xlarge">
-            <label><div>Institución <small class="text-error req">*</small></div></label>
-            <input type="text" placeholder="Ingrese Institución" class="input-xlarge">
-            <label>RUT Institución</label>
-            <input type="text" placeholder="Ingrese RUT" class="input-xlarge">
-            
-		</fieldset>
+<fieldset>
+    <legend>Crear Cliente</legend>
+    
+    <div id="divErrores" style="width: 60%;"></div>
+    
+<div class="row-fluid">
+    <div class="span1"></div>
+    <div class="span5">
+        <label>
+            <div>
+                Nombre(s) <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtNombreCliente" name="txtNombreCliente">
+
+        <label>
+            <div>
+                Apellido(s) <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
+        
+        <label>
+            <div>
+                Dirección <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtDireccion" name="txtDireccion">
+          
     </div>
-    <div class="span6">
-        <fieldset>
-        <legend> &nbsp;</legend>
-      		 <label>Dirección *</label>
-            <input type="text" placeholder="Ingrese Dirección" class="input-xlarge">
-            <label>Ciudad *</label>
-            <input type="text" placeholder="Ingrese Ciudad" class="input-xlarge">
-            <label>País *</label>
-            <input type="text" placeholder="Ingrese País" class="input-xlarge">
-            <label>Correo Electrónico *</label>
-            <input type="text" placeholder="Ingrese Correo" class="input-xlarge">
-            </center>
-        	<label>Observación/Comentario</label>
-       		  <textarea rows="3" placeholder="Ingrese Comentario..." ></textarea>
-    		<br>
-			<br>
-       		 <button type="button" class="btn btn-lg btn-primary">Registrar Cliente</button>
-        </fieldset>
+    <div class="span5">
+        <label>
+            <div>
+                Rut <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
+        
+        <label>
+            <div>
+                Correo <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtCorreo" name="txtCorreo">
+    </div>
+    <div class="span1"></div>
+</div>
+</fieldset>
+
+<div>
+    &nbsp;
+</div>
+<div class="row-fluid">
+    <div class="container theme-showcase pagination-centered">
+        <p>
+            <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
+                Crear Cliente
+            </button>
+        </p>
     </div>
 </div>
+
+<div>
+    &nbsp;
+</div>
+<div>
+    &nbsp;
+</div>
+
+<?php
+
+include ("footer.php");
+?>
+
+
+
+
+
+

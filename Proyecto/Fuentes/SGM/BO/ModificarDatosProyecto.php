@@ -1,7 +1,7 @@
 <?php
 require("../config/parametros.php");
 
-$depurar = 1; // Cambiar a 1 para ver el detalle
+$depurar = 0; // Cambiar a 1 para ver el detalle
 $data = array();
 
 $msg = "";

@@ -3,7 +3,7 @@
 require ("cabecera.php");
 include ("menu.php");
 
-if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
+if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 {
 	echo $V_ACCES_DENIED;
 	exit();
@@ -40,7 +40,7 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 			},
 			"bProcessing" : true, //para procesar desde servidor
 			"sServerMethod" : "POST",
-			"sAjaxSource" : './BO/BuscaClientes.php', // fuente del json
+			"sAjaxSource" : './BO/BuscaUsuarios.php', // fuente del json
 			"fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
 				$.ajax({
 					"dataType" : 'json',
@@ -63,8 +63,6 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		$("#btnLimpiar").click(function(){
             $("#txtRut").val("");
             $("#txtNombre").val("");
-            $("#txtApellido").val("");
-            $("#txtEmpresa").val("");
             $("#txtFechaInicioDesde").val("");
             $("#txtFechaInicioHasta").val("");
             oTabla.fnReloadAjax();
@@ -89,20 +87,6 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 	    		errores.push(" - El nombre es inválido.");
 	    	}
 	    }
-	    
-	    var txtApellido = $("#txtApellido").val();
-	    if(txtApellido != ""){
-	    	if(!ValidaTexto(txtApellido)){
-	    		errores.push(" - El apellido es inválido.");
-	    	}
-	    }
-	    
-	    var txtEmpresa = $("#txtEmpresa").val();
-	    if(txtEmpresa != ""){
-	    	if(!ValidaTexto(txtEmpresa)){
-	    		errores.push(" - El nombre empresa es inválido.");
-	    	}
-	    }
 
 	    if(errores.length > 0)
 		{
@@ -115,9 +99,9 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		}
 	}
 	
-	function ModificarCliente(idProyecto)
+	function ModificarUsuario(idProyecto)
 	{
-	    Ir("modificar_cliente.php?idCliente="+idProyecto);
+	    Ir("modificar_usuario.php?idUsuario="+idProyecto);
 	}
 	
 </script>
@@ -146,7 +130,7 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 			<input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
 		</div>
 		<div class="span5">
-			<label>Nombre</label>
+			<label>Nombre Usuario</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" name="txtNombre">
 		</div>
 		<div class="span1"></div>
@@ -156,14 +140,10 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		<div class="span5">
 			<label>Fecha de creación desde</label>
 			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
-			<label>Empresa</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtEmpresa" name="txtEmpresa">
 		</div>
 		<div class="span5">
 	        <label>Fecha de creación hasta</label>
             <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
-			<label>Apellido(s)</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
 		</div>
 		<div class="span1"></div>
 	</div>
@@ -197,7 +177,7 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 						<th>Nombre(s)</th>
 						<th>Apellido(s)</th>
 						<th>Correo</th>
-						<th>Empresa</th>
+						<th>Telefóno</th>
 						<th>Acción</th>
 					</tr>
 				</thead>

@@ -40,15 +40,15 @@ $V_MAXIMO_MB = "2";
 $V_HOST = "mysql.hostinger.es";
 $V_USER = "u643183889_sgm";
 $V_PASS = "sgmlazos";
-$V_BBDD = "u643183889_sgm";
+$V_BBDD = "u643183889_sgm"; 
 
-/* Ambiente desarrollo
+/* Ambiente desarrollo 
 $V_HOST = "localhost";
 $V_USER = "sgm";
 $V_PASS = "sgm";
 $V_BBDD = "sgm";*/
 
-$V_DEPURAR = FALSE;
+$V_DEPURAR = TRUE;
 
 // Clase para generar cosas genericas
 class Utilidades
@@ -248,6 +248,221 @@ class Utilidades
 
         return $html;
     }
+
+	public function GeneraSelectProyectos($nombre, $multiple = false, $buscar = false, $size = 0){
+		$html  = "<label>Proyectos</label>";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT pro_id, pro_nombre
+                    FROM tsg_proyecto 
+                    WHERE pro_activo = 1";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["pro_id"]."'>".$row["pro_nombre"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+	}
+
+	public function GeneraSelectEstadoSolicitud($nombre, $multiple = false, $buscar = false, $size = 0){
+		$html  = "<label>Estado Solicitud</label>";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT est_id, est_nombre
+                    FROM tsg_estado_ticket 
+                    WHERE est_activo = 1";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["est_id"]."'>".$row["est_nombre"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+	}
+
+	public function GeneraSelectCategoriaSolicitud($nombre, $multiple = false, $buscar = false, $size = 0){
+		$html  = "<label>Categoría Solicitud</label>";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT cat_id, cat_nombre
+                    FROM tsg_categoria 
+                    WHERE cat_activo = 1";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["cat_id"]."'>".$row["cat_nombre"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+	}
+	
+	public function GeneraSelectUsuarios($nombre, $multiple = false, $buscar = false, $size = 0){
+		$html  = "<label>Usuarios</label>";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT usu_id, usu_rut,usu_nombre
+                    FROM tsg_usuario 
+                    WHERE usu_activo = 1";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["usu_id"]."'>".$row["usu_rut"]." - ".$row["usu_nombre"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+	}
+
+	public function GeneraSelectPrioridad($nombre, $multiple = false, $buscar = false, $size = 0){
+		$html  = "<label>Prioridad</label>";
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+		
+		if($multiple == true){
+			$html .= "[]\"  multiple ";	
+		}
+		else{
+			$html .= "\" ";
+		}
+		
+		if($buscar == true){
+			$html .= " data-live-search=\"true\" ";	
+		}
+		
+		if($size != 0)
+		{
+			$html .= " data-size=\"$size\"  ";
+		}
+		
+		$html .= ">";
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT pri_id, pri_nombre
+                    FROM tsg_prioridad 
+                    WHERE pri_activo = 1";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["pri_id"]."'>".$row["pri_nombre"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+	}
     
     public function toString()
     {
