@@ -48,7 +48,7 @@ $V_USER = "sgm";
 $V_PASS = "sgm";
 $V_BBDD = "sgm";*/
 
-$V_DEPURAR = TRUE;
+$V_DEPURAR = FALSE;
 
 // Clase para generar cosas genericas
 class Utilidades

@@ -55,6 +55,8 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 ?>
 <script type="text/javascript">
 
+    var oTabla;
+    
 	function cargarCampos()
 	{
 		var id = "<?php echo $proyecto["pro_id"] ?>";
@@ -95,7 +97,7 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 			Ir("busqueda_proyecto.php");
 		});
 		
-		var oTabla = $('#tblObservaciones').dataTable({
+		oTabla = $('#tblObservaciones').dataTable({
 			bJQueryUI : true,
 			sPaginationType : "full_numbers", //tipo de paginacion
 			"bFilter" : false, // muestra el cuadro de busqueda
@@ -219,45 +221,117 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 		
 		$("#btnGuardaObservacion").click(function(){
 			
-			// Pendiente
-			var obs = $("#txtObservacion").val();
-			
-			if(ValidaTexto(obs)){
-			    // Validar datos
-			    if(ValidaArchivo())
-			    {
-    			    $.post("./BO/GuardarObservacionProyecto.php", $('#FormPrincipal').serialize(),
-                        function(data) {
-                            var obj = jQuery.parseJSON(data);
-                            
-                            var msj = obj.html;
-                            var sub_msj = obj.errores; 
-                            
-                            var estado =  obj.estado;
-                            if(estado == 'OK') // Exito
-                            {
-                                MostrarExito(msj, sub_msj);
-                            }
-                            else // Error
-                            {
-                                MostrarError(msj, sub_msj);
-                            }
-                            oTabla.fnReloadAjax();
-                    });
-                }
-			}
-			else
-			{
-			    // Mostrar error
-			}
+		    if(ValidaObservacionArchivo())
+		    {
+		    	if($("#txtArchivo")[0].files[0] != null){
+		    		
+		    		var xhr = new XMLHttpRequest();
+					xhr.upload.addEventListener('progress',function(ev){
+					    console.log((ev.loaded/ev.total)+'%');
+					}, false);
+					xhr.onreadystatechange = function(ev){
+					    if(xhr.readyState==4 && xhr.status==200)
+					    {
+					    	var data = ev.currentTarget.responseText;
+					    	var obj = jQuery.parseJSON(data);
+					    	if(obj.estado == 'OK'){
+				    	       $("#hdnIdArchivo").val(obj.id);
+				    	       GuardarObservacion();    
+					    	}
+					    	else{
+					    	    MostrarError(obj.msj, null);
+					    	}
+					    }
+					};
+					xhr.open('POST', "./BO/UploadArchivo.php", true);
+					var files = $("#txtArchivo")[0].files;
+					var data = new FormData();
+					for(var i = 0; i < files.length; i++) data.append('file'+i, files[i]);
+					xhr.send(data);
+		    	}
+		    	else
+		    	{
+					GuardarObservacion();	    		
+		    	}
+            }
 		});
 
 	});
 	
-	function ValidaArchivo(){
-	    // Pendiente
-	    return true;
+	function GuardarObservacion(){
+		$.post("./BO/GuardarObservacionProyecto.php", $('#FormPrincipal').serialize(),
+            function(data) {
+                var obj = jQuery.parseJSON(data);
+                
+                var msj = obj.html;
+                var sub_msj = obj.errores; 
+                
+                var estado =  obj.estado;
+                if(estado == 'OK') // Exito
+                {
+                    MostrarExito(msj, sub_msj);
+                }
+                else // Error
+                {
+                    MostrarError(msj, sub_msj);
+                }
+                oTabla.fnReloadAjax();
+                $("#hdnIdArchivo").val("");
+                $("#txtArchivo").val("");
+                $("#txtObservacion").val("");
+        });
 	}
+	
+	function ValidaObservacionArchivo(){
+	    
+	    var errores = [];
+	    
+	    var obs = $("#txtObservacion").val();
+	    
+	    if(!ValidaTexto(obs)){
+	  		errores.push(" - La observación es inválida.");
+	  	}
+	    
+	    var archivo = $("#txtArchivo")[0].files[0];
+	    
+	    if(archivo != null){
+	    	if(archivo.size / 1048576 > <?php echo $V_MAXIMO_MB ?> )
+	    	{
+				errores.push(" - Tamaño máximo excedido.");
+	    	}
+	    	if(!ValidaExtensiones(archivo.name)){
+	    		errores.push(" - Extensión inválida.");
+	    	}
+	    }
+	    
+	    if(errores.length > 0)
+	    {
+		  	MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
+		  	return false;
+		}
+		else
+		{
+		 	return true;
+		}
+	}
+	
+	function ValidaExtensiones(file)
+    {
+        if (file != "") {
+            var extension = file.split(".");
+            var ext = extension[extension.length - 1];
+            ext = ext.toLowerCase();
+            var extensiones = "<?php echo $V_EXT_VALIDAS ?>";
+            var resultado = extensiones.indexOf(ext);
+            if (resultado > -1) {
+                return true;
+            }
+            if (extensiones == '*') {
+                return true;
+            }
+        }
+        return false;
+    }
 	
 	function ValidarDatos(){
 	  var errores = [];
@@ -307,8 +381,8 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 	  }
 	}
 	
-	function DescargarArchivo(idArchivo, Url){
-		// Pendiente
+	function DescargarArchivo(idArchivo){
+		$().redirect('./BO/DownloadArchivo.php', {'idArchivo': idArchivo});
 	}
 
 </script>
@@ -451,6 +525,7 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 <!-- Hiddens -->
 <div style="display: none;">
 	<input type="hidden" id="hdnIdProyecto" name="hdnIdProyecto" />
+	<input type="hidden" id="hdnIdArchivo" name="hdnIdArchivo" />
 </div>
 
 <?php

@@ -49,6 +49,8 @@ CREATE TABLE tsg_archivo (
   arc_nombre varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'nombre del archivo adjunto',
   arc_peso float NOT NULL COMMENT 'peso del archivo adjunto',
   arc_url varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'url del archivo adjunto',
+  content MEDIUMBLOB NOT NULL,
+  type VARCHAR(30) NOT NULL,
   PRIMARY KEY (arc_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de archivos adjuntos' AUTO_INCREMENT=1 ;
 
@@ -205,21 +207,6 @@ CREATE TABLE tsg_modulo (
   PRIMARY KEY (mod_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de módulos' AUTO_INCREMENT=10 ;
 
---
--- Volcado de datos para la tabla tsg_modulo
---
-
-INSERT INTO tsg_modulo (mod_id, mod_nombre, mod_descrip, mod_activo, mod_usu_creador, mod_fecha_creacion, mod_fecha_modificacion, mod_id_mod_padre, mod_ruta_imagen) VALUES
-(1, 'Proyecto', '', 1, 'luxo', '2013-10-31 00:00:00', NULL, NULL, NULL),
-(2, 'Clientes', '', 1, 'luxo', '2013-10-31 00:00:00', NULL, NULL, NULL),
-(3, 'Registrar', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 1, 'css/images/registrar.jpg'),
-(4, 'Buscar', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 1, 'css/images/Search.png'),
-(5, 'Estadisticas', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 1, 'css/images/Estrella-blanca.png'),
-(6, 'Otroas', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 1, 'css/images/Estrella-blanca.png'),
-(7, 'Buscar', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 2, 'css/images/Search.png'),
-(8, 'Solicitudes', '', 1, 'luxo', '2013-10-31 00:00:00', NULL, NULL, NULL),
-(9, 'Buscar', 'proyecto.php', 1, 'luxo', '2013-10-31 00:00:00', NULL, 8, 'css/images/Search.png');
-
 -- --------------------------------------------------------
 
 --
@@ -231,18 +218,6 @@ CREATE TABLE tsg_modulo_tsg_rol (
   tsg_rolrol_id int(10) NOT NULL,
   PRIMARY KEY (tsg_modulomod_id,tsg_rolrol_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla tsg_modulo_tsg_rol
---
-
-INSERT INTO tsg_modulo_tsg_rol (tsg_modulomod_id, tsg_rolrol_id) VALUES
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 1),
-(9, 1);
 
 -- --------------------------------------------------------
 
@@ -317,13 +292,6 @@ CREATE TABLE tsg_rol (
   PRIMARY KEY (rol_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de roles' AUTO_INCREMENT=2 ;
 
---
--- Volcado de datos para la tabla tsg_rol
---
-
-INSERT INTO tsg_rol (rol_id, rol_nombre, rol_descrip, rol_activo, rol_usu_creador, rol_fecha_creacion, rol_fecha_modificacion) VALUES
-(1, 'super-user', 'rol del super usuario', 1, 'luxo', '2013-10-31 00:00:00', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -365,13 +333,6 @@ CREATE TABLE tsg_usuario (
   PRIMARY KEY (usu_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de Usuarios' AUTO_INCREMENT=2 ;
 
---
--- Volcado de datos para la tabla tsg_usuario
---
-
-INSERT INTO tsg_usuario (usu_id, usu_nombre, usu_apellido, usu_telefono, usu_direccion, usu_fecha_crea, usu_fecha_mod, usu_rut, usu_pass, usu_correo, usu_activo) VALUES
-(1, 'usuario de prueba', '', 0, '', '2013-10-31 03:00:00', '2013-11-01 01:55:58', '11111111-1', 'asdf', 'correo@sgm.cl', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -397,13 +358,6 @@ CREATE TABLE tsg_usuario_tsg_rol (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla tsg_usuario_tsg_rol
---
-
-INSERT INTO tsg_usuario_tsg_rol (tsg_usuariousu_id, tsg_rolrol_id) VALUES
-(1, 1);
-
---
 -- Restricciones para tablas volcadas
 --
 
@@ -418,7 +372,6 @@ ALTER TABLE sqi_tipo_proyecto
 --
 ALTER TABLE tsg_comentario_proyecto
   ADD CONSTRAINT FKtsg_coment436168 FOREIGN KEY (tsg_usuariousu_id) REFERENCES tsg_usuario (usu_id),
-  ADD CONSTRAINT FKtsg_coment782628 FOREIGN KEY (tsg_archivoarc_id) REFERENCES tsg_archivo (arc_id),
   ADD CONSTRAINT FKtsg_coment854003 FOREIGN KEY (tsg_proyectopro_id) REFERENCES tsg_proyecto (pro_id);
 
 --
@@ -427,7 +380,6 @@ ALTER TABLE tsg_comentario_proyecto
 ALTER TABLE tsg_comentario_ticket
   ADD CONSTRAINT FKtsg_coment189196 FOREIGN KEY (tsg_usuariousu_id) REFERENCES tsg_usuario (usu_id),
   ADD CONSTRAINT FKtsg_coment449974 FOREIGN KEY (tsg_tickettic_id) REFERENCES tsg_ticket (tic_id),
-  ADD CONSTRAINT FKtsg_coment842735 FOREIGN KEY (tsg_archivoarc_id) REFERENCES tsg_archivo (arc_id);
 
 --
 -- Filtros para la tabla tsg_modulo_tsg_rol
