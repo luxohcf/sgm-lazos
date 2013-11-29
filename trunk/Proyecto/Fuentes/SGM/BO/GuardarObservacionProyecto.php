@@ -1,17 +1,21 @@
 <?php
 require("../config/parametros.php");
 
-$depurar = 1; // Cambiar a 1 para ver el detalle
+$depurar = 0; // Cambiar a 1 para ver el detalle
 $data = array();
-
 $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
 
 $hdnIdProyecto = (isset($_POST['hdnIdProyecto']))? $_POST['hdnIdProyecto'] : "";
+$hdnIdArchivo  = (isset($_POST['hdnIdArchivo']))? $_POST['hdnIdArchivo'] : "NULL";
+$txtObservacion  = (isset($_POST['txtObservacion']))? $_POST['txtObservacion'] : "";
+
+if(strlen($hdnIdArchivo <= 0)){
+    $hdnIdArchivo = "NULL";
+} 
 
 $_SESSION["Post-obs"] = $_POST;
-$_SESSION["Files-obs"] = $_FILES;
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 if($mySqli->connect_errno)
@@ -30,17 +34,16 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         $mySqli->query("SET NAMES 'utf8'");
         $mySqli->query("SET CHARACTER SET 'utf8'");
 
-        /*$queryUpdUsu = "UPDATE tsg_proyecto SET
-                            pro_activo = 0
-                        WHERE pro_id = $hdnIdProyecto ";
-        
-        $res = $mySqli->query($queryUpdUsu);*/
+        $queryUpdUsu = "INSERT INTO tsg_comentario_proyecto (cop_descrip, tsg_proyectopro_id, tsg_usuariousu_id, tsg_archivoarc_id, cop_fecha_creacion)
+                        VALUES ('$txtObservacion', $hdnIdProyecto, $usu_id, '$hdnIdArchivo', curdate()); ";
+        $_SESSION["Post-obsQuery"] = $queryUpdUsu;
+        $res = $mySqli->query($queryUpdUsu);
 
         if($mySqli->errno == 0)
         {
             if($mySqli->affected_rows > 0)
             {
-                $msg = "Se ha eliminado el proyecto correctamente";
+                $msg = "Se ha guardado la observación correctamente";
                 $mySqli->commit();
                 $mySqli->close();
                 $data["estado"] = "OK";
@@ -55,7 +58,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         else {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "Error al eliminar el proyecto";
+           $msg = "Error al guardar la observación";
            $data["estado"] = "KO";
         }
     }

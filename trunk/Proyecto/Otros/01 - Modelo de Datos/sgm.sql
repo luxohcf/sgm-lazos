@@ -48,6 +48,8 @@ CREATE TABLE tsg_archivo (
   arc_nombre varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'nombre del archivo adjunto',
   arc_peso float NOT NULL COMMENT 'peso del archivo adjunto',
   arc_url varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'url del archivo adjunto',
+  content MEDIUMBLOB NOT NULL,
+  type VARCHAR(30) NOT NULL,
   PRIMARY KEY (arc_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de archivos adjuntos' AUTO_INCREMENT=1 ;
 
@@ -100,7 +102,7 @@ CREATE TABLE tsg_comentario_proyecto (
   cop_descrip varchar(1000) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Descripción',
   tsg_proyectopro_id int(10) NOT NULL,
   tsg_usuariousu_id int(10) NOT NULL,
-  tsg_archivoarc_id int(10) NOT NULL,
+  tsg_archivoarc_id int(10) NULL,
   cop_fecha_creacion datetime DEFAULT NULL COMMENT 'Fecha de creación',
   PRIMARY KEY (cop_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de observaciones del proyecto' AUTO_INCREMENT=1 ;
@@ -116,7 +118,7 @@ CREATE TABLE tsg_comentario_ticket (
   com_descrip varchar(1000) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'descripción del comentario asociado al ticket',
   tsg_tickettic_id int(10) NOT NULL,
   tsg_usuariousu_id int(10) NOT NULL,
-  tsg_archivoarc_id int(10) NOT NULL,
+  tsg_archivoarc_id int(10) NULL,
   com_fecha_creacion datetime DEFAULT NULL COMMENT 'Fecha de creación',
   PRIMARY KEY (com_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='comentario asociado al ticket' AUTO_INCREMENT=1 ;
@@ -394,14 +396,7 @@ CREATE TABLE tsg_usuario_tsg_rol (
   tsg_rolrol_id int(10) NOT NULL,
   PRIMARY KEY (tsg_usuariousu_id,tsg_rolrol_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla tsg_usuario_tsg_rol
---
-
-INSERT INTO tsg_usuario_tsg_rol (tsg_usuariousu_id, tsg_rolrol_id) VALUES
-(1, 1);
-
+/*
 --
 -- Restricciones para tablas volcadas
 --
@@ -419,7 +414,6 @@ ALTER TABLE tsg_comentario_proyecto
 ALTER TABLE tsg_comentario_ticket
   ADD CONSTRAINT FKtsg_coment189196 FOREIGN KEY (tsg_usuariousu_id) REFERENCES tsg_usuario (usu_id),
   ADD CONSTRAINT FKtsg_coment449974 FOREIGN KEY (tsg_tickettic_id) REFERENCES tsg_ticket (tic_id),
-  ADD CONSTRAINT FKtsg_coment842735 FOREIGN KEY (tsg_archivoarc_id) REFERENCES tsg_archivo (arc_id);
 
 --
 -- Filtros para la tabla tsg_modulo_tsg_rol
@@ -467,7 +461,7 @@ ALTER TABLE tsg_usuario_tsg_proyecto
 ALTER TABLE tsg_usuario_tsg_rol
   ADD CONSTRAINT FKtsg_usuari189443 FOREIGN KEY (tsg_rolrol_id) REFERENCES tsg_rol (rol_id),
   ADD CONSTRAINT FKtsg_usuari286059 FOREIGN KEY (tsg_usuariousu_id) REFERENCES tsg_usuario (usu_id);
-
+*/
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

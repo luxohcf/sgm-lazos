@@ -19,7 +19,8 @@ $query = "SELECT obs.cop_id,
           	ON usu.usu_id = obs.tsg_usuariousu_id
           	LEFT JOIN tsg_archivo arc
           	ON obs.tsg_archivoarc_id = arc.arc_id
-          WHERE obs.tsg_proyectopro_id = $IdProyecto ";
+          WHERE obs.tsg_proyectopro_id = $IdProyecto 
+          ORDER BY obs.cop_id DESC ";
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 
@@ -40,7 +41,7 @@ if($mySqli->affected_rows > 0)
         					$row['usu_nombre'],
         					$row['cop_descrip'],
 							$row['arc_nombre'],
-                            "<a class=\"btn\" href=\"javascript:DescargarArchivo(".$row["arc_id"].",'".$row["arc_url"]."');\"><i class=\"icon-download-alt\"></i></a>"
+                            (strlen($row["arc_id"]) > 0) ? "<a class=\"btn\" href=\"javascript:DescargarArchivo(".$row["arc_id"].");\"><i class=\"icon-download-alt\"></i></a>" : ""                                                        
                         );
      }
   

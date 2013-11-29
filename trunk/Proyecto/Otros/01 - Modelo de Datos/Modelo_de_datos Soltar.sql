@@ -1,3 +1,4 @@
+/*
 ALTER TABLE tsg_usuario_tsg_proyecto DROP FOREIGN KEY FKtsg_usuari848679;
 ALTER TABLE tsg_usuario_tsg_proyecto DROP FOREIGN KEY FKtsg_usuari832738;
 ALTER TABLE tsg_usuario_tsg_rol DROP FOREIGN KEY FKtsg_usuari286059;
@@ -21,7 +22,7 @@ ALTER TABLE tsg_comentario_ticket DROP FOREIGN KEY FKtsg_coment842735;
 ALTER TABLE tsg_ticket DROP FOREIGN KEY FKtsg_ticket331605;
 ALTER TABLE tsg_comentario_proyecto DROP FOREIGN KEY FKtsg_coment854003;
 ALTER TABLE tsg_comentario_proyecto DROP FOREIGN KEY FKtsg_coment436168;
-ALTER TABLE tsg_comentario_proyecto DROP FOREIGN KEY FKtsg_coment782628;
+ALTER TABLE tsg_comentario_proyecto DROP FOREIGN KEY FKtsg_coment782628;*/
 DROP TABLE IF EXISTS tsg_comentario_proyecto;
 DROP TABLE IF EXISTS tsg_proyecto_historico;
 DROP TABLE IF EXISTS tsg_modulo_tsg_rol;
