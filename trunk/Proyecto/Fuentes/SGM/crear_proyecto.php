@@ -59,7 +59,7 @@ $(function() {
     
     $("#btnLimpiar").click(function(){
         Limpiar();
-    })
+    });
     
 });
 
@@ -75,41 +75,56 @@ function Limpiar(){
 
 function ValidarDatos(){
       var errores = [];
+      
+      var encargados = $("#ddlJefeProyecto").val(); 
+      
+      if(encargados == "" || encargados == null){
+        errores.push(" - Debe especificar al menos un encargado.");
+      }
+      
       var nombre = $("#txtNombreProyecto").val();
       
-      if(!ValidaTexto(nombre)){
+      if(!ValidaTexto(nombre,255)){
         errores.push(" - El nombre es inválido.");
       }
       var duracion = $("#txtDuracion").val();
       
-      if(!ValidaAlfaNumerico(duracion)){
+      if(!ValidaTexto(duracion, 255)){
         errores.push(" - La duración es inválida.");
       }
       
       var descripcion = $("#txtDescripcion").val();
       
       if(descripcion != ""){
-          if(!ValidaAlfaNumerico(descripcion)){
+          if(!ValidaTexto(descripcion,255)){
             errores.push(" - La descripción es inválida.");
           }
       }
       
       var txtFechaInicio = $("#txtFechaInicio").val();
       
-      if(!ValidaAlfaNumerico(txtFechaInicio)){
+      if(!ValidaFecha(txtFechaInicio)){
         errores.push(" - La fecha de inicio es inválida.");
       }
       
       var txtFechaTermino = $("#txtFechaTermino").val();
       
-      if(!ValidaAlfaNumerico(txtFechaTermino)){
+      if(!ValidaFecha(txtFechaTermino)){
         errores.push(" - La fecha de termino es inválida.");
       }
       
       var txtFechaGarantia = $("#txtFechaGarantia").val();
       
-      if(!ValidaAlfaNumerico(txtFechaGarantia)){
+      if(!ValidaFecha(txtFechaGarantia)){
         errores.push(" - La fecha de garantía es inválida.");
+      }
+      
+      if(ValidaFecha(txtFechaInicio) && ValidaFecha(txtFechaTermino) && !ValidaFechaDiff(txtFechaInicio, txtFechaTermino)){
+        errores.push(" - La fecha de termino debe ser mayor a la de inicio.");
+      }
+      
+      if(ValidaFecha(txtFechaGarantia) && ValidaFecha(txtFechaTermino) && !ValidaFechaDiff(txtFechaTermino, txtFechaGarantia)){
+        errores.push(" - La fecha de garantía debe ser mayor a la de termino.");
       }
 
       if(errores.length > 0)
@@ -145,7 +160,9 @@ function ValidarDatos(){
         <input type="text" placeholder="" class="input-xlarge" id="txtDuracion" name="txtDuracion">
         <?php
         $obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
-        echo $obj -> GeneraSelectJefeProyecto("ddlJefeProyecto", false, true, 5);
+
+        echo $obj->GeneraSelectEncargado("ddlJefeProyecto", true, true, 5);
+        
         echo $obj -> GeneraSelectClientes("ddlCliente", false, true, 5);
         ?>
 
@@ -181,6 +198,9 @@ function ValidarDatos(){
         <p>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
                 Crear Proyecto
+            </button>
+            <button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
+                Limpiar
             </button>
         </p>
     </div>

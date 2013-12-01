@@ -85,21 +85,21 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 	    
 	    var txtNombre = $("#txtNombre").val();
 	    if(txtNombre != ""){
-	    	if(!ValidaTexto(txtNombre)){
+	    	if(!ValidaTexto(txtNombre, 255)){
 	    		errores.push(" - El nombre es inválido.");
 	    	}
 	    }
 	    
 	    var txtApellido = $("#txtApellido").val();
 	    if(txtApellido != ""){
-	    	if(!ValidaTexto(txtApellido)){
+	    	if(!ValidaTexto(txtApellido, 255)){
 	    		errores.push(" - El apellido es inválido.");
 	    	}
 	    }
 	    
 	    var txtEmpresa = $("#txtEmpresa").val();
 	    if(txtEmpresa != ""){
-	    	if(!ValidaTexto(txtEmpresa)){
+	    	if(!ValidaTexto(txtEmpresa, 255)){
 	    		errores.push(" - El nombre empresa es inválido.");
 	    	}
 	    }

@@ -15,36 +15,106 @@ if(!ValidaAcceso("crear_usuario.php", $_SESSION["paginas"]))
 $(function() {
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/CrearUsuario.php", $('#FormPrincipal').serialize(),
-                function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    
-                    var msj = obj.html;
-                    var sub_msj = obj.errores; 
-                    
-                    var estado =  obj.estado;
-                    if(estado == 'OK') // Exito
-                    {
-                        MostrarExito(msj, sub_msj);
-                        Limpiar();
+            
+            bootbox.dialog({
+              message: "¿Seguro que desea crear el usuario?",
+              title: null,
+              buttons: {
+                Si: {
+                  label: "Si",
+                  className: "btn-success",
+                  callback: function() {
+                        $.post("./BO/CrearUsuario.php", $('#FormPrincipal').serialize(),
+                            function(data) {
+                                var obj = jQuery.parseJSON(data);
+                                
+                                var msj = obj.html;
+                                var sub_msj = obj.errores; 
+                                
+                                var estado =  obj.estado;
+                                if(estado == 'OK') // Exito
+                                {
+                                    MostrarExito(msj, sub_msj);
+                                    Limpiar();
+                                }
+                                else // Error
+                                {
+                                    MostrarError(msj, sub_msj);
+                                }
+                        });
                     }
-                    else // Error
-                    {
-                        MostrarError(msj, sub_msj);
-                    }
+                },
+                No: {
+                  label: "No",
+                  className: "btn-info",
+                  callback: function() {
+                    
+                  }
+                }
+              }
             });
         }
+    });
+    
+    $("#btnLimpiar").click(function(){
+        Limpiar();
     });
 });
 
 function Limpiar(){
-    // Pendiente
+    $("#txtNombreUsuario").val("");
+    $("#txtApellido").val("");
+    $("#txtDireccion").val("");
+    $("#txtTelefono").val("");
+    $("#txtNombreRut").val("");
+    $("#txtPass").val("");
+    $("#txtCorreo").val("");
 }
 
 function ValidarDatos(){
       var errores = [];
       
-      // Pendiente
+      var txtNombreUsuario = $("#txtNombreUsuario").val();
+      
+      if(!ValidaTexto(txtNombreUsuario,255)){
+        errores.push(" - El nombre es inválido.");
+      }
+      
+      var txtApellido = $("#txtApellido").val();
+      
+      if(!ValidaTexto(txtApellido,255)){
+        errores.push(" - El apellido es inválido.");
+      }
+      
+      var txtDireccion = $("#txtDireccion").val();
+      
+      if(!ValidaTexto(txtDireccion,255)){
+        errores.push(" - La dirección es inválida.");
+      }
+      
+      var txtTelefono = $("#txtTelefono").val();
+      
+      if(!ValidaNumerico(txtTelefono)){
+        errores.push(" - El telefóno es inválido.");
+      }
+      
+      var txtNombreRut = $("#txtNombreRut").val();
+      
+      if(!ValidaRut(txtNombreRut)){
+        errores.push(" - El rut es inválido.");
+      }
+      
+      var txtPass = $("#txtPass").val();
+      
+      if(!validaFormatoPass(txtPass)){
+        errores.push(" - La contraseña es inválida.");
+      }
+      
+      var txtCorreo = $("#txtCorreo").val();
+      
+      if(!ValidaCorreo(txtCorreo)){
+        errores.push(" - El correo es inválido.");
+      }
       
       if(errores.length > 0)
       {
@@ -70,7 +140,7 @@ function ValidarDatos(){
             <div>
                 Nombre(s) Usuario <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreUsuario" name="txtNombreUsuario">
+        <input type="text" placeholder="xx" class="input-xlarge" id="txtNombreUsuario" name="txtNombreUsuario">
 
         <label>
             <div>
@@ -122,6 +192,9 @@ function ValidarDatos(){
         <p>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
                 Crear Usuario
+            </button>
+            <button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
+                Limpiar
             </button>
         </p>
     </div>

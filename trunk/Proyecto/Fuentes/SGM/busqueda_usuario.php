@@ -83,7 +83,7 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 	    
 	    var txtNombre = $("#txtNombre").val();
 	    if(txtNombre != ""){
-	    	if(!ValidaTexto(txtNombre)){
+	    	if(!ValidaTexto(txtNombre, 255)){
 	    		errores.push(" - El nombre es inválido.");
 	    	}
 	    }
@@ -99,9 +99,9 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 		}
 	}
 	
-	function ModificarUsuario(idProyecto)
+	function ModificarUsuario(idUsuario)
 	{
-	    Ir("modificar_usuario.php?idUsuario="+idProyecto);
+	    $().redirect('modificar_usuario.php', {'idUsuario': idUsuario});
 	}
 	
 </script>
