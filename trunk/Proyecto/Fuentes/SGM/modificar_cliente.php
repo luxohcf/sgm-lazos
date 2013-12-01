@@ -13,6 +13,39 @@ if ($idCliente == NULL || $usu_id == NULL || strlen($idCliente) < 1) {
 	exit();
 }
 
+//---------------------------------------------------
+
+$query = "SELECT pry.cli_id, 
+				 pry.cli_nombre,
+				 pry.cli_apellido,
+				 pry.cli_correo,
+				 pry.cli_empresa,
+				 pry.cli_rut,
+		    	 pry.cli_direccion
+				 
+		 FROM tsg_cliente pry
+		 WHERE pry.cli_id = $idCliente AND pry.cli_activo = 1 ";
+
+$mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+$mySqli->query("SET NAMES 'utf8'");
+$mySqli->query("SET CHARACTER SET 'utf8'");
+$res = $mySqli -> query($query);
+
+if ($mySqli -> affected_rows > 0)// Si los datos son validos
+{
+	while ($row = $res -> fetch_assoc()) {
+		$proyecto["cli_id"] = $row['cli_id'];
+		$proyecto["cli_nombre"] = $row['cli_nombre'];
+		$proyecto["cli_apellido"] = $row['cli_apellido'];
+		$proyecto["cli_correo"] = $row['cli_correo'];
+		$proyecto["cli_empresa"] = $row["cli_empresa"];
+		$proyecto["cli_rut"] = $row["cli_rut"];
+		$proyecto["cli_direccion"] = $row["cli_direccion"];
+		}
+	$mySqli -> close();
+}
+
+//---------------------------------------------------------
 
 ?>
 <script type="text/javascript">
@@ -49,8 +82,40 @@ function Limpiar(){
 function ValidarDatos(){
       var errores = [];
       
-      // Pendiente
-      
+//      -------------------------------------------------
+  
+	  var nombre = $("#txtNombreCliente").val();
+	  
+	  if(!ValidaTexto(nombre)){
+	  	errores.push(" - El Nombre es inválido.");
+	  }
+	  
+	   var apellido = $("#txtApellidoCliente").val();
+	  
+	  if(!ValidaTexto(apellido)){
+	  	errores.push(" - El Apellido es inválido.");
+	  }
+	  
+	  var direccion = $("#txtdireccion").val();
+	  
+	  if(!ValidaTexto(direccion)){
+	  	errores.push(" - La Dirección es inválida.");
+	  }
+	  
+	  var txtRut = $("#txtRut").val();
+
+      if(!ValidaRut(txtRut)){
+	    errores.push(" - El Rut es inválido.");
+	    }
+	  
+	  var correo = $("#txtCorreo").val();
+	  
+  	  if(!ValidaTexto(correo)){
+	  	errores.push(" - El Correo es inválido.");
+	  }
+	  
+
+  //----------------------------------------------------------    
       if(errores.length > 0)
       {
         MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
