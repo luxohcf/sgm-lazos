@@ -35,20 +35,22 @@ $V_TITULO = "Proyecto SGM";
 $V_EXT_VALIDAS = "doc,docx,xls,xlsx,jpg,png,pdf";
 $V_MAXIMO_MB = "2";
 
-/* Ambiente testing */
+/* Ambiente testing 
 
 $V_HOST = "mysql.hostinger.es";
 $V_USER = "u643183889_sgm";
 $V_PASS = "sgmlazos";
-$V_BBDD = "u643183889_sgm"; 
+$V_BBDD = "u643183889_sgm";
 
-/* Ambiente desarrollo 
+$V_DEPURAR = FALSE; */
+
+/* Ambiente desarrollo */
 $V_HOST = "localhost";
 $V_USER = "sgm";
 $V_PASS = "sgm";
-$V_BBDD = "sgm";*/
+$V_BBDD = "sgm";
 
-$V_DEPURAR = FALSE;
+$V_DEPURAR = TRUE; 
 
 // Clase para generar cosas genericas
 class Utilidades
@@ -69,6 +71,10 @@ class Utilidades
     public function GeneraSelectClientes($nombre, $multiple = false, $buscar = false, $size = 0){
             
         $html  = "<label>Cliente</label>";
+        if($multiple)
+        {
+            $html  = "<label>Clientes</label>";
+        }
         $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
 		
 		if($multiple == true){
@@ -206,6 +212,58 @@ class Utilidades
         return $html;
     }
 
+    public function GeneraSelectEncargado($nombre, $multiple = false, $buscar = false, $size = 0){
+        $html  = "<label>Encargado</label>";
+        if($multiple)
+        {
+            $html  = "<label>Encargados</label>";
+        }
+        $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
+        
+        if($multiple == true){
+            $html .= "[]\"  multiple "; 
+        }
+        else{
+            $html .= "\" ";
+        }
+        
+        if($buscar == true){
+            $html .= " data-live-search=\"true\" "; 
+        }
+        
+        if($size != 0)
+        {
+            $html .= " data-size=\"$size\"  ";
+        }
+        
+        $html .= ">";
+        $id_Encargado = 3; // Rol encargado
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT DISTINCT usu.usu_id, usu.usu_nombre, usu.usu_apellido
+                  FROM tsg_usuario usu
+                    INNER JOIN tsg_usuario_tsg_rol rol_usu
+                    ON rol_usu.tsg_usuariousu_id = usu.usu_id
+                    INNER JOIN tsg_rol rol
+                    ON rol.rol_id = rol_usu.tsg_rolrol_id AND rol.rol_activo = 1
+                  WHERE usu.usu_activo = 1 AND rol.rol_id = $id_Encargado ";
+
+        if ($mySqli -> connect_errno) {
+            $html = "Error al generar el menu";
+            return $html;
+        }
+        $res = $mySqli -> query($query);
+
+        if ($mySqli -> affected_rows > 0) {
+            while ($row = $res -> fetch_assoc()) {
+                $html .= "<option value='".$row["usu_id"]."'>".$row["usu_nombre"]." ".$row["usu_apellido"]."</option>";
+            }
+        }
+        $html .= "</select>";
+
+        return $html;
+    }
+
     public function GeneraSelectEstadoProyecto($nombre, $multiple = false, $buscar = false, $size = 0){
         $html  = "<label>Estado Proyecto</label>";
         $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
@@ -250,7 +308,11 @@ class Utilidades
     }
 
 	public function GeneraSelectProyectos($nombre, $multiple = false, $buscar = false, $size = 0){
-		$html  = "<label>Proyectos</label>";
+		$html  = "<label>Proyecto</label>";
+        if($multiple)
+        {
+            $html  = "<label>Proyectos</label>";
+        }
         $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
 		
 		if($multiple == true){
@@ -379,7 +441,11 @@ class Utilidades
 	}
 	
 	public function GeneraSelectUsuarios($nombre, $multiple = false, $buscar = false, $size = 0){
-		$html  = "<label>Usuarios</label>";
+		$html  = "<label>Usuario</label>";
+        if($multiple)
+        {
+            $html  = "<label>Usuarios</label>";
+        }
         $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
 		
 		if($multiple == true){
@@ -423,6 +489,10 @@ class Utilidades
 
 	public function GeneraSelectPrioridad($nombre, $multiple = false, $buscar = false, $size = 0){
 		$html  = "<label>Prioridad</label>";
+        if($multiple)
+        {
+            $html  = "<label>Prioridades</label>";
+        }
         $html .= "<select class=\"selectpicker\" id=\"$nombre\" name=\"$nombre";
 		
 		if($multiple == true){

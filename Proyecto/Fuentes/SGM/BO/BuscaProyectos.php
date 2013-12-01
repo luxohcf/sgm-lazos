@@ -23,8 +23,6 @@ $query = "SELECT DISTINCT
                 pry.pro_id,
                 pry.pro_nombre,
                 tip_pry.tip_nombre,
-                usu.usu_nombre, 
-                usu.usu_apellido,
                 est_pry.est_nombre,
                 DATE_FORMAT(pry.pro_fecha_ini,'%d-%m-%Y') AS pro_fecha_ini,
                 DATE_FORMAT(pry.pro_fecha_term,'%d-%m-%Y') AS pro_fecha_term,
@@ -32,14 +30,16 @@ $query = "SELECT DISTINCT
                 cli.cli_rut
                 
         FROM tsg_proyecto pry
-            LEFT JOIN tsg_usuario usu
-            ON pry.pro_usu_id_jefepro = usu.usu_id AND usu.usu_activo = 1
+            
             LEFT JOIN sqi_tipo_proyecto tip_pry
             ON pry.sqi_tipo_proyectotip_id = tip_pry.tip_id AND tip_activo = 1
+            
             LEFT JOIN tsg_estado_proyecto est_pry
             ON pry.tsg_estado_proyectoest_id = est_pry.est_id AND est_pry.est_activo = 1
+            
             LEFT JOIN tsg_cliente cli 
             ON pry.tsg_clientecli_id = cli.cli_id AND cli_activo = 1
+            
         WHERE 
             pry.pro_activo = 1";
 
@@ -49,14 +49,20 @@ if($CodigoProyecto != null && strlen($CodigoProyecto) > 0){
 if($NombreProyecto != null && strlen($NombreProyecto) > 0){
 	$query .= " AND pry.pro_nombre LIKE '%$NombreProyecto%'";
 }
+
 if($ddlJefeProyecto != null && is_array($ddlJefeProyecto) && count($ddlJefeProyecto) > 0)
 {
-	$query .= " AND pry.pro_usu_id_jefepro IN (";
+	$query .= " AND EXISTS ( SELECT 1 FROM tsg_usuario_tsg_proyecto 
+	                         WHERE tsg_proyectopro_id = pry.pro_id 
+	                           AND rol_id = 3
+	                           AND tsg_usuariousu_id IN (";
 	foreach($ddlJefeProyecto as $obj){
 		$query .= "$obj,";
 	}
-	$query = substr($query,0, -1).")";
+	$query = substr($query,0, -1).") )";
+	
 }
+
 if($ddlCliente != null && is_array($ddlCliente) && count($ddlCliente) > 0)
 {
 	$query .= " AND pry.tsg_clientecli_id IN (";
@@ -130,7 +136,6 @@ if($mySqli->affected_rows > 0)
                             $row['pro_id'],
                             $row['pro_nombre'],
                             $row['tip_nombre'],
-                            substr($row['usu_nombre']." ".$row['usu_apellido'], 0, 15)."...",
                             $row['est_nombre'],
                             $row['pro_fecha_ini'],
                             $row['pro_fecha_term'],
@@ -150,9 +155,6 @@ $aa = array(
 
 if($V_DEPURAR == TRUE)
 {
-    //debug($query);
-    //debug($aa);
-    //die;
     $_SESSION["BP-Query"] = $query;
 	$_SESSION["BP-Post"] = $_POST;
 }

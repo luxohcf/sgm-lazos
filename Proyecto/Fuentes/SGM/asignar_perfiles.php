@@ -1,11 +1,11 @@
 <?php
-
 include("cabecera.php");
 include("menu.php");
 
 $usu_id = $_SESSION["id_usuario"];
 
-$perfiles = array();
+$PerfilesActuales = array();
+$PerfilesDisponibles = array();
 
 $IdUsuario = $_POST["IdUsuario"];
 
@@ -14,7 +14,41 @@ if ($IdUsuario == NULL || $usu_id == NULL || strlen($IdUsuario) < 1) {
 	exit();
 }
 
-// Pendiente obtener los perfiles actuales y los disponibles para cargar los select
+$mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+$mySqli->query("SET NAMES 'utf8'");
+$mySqli->query("SET CHARACTER SET 'utf8'");
+
+$query = "SELECT usu_rol.tsg_rolrol_id, 
+                 rol.rol_nombre
+          FROM tsg_usuario_tsg_rol usu_rol
+            INNER JOIN tsg_rol rol
+            ON rol.rol_id = usu_rol.tsg_rolrol_id AND rol.rol_activo = 1
+          WHERE usu_rol.tsg_usuariousu_id = $IdUsuario ";
+
+$res = $mySqli -> query($query);
+
+if ($mySqli -> affected_rows > 0)
+{
+    while ($row = $res -> fetch_assoc()) {
+        $PerfilesActuales[$row['tsg_rolrol_id']] = $row['rol_nombre'];
+    }
+}
+
+$query = "SELECT rol_id, rol_nombre
+          FROM tsg_rol rol
+          WHERE rol.rol_activo = 1
+          AND NOT EXISTS (SELECT 1 FROM tsg_usuario_tsg_rol usu_rol
+                          WHERE usu_rol.tsg_rolrol_id = rol.rol_id 
+                                AND usu_rol.tsg_usuariousu_id = $IdUsuario)";
+
+$res = $mySqli -> query($query);
+
+if ($mySqli -> affected_rows > 0)
+{
+    while ($row = $res -> fetch_assoc()) {
+        $PerfilesDisponibles[$row['rol_id']] = $row['rol_nombre'];
+    }
+}
 
 ?>
 <script type="text/javascript">
@@ -35,13 +69,53 @@ $(function() {
     });
     
     $("#btnVolver").click(function(){
-    	Ir("modificar_usuario.php?idUsuario=<?php echo $IdUsuario; ?>");
+    	$().redirect('modificar_usuario.php', {'idUsuario': <?php echo $IdUsuario; ?>});
     });
     
     $("#btnGuardar").click(function(){
-    	// Pendiente
+    	bootbox.dialog({
+          message: "¿Seguro que desea guardar los cambios?",
+          title: null,
+          buttons: {
+            Si: {
+              label: "Si",
+              className: "btn-success",
+              callback: function() {
+                  
+                    var perfs = [];
+                    $("#PerAsignados option").each(function(data,x){
+                        perfs.push(x.value);
+                    });
+
+                    $.post("./BO/ModificarDatosPerfiles.php", {IdUsuario : $('#hdnIdUsuario').val(), Perfiles : perfs},
+                        function(data) {
+                            var obj = jQuery.parseJSON(data);
+                            
+                            var msj = obj.html;
+                            var sub_msj = obj.errores; 
+                            
+                            var estado =  obj.estado;
+                            if(estado == 'OK') // Exito
+                            {
+                                MostrarExito(msj, sub_msj);
+                            }
+                            else // Error
+                            {
+                                MostrarError(msj, sub_msj);
+                            }
+                    });
+                }
+            },
+            No: {
+              label: "No",
+              className: "btn-info",
+              callback: function() {
+                
+              }
+            }
+          }
+        });
     });
-    
 });
 
 </script>
@@ -56,11 +130,11 @@ $(function() {
     <div class="span10">
 		<div class="row-fluid">
 			<div class="span5">
-				<select name='PerAsignados' id='PerAsignados' multiple size='10' style="width: 100%;">
-				<?php // Pendiente
-					for($x = 0; $x <5; $x++){
-						echo "<option> Perfil xxx $x </option>";
-					}
+				<select id='PerAsignados' name='PerAsignados[]' multiple size='10' style="width: 100%;">
+				<?php 
+				    foreach($PerfilesActuales as $key => $obj){
+				        echo "<option value='$key'>$obj</option>";
+				    }
 				?>
 				</select>
 			</div>
@@ -75,9 +149,11 @@ $(function() {
 				<a class="btn btn-info" href='JavaScript:void(0);' id='btn-remove'><i class="icon-chevron-left"></i></a>
 			</div>
 			<div class="span5">
-				<select class="input-large" name='PerListado' id='PerListado' multiple size='10' style="width: 100%;">
+				<select id='PerListado' name='PerListado' multiple size='10' style="width: 100%;">
 				<?php
-				  // Pendiente
+				  foreach($PerfilesDisponibles as $key => $obj){
+                        echo "<option value='$key'>$obj</option>";
+                    }
 				?>
 				</select>
 			</div>
@@ -109,6 +185,10 @@ $(function() {
 </div>
 <div>
     &nbsp;
+</div>
+
+<div style="display: none;">
+    <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value="<?php echo $IdUsuario; ?>" />
 </div>
 
 <?php

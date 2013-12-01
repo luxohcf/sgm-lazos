@@ -5,7 +5,7 @@ $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
 
-$hdnIdProyecto = (isset($_POST['IdProyecto']))? $_POST['IdProyecto'] : "";
+$IdUsuario = (isset($_POST['IdUsuario']))? $_POST['IdUsuario'] : "";
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 if($mySqli->connect_errno)
@@ -13,7 +13,7 @@ if($mySqli->connect_errno)
     $data["Error conexion MySql"] = $mySqli->connect_error;
 }
 
-if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
+if(strlen($usu_id) > 0 && strlen($IdUsuario) > 0)
 {
     $querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
     $res = $mySqli->query($querySelect);
@@ -24,9 +24,9 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         $mySqli->query("SET NAMES 'utf8'");
         $mySqli->query("SET CHARACTER SET 'utf8'");
 
-        $queryUpdUsu = "UPDATE tsg_proyecto SET
-                            pro_activo = 0
-                        WHERE pro_id = $hdnIdProyecto ";
+        $queryUpdUsu = "UPDATE tsg_usuario SET
+                              usu_activo = 0
+                        WHERE usu_id = $IdUsuario ";
         
         $res = $mySqli->query($queryUpdUsu);
 
@@ -34,7 +34,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         {
             if($mySqli->affected_rows > 0)
             {
-                $msg = "Se ha eliminado el proyecto correctamente";
+                $msg = "Se ha eliminado el usuario correctamente";
                 $mySqli->commit();
                 $mySqli->close();
                 $data["estado"] = "OK";
@@ -49,7 +49,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         else {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "Error al eliminar el proyecto";
+           $msg = "Error al eliminar el usuario";
            $data["estado"] = "KO";
         }
     }
@@ -74,6 +74,5 @@ else
 }
 
 echo json_encode($data);
-
 
 ?>

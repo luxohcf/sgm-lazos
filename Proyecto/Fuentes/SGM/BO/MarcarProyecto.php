@@ -59,6 +59,4 @@ if($V_DEPURAR == TRUE)
 	$_SESSION["BO-MarcaProyecto-Post"] = $_POST;
 }
 
-
-
-
+?>

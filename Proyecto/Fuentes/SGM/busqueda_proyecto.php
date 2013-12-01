@@ -182,7 +182,9 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 		<div class="span5">
 <?php
     $obj = new Utilidades($V_HOST,$V_USER,$V_PASS,$V_BBDD);
-    echo $obj->GeneraSelectJefeProyecto("ddlJefeProyecto", true,true,5);
+    
+    echo $obj->GeneraSelectEncargado("ddlJefeProyecto", true, true, 5);
+    
     echo $obj->GeneraSelectClientes("ddlCliente", true,true,5);
  ?>
 		</div>
@@ -248,7 +250,6 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 						<th>Código</th>
 						<th>Nombre Proyecto</th>
 						<th>Tipo</th>
-						<th>Jefe de Proyecto</th>
 						<th>Estado</th>
 						<th>Inicio</th>
 						<th>Término</th>

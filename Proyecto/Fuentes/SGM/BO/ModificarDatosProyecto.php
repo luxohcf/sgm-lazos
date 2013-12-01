@@ -1,9 +1,6 @@
 <?php
 require("../config/parametros.php");
-
-$depurar = 0; // Cambiar a 1 para ver el detalle
 $data = array();
-
 $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
@@ -103,7 +100,7 @@ else{
 }
 
 
-if($depurar == TRUE)
+if($V_DEPURAR == TRUE)
 {
     $data["html"] = "$msg - $querySelect - $queryInsert - $queryUpdUsu ";
 }
@@ -113,6 +110,5 @@ else
 }
 
 echo json_encode($data);
-
 
 ?>

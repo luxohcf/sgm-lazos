@@ -1,7 +1,5 @@
 <?php
 require("../config/parametros.php");
-
-$depurar = 0; // Cambiar a 1 para ver el detalle
 $data = array();
 $msg = "";
 
@@ -40,7 +38,7 @@ if(strlen($usu_id) > 0)
                      VALUES
                         ('$txtNombreProyecto',
                          '$txtDescripcion',
-                          $ddlJefeProyecto,
+                          NULL,
                          '$txtDuracion',
                           STR_TO_DATE('$txtFechaInicio','%d-%m-%Y'),
                           STR_TO_DATE('$txtFechaTermino','%d-%m-%Y'),
@@ -58,6 +56,18 @@ if(strlen($usu_id) > 0)
         {
             if($mySqli->affected_rows > 0)
             {
+                if($ddlJefeProyecto != null && is_array($ddlJefeProyecto) && count($ddlJefeProyecto) > 0)
+                {
+                    
+                    foreach($ddlTipoProyecto as $obj){
+                                
+                         $query = "INSERT INTO tsg_usuario_tsg_proyecto (tsg_usuariousu_id, tsg_proyectopro_id, rol_id)
+                                   VALUES ($obj, $mySqli->insert_id, 3);";
+                                   
+                         $res = $mySqli->query($query);          
+                    }
+                }
+
                 $msg = "Se ha creado el proyecto $mySqli->insert_id correctamente";
                 $mySqli->commit();
                 $mySqli->close();
@@ -88,7 +98,7 @@ else{
 }
 
 
-if($depurar == TRUE)
+if($V_DEPURAR == TRUE)
 {
     $data["html"] = "$msg - $querySelect - $queryIns ";
 }

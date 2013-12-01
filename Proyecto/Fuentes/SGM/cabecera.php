@@ -85,9 +85,10 @@ if(isset($_SESSION['usuario']) == FALSE)
 		return true;
 	}
 	
-	function ValidaTexto(texto){
+	function ValidaTexto(texto,longitud){
 		
-		if (!/^[a-zA-ZáéíóúÁÉÍÓÚñ0-9\s\'\-\.]{1,255}$/.test(texto)) {
+		var re = RegExp("^[a-zA-ZáéíóúÁÉÍÓÚñ0-9\s\'\-\.\#\_/ ]{1,"+longitud+"}$");
+		if (!re.test(texto.trim())) {
 			return false;
 		}
 		return true;
@@ -101,13 +102,41 @@ if(isset($_SESSION['usuario']) == FALSE)
 		return true;
 	}
 	
-	function ValidaAlfaNumerico(texto){
+	function ValidaAlfaNumerico(texto, longitud){
 		
-		if (!/^[a-zA-ZáéíóúÁÉÍÓÚñ0-9\s\'\-\.\(\)]{1,255}$/.test(texto)) {
+		var re = RegExp("^[a-zA-Z0-9]{1,"+longitud+"}$");
+		if (!re.test(texto.trim())) {
 			return false;
 		}
 		return true;
 	}
+	
+    function ValidaFecha(texto){
+        
+        if (!/^\d{2}[\-]\d{2}[\-]\d{4}$/.test(texto)) {
+            return false;
+        }
+        return true;
+    }
+    
+    function ValidaFechaDiff(fechaInicio, fechaFin){
+        
+        var x = fechaInicio.split("-");
+        fechaInicio = x[1] + "/" + x[0] + "/" + x[2];
+        var d1 = new Date(fechaInicio);
+        x = fechaFin.split("-");
+        fechaFin = x[1] + "/" + x[0] + "/" + x[2];
+        var d2 = new Date(fechaFin);
+        var datediff = d2.getTime() - d1.getTime();
+        var dias = (datediff / (24*60*60*1000));
+        
+        if(dias > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 	function MostrarAdvertencia(mensaje, array) {
 		MostrarMensaje(mensaje, array, "");
@@ -155,8 +184,8 @@ if(isset($_SESSION['usuario']) == FALSE)
         $('.txtFecha').datepicker({
             format: "dd-mm-yyyy",
             todayBtn: "linked",
-            language: "es",
-            endDate: "+"
+            language: "es"//,
+            //endDate: "+"
         });
 	  	
 	});

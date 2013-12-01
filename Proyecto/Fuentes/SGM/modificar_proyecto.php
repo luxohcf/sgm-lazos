@@ -33,7 +33,7 @@ $mySqli->query("SET NAMES 'utf8'");
 $mySqli->query("SET CHARACTER SET 'utf8'");
 $res = $mySqli -> query($query);
 
-if ($mySqli -> affected_rows > 0)// Si los datos son validos
+if ($mySqli -> affected_rows > 0)
 {
 	while ($row = $res -> fetch_assoc()) {
 		$proyecto["pro_id"] = $row['pro_id'];
@@ -49,6 +49,20 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 		$proyecto["sqi_tipo_proyectotip_id"] = $row["sqi_tipo_proyectotip_id"];
 		$proyecto["pro_destacado"] = $row["pro_destacado"];
 	}
+	
+	$query = "SELECT tsg_usuariousu_id FROM tsg_usuario_tsg_proyecto 
+	          WHERE tsg_proyectopro_id = ".$proyecto["pro_id"]."
+	            AND rol_id = 3 ";
+
+	$res = $mySqli -> query($query);
+    if ($mySqli -> affected_rows > 0)
+    {
+        $vals = "[";
+        while ($row = $res -> fetch_assoc()) {
+            $vals .= $row["tsg_usuariousu_id"].",";
+        }
+        $proyecto["pro_usu_id_jefepro"] = substr($vals,0, -1)."]";
+    }
 	$mySqli -> close();
 }
 
@@ -286,6 +300,12 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 	    
 	    var errores = [];
 	    
+	    var encargados = $("#ddlJefeProyecto").val(); 
+      
+        if(encargados == "" || encargados == null){
+            errores.push(" - Debe especificar al menos un encargado.");
+        }
+	    
 	    var obs = $("#txtObservacion").val();
 	    
 	    if(!ValidaTexto(obs)){
@@ -337,38 +357,46 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 	  var errores = [];
 	  var nombre = $("#txtNombreProyecto").val();
 	  
-	  if(!ValidaTexto(nombre)){
+	  if(!ValidaTexto(nombre, 255)){
 	  	errores.push(" - El nombre es inválido.");
 	  }
 	  var duracion = $("#txtDuracion").val();
 	  
-	  if(!ValidaAlfaNumerico(duracion)){
+	  if(!ValidaTexto(duracion, 255)){
 	  	errores.push(" - La duración es inválida.");
 	  }
 	  
 	  var descripcion = $("#txtDescripcion").val();
 	  
-  	  if(!ValidaAlfaNumerico(descripcion)){
+  	  if(!ValidaTexto(descripcion, 255)){
 	  	errores.push(" - La descripción es inválida.");
 	  }
 	  
 	  var txtFechaInicio = $("#txtFechaInicio").val();
 	  
-  	  if(!ValidaAlfaNumerico(txtFechaInicio)){
+  	  if(!ValidaFecha(txtFechaInicio)){
 	  	errores.push(" - La fecha de inicio es inválida.");
 	  }
 	  
 	  var txtFechaTermino = $("#txtFechaTermino").val();
 	  
-  	  if(!ValidaAlfaNumerico(txtFechaTermino)){
+  	  if(!ValidaFecha(txtFechaTermino)){
 	  	errores.push(" - La fecha de termino es inválida.");
 	  }
 	  
 	  var txtFechaGarantia = $("#txtFechaGarantia").val();
 	  
-  	  if(!ValidaAlfaNumerico(txtFechaGarantia)){
+  	  if(!ValidaFecha(txtFechaGarantia)){
 	  	errores.push(" - La fecha de garantía es inválida.");
 	  }
+	  
+	  if(ValidaFecha(txtFechaInicio) && ValidaFecha(txtFechaTermino) && !ValidaFechaDiff(txtFechaInicio, txtFechaTermino)){
+        errores.push(" - La fecha de termino debe ser mayor a la de inicio.");
+      }
+      
+      if(ValidaFecha(txtFechaGarantia) && ValidaFecha(txtFechaTermino) && !ValidaFechaDiff(txtFechaTermino, txtFechaGarantia)){
+        errores.push(" - La fecha de garantía debe ser mayor a la de termino.");
+      }
 
 	  if(errores.length > 0)
 	  {
@@ -406,8 +434,10 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 			<input type="text" placeholder="" class="input-xlarge" id="txtDuracion" value="<?php echo $proyecto["pro_duracion"]; ?>" name="txtDuracion">
 			<?php
 			$obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
-			echo $obj -> GeneraSelectJefeProyecto("ddlJefeProyecto");
-			echo $obj -> GeneraSelectClientes("ddlCliente");
+            
+            echo $obj->GeneraSelectEncargado("ddlJefeProyecto", true, true, 5);
+			
+			echo $obj->GeneraSelectClientes("ddlCliente", false, true, 5);
 			?>
 
 			<label>
@@ -427,8 +457,8 @@ if ($mySqli -> affected_rows > 0)// Si los datos son validos
 			<input type="text" class="txtFecha" id="txtFechaGarantia" name="txtFechaGarantia" value="<?php echo $proyecto["pro_fecha_garan"]; ?>">
 
 			<?php
-			echo $obj -> GeneraSelectTipoProyecto("ddlTipoProyecto");
-			echo $obj -> GeneraSelectEstadoProyecto("ddlEstadoProyecto");
+			echo $obj -> GeneraSelectTipoProyecto("ddlTipoProyecto", false, true, 5);
+			echo $obj -> GeneraSelectEstadoProyecto("ddlEstadoProyecto", false, true, 5);
 			?>
 		</div>
 		<div class="span1"></div>

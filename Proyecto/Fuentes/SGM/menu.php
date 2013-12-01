@@ -70,6 +70,10 @@ if($mySqli->affected_rows > 0)
     }
   $mySqli->close();
 }
+else
+{
+    $Menu["No existen opciones disponibles"] = array();
+}
 
 ?>
 

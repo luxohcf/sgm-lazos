@@ -256,7 +256,7 @@ if ($mySqli -> affected_rows > 0)
 </script>
 <!-- Contenido  -->
 <fieldset>
-    <legend>Modificar Proyecto</legend>
+    <legend>Detalle Solicitud</legend>
 
     <div class="row-fluid">
         <div class="span1"></div>
