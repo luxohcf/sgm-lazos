@@ -5,13 +5,13 @@ $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
 
-$hdnIdProyecto = (isset($_POST['hdnIdProyecto']))? $_POST['hdnIdProyecto'] : "";
+$hdnIdSolicitud = (isset($_POST['hdnIdSolicitud']))? $_POST['hdnIdSolicitud'] : "";
 $hdnIdArchivo  = (isset($_POST['hdnIdArchivo']))? $_POST['hdnIdArchivo'] : "NULL";
 $txtObservacion  = (isset($_POST['txtObservacion']))? $_POST['txtObservacion'] : "";
 
 if(strlen($hdnIdArchivo <= 0)){
     $hdnIdArchivo = "NULL";
-} 
+}
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 if($mySqli->connect_errno)
@@ -19,19 +19,19 @@ if($mySqli->connect_errno)
     $data["Error conexion MySql"] = $mySqli->connect_error;
 }
 
-if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
+if(strlen($usu_id) > 0 && strlen($hdnIdSolicitud) > 0)
 {
     $querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
     $res = $mySqli->query($querySelect);
         
-    if($mySqli->affected_rows > 0) // No existe el nombre
+    if($mySqli->affected_rows > 0)
     {
         $mySqli->autocommit(FALSE);
         $mySqli->query("SET NAMES 'utf8'");
         $mySqli->query("SET CHARACTER SET 'utf8'");
 
-        $queryUpdUsu = "INSERT INTO tsg_comentario_proyecto (cop_descrip, tsg_proyectopro_id, tsg_usuariousu_id, tsg_archivoarc_id, cop_fecha_creacion)
-                        VALUES ('$txtObservacion', $hdnIdProyecto, $usu_id, '$hdnIdArchivo', NOW()); ";
+        $queryUpdUsu = "INSERT INTO tsg_comentario_ticket (com_descrip, tsg_tickettic_id, tsg_usuariousu_id, tsg_archivoarc_id, com_fecha_creacion)
+                        VALUES ('$txtObservacion', $hdnIdSolicitud, $usu_id, '$hdnIdArchivo', NOW()); ";
 
         $res = $mySqli->query($queryUpdUsu);
 
@@ -67,7 +67,6 @@ else{
     $msg = "Usuario inválido";
     $data["estado"] = "KO";
 }
-
 
 if($V_DEPURAR == TRUE)
 {

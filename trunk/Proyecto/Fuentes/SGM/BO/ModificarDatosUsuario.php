@@ -37,7 +37,7 @@ if(strlen($usu_id) > 0)
 	                        ,`usu_apellido` = '$Apellido'
 	                        ,`usu_telefono` = '$Telefono'
 	                        ,`usu_direccion` = '$Direccion' 
-	                        ,`usu_fecha_mod` = curdate()
+	                        ,`usu_fecha_mod` = NOW()
 	                        ,`usu_correo` = '$Correo'
 	                        
                         WHERE `usu_id` = $usu_id AND `usu_activo` = 1 ";

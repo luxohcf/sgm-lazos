@@ -13,7 +13,7 @@ $query = "SELECT obs.cop_id,
                  arc.arc_id,
                  arc.arc_nombre,
                  arc.arc_url,
-                 DATE_FORMAT(obs.cop_fecha_creacion,'%d-%m-%Y') AS cop_fecha_creacion
+                 obs.cop_fecha_creacion
           FROM tsg_comentario_proyecto obs
           	LEFT JOIN tsg_usuario usu 
           	ON usu.usu_id = obs.tsg_usuariousu_id

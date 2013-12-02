@@ -38,7 +38,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdUsuario) > 0)
                             ,usu_telefono = '$txtTelefono'
                             ,usu_direccion = '$txtDireccion' 
                             ,usu_correo = '$txtCorreo'
-                            ,usu_fecha_mod = curdate()
+                            ,usu_fecha_mod = NOW()
                         WHERE usu_id = $hdnIdUsuario AND usu_activo = 1 ";
         
         $res = $mySqli->query($queryUpdUsu);

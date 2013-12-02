@@ -6,7 +6,7 @@ include ("menu.php");
 $usu_id = $_SESSION["id_usuario"];
 $proyecto = array();
 
-$idProyecto = $_GET["idProyecto"];
+$idProyecto = $_POST["idProyecto"];
 
 if ($idProyecto == NULL || $usu_id == NULL || strlen($idProyecto) < 1) {
 	echo $V_ACCES_DENIED;
@@ -136,6 +136,7 @@ if ($mySqli -> affected_rows > 0)
 				}
 			},
 			"bProcessing" : true, //para procesar desde servidor
+			"aaSorting":[],
 			"sServerMethod" : "POST",
 			"sAjaxSource" : './BO/BuscaObservacionesProyecto.php', // fuente del json
 			"fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
@@ -300,15 +301,9 @@ if ($mySqli -> affected_rows > 0)
 	    
 	    var errores = [];
 	    
-	    var encargados = $("#ddlJefeProyecto").val(); 
-      
-        if(encargados == "" || encargados == null){
-            errores.push(" - Debe especificar al menos un encargado.");
-        }
-	    
 	    var obs = $("#txtObservacion").val();
 	    
-	    if(!ValidaTexto(obs)){
+	    if(!ValidaTexto(obs, 1000)){
 	  		errores.push(" - La observación es inválida.");
 	  	}
 	    
@@ -355,6 +350,13 @@ if ($mySqli -> affected_rows > 0)
 	
 	function ValidarDatos(){
 	  var errores = [];
+	  
+	  var encargados = $("#ddlJefeProyecto").val(); 
+      
+      if(encargados == "" || encargados == null){
+        errores.push(" - Debe especificar al menos un encargado.");
+      }
+
 	  var nombre = $("#txtNombreProyecto").val();
 	  
 	  if(!ValidaTexto(nombre, 255)){

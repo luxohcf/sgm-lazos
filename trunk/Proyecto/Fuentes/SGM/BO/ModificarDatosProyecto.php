@@ -29,7 +29,7 @@ if(strlen($usu_id) > 0)
 	$querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
 	$res = $mySqli->query($querySelect);
 		
-	if($mySqli->affected_rows > 0) // No existe el nombre
+	if($mySqli->affected_rows > 0)
 	{
 	    $mySqli->autocommit(FALSE);
 	    $mySqli->query("SET NAMES 'utf8'");
@@ -37,7 +37,7 @@ if(strlen($usu_id) > 0)
 		
 		$queryInsert = "INSERT INTO tsg_proyecto_historico (`prh_usuario`, `prh_fecha`, `tsg_proyectopro_id`, `sqi_tipo_proyectotip_id`, `tsg_estado_proyectoest_id`)
 						SELECT  usu.usu_nombre,
-								curdate(),
+								NOW(),
 								pry.pro_id, 
 								pry.sqi_tipo_proyectotip_id,
 								pry.tsg_estado_proyectoest_id
@@ -60,7 +60,7 @@ if(strlen($usu_id) > 0)
 	                        ,`pro_fecha_garan` = STR_TO_DATE('$txtFechaGarantia','%d-%m-%Y')
 	                        ,`sqi_tipo_proyectotip_id` = '$ddlTipoProyecto'
 	                        ,`tsg_estado_proyectoest_id` = '$ddlEstadoProyecto'
-	                        ,pro_fecha_modificacion = curdate()
+	                        ,pro_fecha_modificacion = NOW()
 	                        
                         WHERE pro_id = $hdnIdProyecto AND pro_activo = 1 ";
 	    

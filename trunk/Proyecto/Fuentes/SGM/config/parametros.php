@@ -35,22 +35,22 @@ $V_TITULO = "Proyecto SGM";
 $V_EXT_VALIDAS = "doc,docx,xls,xlsx,jpg,png,pdf";
 $V_MAXIMO_MB = "2";
 
-/* Ambiente testing 
+/* Ambiente testing */
 
 $V_HOST = "mysql.hostinger.es";
 $V_USER = "u643183889_sgm";
 $V_PASS = "sgmlazos";
 $V_BBDD = "u643183889_sgm";
 
-$V_DEPURAR = FALSE; */
+$V_DEPURAR = FALSE; 
 
-/* Ambiente desarrollo */
+/* Ambiente desarrollo 
 $V_HOST = "localhost";
 $V_USER = "sgm";
 $V_PASS = "sgm";
 $V_BBDD = "sgm";
 
-$V_DEPURAR = TRUE; 
+$V_DEPURAR = TRUE; */
 
 // Clase para generar cosas genericas
 class Utilidades

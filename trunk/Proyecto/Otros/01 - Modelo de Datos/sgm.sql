@@ -184,6 +184,7 @@ CREATE TABLE tsg_historico_ticket (
   tsg_proyectopro_id int(10) NOT NULL,
   tsg_prioridadpri_id int(10) NOT NULL,
   tsg_categoriacat_id int(10) NOT NULL,
+  his_fecha datetime NOT NULL COMMENT 'Fecha',
   PRIMARY KEY (his_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de registro histórico del ticket' AUTO_INCREMENT=1 ;
 
@@ -302,6 +303,7 @@ CREATE TABLE tsg_rol (
 CREATE TABLE tsg_ticket (
   tic_id int(10) NOT NULL AUTO_INCREMENT COMMENT 'identificador único del ticket',
   tic_nombre varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'nombre del ticket',
+  tic_descripcion varchar(1000) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Descripción del ticket',
   tic_fecha_crea datetime NOT NULL COMMENT 'fecha de creación del ticket',
   tsg_estado_ticketest_id int(10) NOT NULL,
   tsg_usuariousu_id int(10) NOT NULL,
