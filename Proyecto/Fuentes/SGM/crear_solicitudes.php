@@ -16,46 +16,92 @@ $(function() {
     
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/CrearSolicitud.php", $('#FormPrincipal').serialize(),
-                function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    
-                    var msj = obj.html;
-                    var sub_msj = obj.errores; 
-                    
-                    var estado =  obj.estado;
-                    if(estado == 'OK') // Exito
-                    {
-                        MostrarExito(msj, sub_msj);
-                        Limpiar();
+
+            bootbox.dialog({
+              message: "¿Seguro que desea crear la solicitud?",
+              title: null,
+              buttons: {
+                Si: {
+                  label: "Si",
+                  className: "btn-success",
+                  callback: function() {
+                        $.post("./BO/CrearSolicitud.php", $('#FormPrincipal').serialize(),
+                            function(data) {
+                                var obj = jQuery.parseJSON(data);
+                                
+                                var msj = obj.html;
+                                var sub_msj = obj.errores; 
+                                
+                                var estado =  obj.estado;
+                                if(estado == 'OK') // Exito
+                                {
+                                    MostrarExito(msj, sub_msj);
+                                    Limpiar();
+                                }
+                                else // Error
+                                {
+                                    MostrarError(msj, sub_msj);
+                                }
+                        });
                     }
-                    else // Error
-                    {
-                        MostrarError(msj, sub_msj);
-                    }
+                },
+                No: {
+                  label: "No",
+                  className: "btn-info",
+                  callback: function() {
+                    
+                  }
+                }
+              }
             });
         }
     });
+    
+    $("#btnLimpiar").click(function(){
+        Limpiar();
+    });
+    
 });
 
 function Limpiar(){
-    // Pendiente
+    $("#txtNombre").val("");
+    $("#txtDescripcion").val("");
+    $("#txtCorreoCopia").val("");
+    $('.selectpicker').selectpicker('deselectAll');
 }
 
 function ValidarDatos(){
       var errores = [];
       var nombre = $("#txtNombre").val();
       
-      if(!ValidaTexto(nombre)){
+      if(!ValidaTexto(nombre, 255)){
         errores.push(" - El nombre es inválido.");
       }
       var Descripcion = $("#txtDescripcion").val();
       
-      if(!ValidaAlfaNumerico(Descripcion)){
+      if(!ValidaTexto(Descripcion, 1000)){
         errores.push(" - La descripción es inválida.");
       }
       
-      // Pendiente
+      var txtCorreoCopia = $("#txtCorreoCopia").val();
+      
+      if(txtCorreoCopia != ""){
+          
+          var correos = txtCorreoCopia.split(';');
+          if(correos == null){
+              errores.push(" - Correos en copia inválido.");
+          }
+          else
+          {
+              correos.forEach(function(entry) {
+                  if(entry != ""){
+                       if(!ValidaCorreo(entry)){
+                           errores.push(" - correo "+ entry +" inválido.");
+                       }
+                  }
+              });
+          }
+      }
 
       if(errores.length > 0)
       {
@@ -102,7 +148,10 @@ function ValidarDatos(){
         echo $obj->GeneraSelectCategoriaSolicitud("ddlCategoria", false, true, 5);
         ?>
 
-        <label>Correo en copia</label>
+        <label>
+            <div>
+                Correo(s) en copia <small class="text-error req">(Separar correos con un <b>;</b> )</small>
+            </div></label>
         <textarea rows="3" class="input-xlarge" id="txtCorreoCopia" name="txtCorreoCopia" ></textarea>
     </div>
     <div class="span1"></div>
@@ -117,6 +166,9 @@ function ValidarDatos(){
         <p>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
                 Crear Solicitud
+            </button>
+            <button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
+                Limpiar
             </button>
         </p>
     </div>

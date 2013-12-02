@@ -157,7 +157,7 @@ if($mySqli->affected_rows > 0)
                             $row['cli_empresa'],
                             $row['cat_nombre'],
                             $row['pri_nombre'],
-                            $row['usu_rut'] + " - " + $row['usu_nombre'],
+                            $row['usu_rut']." - ".$row['usu_nombre'],
                             
                             "<a class=\"btn\" href=\"javascript:ModificarSolicitud(".$row["tic_id"].");\"><i class=\"icon-pencil\"></i></a>"
                         );

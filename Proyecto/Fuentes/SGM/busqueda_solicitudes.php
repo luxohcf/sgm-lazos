@@ -39,6 +39,7 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 				}
 			},
 			"bProcessing" : true, //para procesar desde servidor
+			"aaSorting":[],
 			"sServerMethod" : "POST",
 			"sAjaxSource" : './BO/BuscaSolicitudes.php', // fuente del json
 			"fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
@@ -110,7 +111,8 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 	}
 
 	function ModificarSolicitud(Id) {
-		Ir("asigna_solicitudes.php?idSolicitud=" + Id);
+	    
+	    $().redirect('asigna_solicitudes.php', {'idSolicitud': Id});
 	}
 
 	function NoDestacarSolicitud(Id) {

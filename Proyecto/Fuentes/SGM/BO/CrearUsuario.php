@@ -40,7 +40,7 @@ if(strlen($usu_id) > 0)
                          '$txtPass',
                          '$txtCorreo',
                          1,
-                         curdate());";
+                         NOW());";
         
         $res = $mySqli->query($queryIns);
         

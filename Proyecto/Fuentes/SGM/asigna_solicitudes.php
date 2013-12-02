@@ -1,24 +1,25 @@
 <?php
-
-include ("cabecera.php");
+require ("cabecera.php");
 include ("menu.php");
 
 $usu_id = $_SESSION["id_usuario"];
 $Solicitud = array();
 
-$idSolicitud = $_GET["idSolicitud"];
-/*
-if ($idProyecto == NULL || $usu_id == NULL || strlen($idProyecto) < 1) {
+$idSolicitud = $_POST["idSolicitud"];
+
+if ($idSolicitud == NULL || $usu_id == NULL || strlen($idSolicitud) < 1) {
     echo $V_ACCES_DENIED;
     exit();
-}*/
+}
 
 $query = "SELECT DISTINCT 
                 tick.tic_id,
                 tick.tic_nombre,
+                tick.tic_descripcion,
+                tick.tsg_tic_correo_en_copia,
                 tick.tsg_estado_ticketest_id,
                 tick.tsg_proyectopro_id,
-                tick.tsg_categoriacat_id
+                tick.tsg_categoriacat_id,
                 tick.tsg_prioridadpri_id,
                 tick.tsg_usuariousu_id
           FROM tsg_ticket tick
@@ -35,6 +36,8 @@ if ($mySqli -> affected_rows > 0)
     while ($row = $res -> fetch_assoc()) {
         $Solicitud["tic_id"] = $row['tic_id'];
         $Solicitud["tic_nombre"] = $row['tic_nombre'];
+        $Solicitud["tic_descripcion"] = $row['tic_descripcion'];
+        $Solicitud["tsg_tic_correo_en_copia"] = $row['tsg_tic_correo_en_copia'];
         $Solicitud["tsg_estado_ticketest_id"] = $row['tsg_estado_ticketest_id'];
         $Solicitud["tsg_proyectopro_id"] = $row['tsg_proyectopro_id'];
         $Solicitud["tsg_categoriacat_id"] = $row['tsg_categoriacat_id'];
@@ -49,12 +52,16 @@ if ($mySqli -> affected_rows > 0)
 
     function cargarCampos()
     {
-        var id = "<?php echo $Solicitud["tic_id"] ?>";
-        var idEstado = "<?php echo $Solicitud["tsg_estado_ticketest_id"] ?>";
-        var idProyecto = "<?php echo $Solicitud["tsg_proyectopro_id"] ?>";
-        var idCategoria = "<?php echo $Solicitud["tsg_categoriacat_id"] ?>";
-        var idPrioridad = "<?php echo $Solicitud["tsg_prioridadpri_id"] ?>";
-        var idUsuario = "<?php echo $Solicitud["tsg_usuariousu_id"] ?>";
+        var id = "<?php echo $Solicitud["tic_id"]; ?>";
+        var idEstado = "<?php echo $Solicitud["tsg_estado_ticketest_id"]; ?>";
+        var idProyecto = "<?php echo $Solicitud["tsg_proyectopro_id"]; ?>";
+        var idCategoria = "<?php echo $Solicitud["tsg_categoriacat_id"]; ?>";
+        var idPrioridad = "<?php echo $Solicitud["tsg_prioridadpri_id"]; ?>";
+        var idUsuario = "<?php echo $Solicitud["tsg_usuariousu_id"]; ?>";
+        
+        var txtNombre = "<?php echo $Solicitud["tic_nombre"]; ?>";
+        var txtDescripcion = "<?php echo $Solicitud["tic_descripcion"]; ?>";
+        var txtCorreoCopia = "<?php echo $Solicitud["tsg_tic_correo_en_copia"]; ?>";
         
         $("#ddlEstado").selectpicker('val', idEstado);
         $("#ddlProyecto").selectpicker('val', idProyecto);
@@ -62,12 +69,17 @@ if ($mySqli -> affected_rows > 0)
         $("#ddlPrioridad").selectpicker('val', idPrioridad);
         $("#ddlUsuario").selectpicker('val', idUsuario);
         $("#hdnIdSolicitud").val(id);
-        
+        $("#txtCodigo").val(id);
+        $("#txtNombre").val(txtNombre);
+        $("#txtDescripcion").val(txtDescripcion);
+        $("#txtCorreoCopia").val(txtCorreoCopia);
+
         $(".filtroAvanzado").hide();
         $(".filtroAvanzadoAgregaObs").hide();
         $(".filtroAvanzadoH").hide();
     }
 
+    var oTabla;
     var flag1 = true;
     var flag2 = true;
     var flag3 = true;
@@ -125,7 +137,7 @@ if ($mySqli -> affected_rows > 0)
             Ir("busqueda_solicitudes.php");
         });
         
-        var oTabla = $('#tblObservaciones').dataTable({
+        oTabla = $('#tblObservaciones').dataTable({
             bJQueryUI : true,
             sPaginationType : "full_numbers", //tipo de paginacion
             "bFilter" : false, // muestra el cuadro de busqueda
@@ -150,6 +162,7 @@ if ($mySqli -> affected_rows > 0)
                 }
             },
             "bProcessing" : true, //para procesar desde servidor
+            "aaSorting":[],
             "sServerMethod" : "POST",
             "sAjaxSource" : './BO/BuscaObservacionesSolicitud.php', // fuente del json
             "fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
@@ -188,6 +201,7 @@ if ($mySqli -> affected_rows > 0)
                 }
             },
             "bProcessing" : true, //para procesar desde servidor
+            "aaSorting":[],
             "sServerMethod" : "POST",
             "sAjaxSource" : './BO/BuscaHistoricoSolicitud.php', // fuente del json
             "fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
@@ -214,6 +228,7 @@ if ($mySqli -> affected_rows > 0)
                         if(estado == 'OK') // Exito
                         {
                             MostrarExito(msj, sub_msj);
+                            oTablaH.fnReloadAjax();
                         }
                         else // Error
                         {
@@ -225,18 +240,151 @@ if ($mySqli -> affected_rows > 0)
         
         $("#btnGuardaObservacion").click(function(){
             
-            // Pendiente
-            // Validar datos
-            // guardar
-            oTabla.fnReloadAjax();
+            if(ValidaObservacionArchivo())
+            {
+                if($("#txtArchivo")[0].files[0] != null){
+                    
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener('progress',function(ev){
+                        console.log((ev.loaded/ev.total)+'%');
+                    }, false);
+                    xhr.onreadystatechange = function(ev){
+                        if(xhr.readyState==4 && xhr.status==200)
+                        {
+                            var data = ev.currentTarget.responseText;
+                            var obj = jQuery.parseJSON(data);
+                            if(obj.estado == 'OK'){
+                               $("#hdnIdArchivo").val(obj.id);
+                               GuardarObservacion();    
+                            }
+                            else{
+                                MostrarError(obj.msj, null);
+                            }
+                        }
+                    };
+                    xhr.open('POST', "./BO/UploadArchivo.php", true);
+                    var files = $("#txtArchivo")[0].files;
+                    var data = new FormData();
+                    for(var i = 0; i < files.length; i++) data.append('file'+i, files[i]);
+                    xhr.send(data);
+                }
+                else
+                {
+                    GuardarObservacion();               
+                }
+            }
         });
 
     });
     
+    function GuardarObservacion(){
+        $.post("./BO/GuardarObservacionSolicitud.php", $('#FormPrincipal').serialize(),
+            function(data) {
+                var obj = jQuery.parseJSON(data);
+                
+                var msj = obj.html;
+                var sub_msj = obj.errores; 
+                
+                var estado =  obj.estado;
+                if(estado == 'OK') // Exito
+                {
+                    MostrarExito(msj, sub_msj);
+                }
+                else // Error
+                {
+                    MostrarError(msj, sub_msj);
+                }
+                oTabla.fnReloadAjax();
+                $("#hdnIdArchivo").val("");
+                $("#txtArchivo").val("");
+                $("#txtObservacion").val("");
+        });
+    }
+    
+    function ValidaObservacionArchivo(){
+        
+        var errores = [];
+        
+        var obs = $("#txtObservacion").val();
+        
+        if(!ValidaTexto(obs,1000)){
+            errores.push(" - La observación es inválida.");
+        }
+        
+        var archivo = $("#txtArchivo")[0].files[0];
+        
+        if(archivo != null){
+            if(archivo.size / 1048576 > <?php echo $V_MAXIMO_MB ?> )
+            {
+                errores.push(" - Tamaño máximo excedido.");
+            }
+            if(!ValidaExtensiones(archivo.name)){
+                errores.push(" - Extensión inválida.");
+            }
+        }
+        
+        if(errores.length > 0)
+        {
+            MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    function ValidaExtensiones(file)
+    {
+        if (file != "") {
+            var extension = file.split(".");
+            var ext = extension[extension.length - 1];
+            ext = ext.toLowerCase();
+            var extensiones = "<?php echo $V_EXT_VALIDAS ?>";
+            var resultado = extensiones.indexOf(ext);
+            if (resultado > -1) {
+                return true;
+            }
+            if (extensiones == '*') {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     function ValidarDatos(){
       var errores = [];
       
-      // Pendiente
+      var nombre = $("#txtNombre").val();
+      
+      if(!ValidaTexto(nombre, 255)){
+        errores.push(" - El nombre es inválido.");
+      }
+      var Descripcion = $("#txtDescripcion").val();
+      
+      if(!ValidaTexto(Descripcion, 1000)){
+        errores.push(" - La descripción es inválida.");
+      }
+      
+      var txtCorreoCopia = $("#txtCorreoCopia").val();
+      
+      if(txtCorreoCopia != ""){
+          
+          var correos = txtCorreoCopia.split(';');
+          if(correos == null){
+              errores.push(" - Correos en copia inválido.");
+          }
+          else
+          {
+              correos.forEach(function(entry) {
+                  if(entry != ""){
+                       if(!ValidaCorreo(entry)){
+                           errores.push(" - correo "+ entry +" inválido.");
+                       }
+                  }
+              });
+          }
+      }
 
       if(errores.length > 0)
       {
@@ -249,8 +397,8 @@ if ($mySqli -> affected_rows > 0)
       }
     }
     
-    function DescargarArchivo(idArchivo, Url){
-        // Pendiente
+    function DescargarArchivo(idArchivo){
+        $().redirect('./BO/DownloadArchivo.php', {'idArchivo': idArchivo});
     }
 
 </script>
@@ -263,9 +411,9 @@ if ($mySqli -> affected_rows > 0)
         <div class="span5">
             <label>
                 <div>
-                    Código <small class="text-error req">*</small>
+                    Código <small class="text-error req"></small>
                 </div></label>
-            <input type="text" placeholder="" class="input-xlarge" id="txtCodigo" name="txtCodigo" >
+            <input type="text" placeholder="" class="input-xlarge" id="txtCodigo" name="txtCodigo" disabled >
             <label>
                 <div>
                     Nombre <small class="text-error req">*</small>
@@ -427,6 +575,7 @@ if ($mySqli -> affected_rows > 0)
 <!-- Hiddens -->
 <div style="display: none;">
     <input type="hidden" id="hdnIdSolicitud" name="hdnIdSolicitud" />
+    <input type="hidden" id="hdnIdArchivo" name="hdnIdArchivo" />
 </div>
 
 <?php

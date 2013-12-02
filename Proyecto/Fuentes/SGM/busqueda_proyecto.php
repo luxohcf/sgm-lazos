@@ -110,7 +110,7 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 	
 	function ModificarProyecto(idProyecto)
 	{
-	    Ir("modificar_proyecto.php?idProyecto="+idProyecto);
+	    $().redirect('modificar_proyecto.php', {'idProyecto': idProyecto});
 	}
 	
 	function NoDestacarProyecto(idProyecto)
