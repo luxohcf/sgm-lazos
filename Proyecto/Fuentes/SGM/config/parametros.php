@@ -42,7 +42,16 @@ $V_USER = "u643183889_sgm";
 $V_PASS = "sgmlazos";
 $V_BBDD = "u643183889_sgm";
 
-$V_DEPURAR = FALSE; 
+$V_HOST_SMTP = "mx1.hostinger.es";
+$V_PORT_SMTP = 2525;
+$V_USER_SMTP = "admin@sgm-lazos.esy.es";
+$V_PASS_SMTP = "sgmlazos";
+$V_FROM      = "noreply@sgm-lazos.esy.es";
+$V_FROM_NAME = "SGM-Lazos";
+
+  
+$V_DEPURAR = FALSE;
+
 
 /* Ambiente desarrollo 
 $V_HOST = "localhost";
@@ -540,9 +549,82 @@ class Utilidades
     }
 };
 
+class EnvioMail
+{
+    private $Host;
+    private $Port;
+    private $SMTPAuth;
+    private $Username;
+    private $Password;
+    private $From;
+    private $FromName;
+    private $mail;
+    public  $ErrorInfo;
+    
+    function __construct($Host,$Port,$Username,$Password,$From,$FromName)
+    {
+        require('../mail/PHPMailerAutoload.php');
+        
+        $this->Host=$Host;
+        $this->Port=$Port;
+        $this->Username=$Username;
+        $this->Password=$Password;
+        $this->From=$From;
+        $this->FromName=$FromName;
+        
+        $this->mail = new PHPMailer;
+        $this->mail->isSMTP();
+        $this->mail->Host = $this->Host;
+        $this->mail->Port = $this->Port;
+        $this->mail->SMTPAuth = true;
+        $this->mail->Username = $this->Username;
+        $this->mail->Password = $this->Password;
+        
+        $this->mail->From = $this->From;
+        $this->mail->FromName = $this->FromName;
+        $this->mail->WordWrap = 50;   
+        $this->mail->isHTML(true);
+    }
+    
+    public function EnviarCorreo($Asunto, $Cuerpo, $Para, $CC = null, $BC = null, $CuerpoAlt = ""){
+        if(is_array($Para)){
+            foreach ($Para as $key => $value) {
+                $this->mail->addAddress($key, $value);
+            }
+        }
+        if($CC != null && is_array($CC)){
+            foreach ($CC as $key => $value) {
+                $this->mail->addCC($key, $value);
+            }
+        }
+        if($BC != null && is_array($BC)){
+            foreach ($BC as $key => $value) {
+                $this->mail->addBCC($key, $value);
+            }
+        }
+        
+        $this->mail->Subject = $Asunto;
+        $this->mail->Body    = $Cuerpo;
+        $this->mail->AltBody = $CuerpoAlt;
+        
+        if($this->mail->send()) {
+           return TRUE;
+        }
+        else{
+            $this->ErrorInfo = $this->mail->ErrorInfo;
+            return FALSE;
+        }
+    }
+    
+    public function toString()
+    {
+        return var_dump($this);
+    }
+};
 
 // http://silviomoreto.github.io/bootstrap-select/
 // http://eternicode.github.io/bootstrap-datepicker/
 // http://bootboxjs.com/
+// https://github.com/PHPMailer/PHPMailer
 
 ?>
