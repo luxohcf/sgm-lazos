@@ -572,7 +572,7 @@ class EnvioMail
     private $V_BBDD;
     public  $ErrorInfo;
     
-    function __construct($Host,$Port,$Username,$Password,$From,$FromName,$V_HOST="localhost", $V_USER="sgm", $V_PASS="sgm", $V_BBDD="sgm")
+    function __construct($Host,$Port,$Username,$Password,$From,$FromName,$V_HOST, $V_USER, $V_PASS, $V_BBDD)
     {
         require('../mail/PHPMailerAutoload.php');
         
