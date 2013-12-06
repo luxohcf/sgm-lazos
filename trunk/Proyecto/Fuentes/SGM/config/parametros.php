@@ -59,7 +59,14 @@ $V_USER = "sgm";
 $V_PASS = "sgm";
 $V_BBDD = "sgm";
 
-$V_DEPURAR = TRUE; */
+$V_DEPURAR = TRUE; 
+
+$V_HOST_SMTP = "mx1.hostinger.es";
+$V_PORT_SMTP = 2525;
+$V_USER_SMTP = "admin@sgm-lazos.esy.es";
+$V_PASS_SMTP = "sgmlazos";
+$V_FROM      = "noreply@sgm-lazos.esy.es";
+$V_FROM_NAME = "SGM-Lazos";*/
 
 // Clase para generar cosas genericas
 class Utilidades
@@ -559,9 +566,13 @@ class EnvioMail
     private $From;
     private $FromName;
     private $mail;
+    private $V_HOST;
+    private $V_USER;
+    private $V_PASS;
+    private $V_BBDD;
     public  $ErrorInfo;
     
-    function __construct($Host,$Port,$Username,$Password,$From,$FromName)
+    function __construct($Host,$Port,$Username,$Password,$From,$FromName,$V_HOST="localhost", $V_USER="sgm", $V_PASS="sgm", $V_BBDD="sgm")
     {
         require('../mail/PHPMailerAutoload.php');
         
@@ -584,36 +595,303 @@ class EnvioMail
         $this->mail->FromName = $this->FromName;
         $this->mail->WordWrap = 50;   
         $this->mail->isHTML(true);
+        
+        $this->V_HOST=$V_HOST;
+        $this->V_USER=$V_USER;
+        $this->V_PASS=$V_PASS;
+        $this->V_BBDD=$V_BBDD;
     }
     
     public function EnviarCorreo($Asunto, $Cuerpo, $Para, $CC = null, $BC = null, $CuerpoAlt = ""){
-        if(is_array($Para)){
-            foreach ($Para as $key => $value) {
-                $this->mail->addAddress($key, $value);
-            }
-        }
-        if($CC != null && is_array($CC)){
-            foreach ($CC as $key => $value) {
-                $this->mail->addCC($key, $value);
-            }
-        }
-        if($BC != null && is_array($BC)){
-            foreach ($BC as $key => $value) {
-                $this->mail->addBCC($key, $value);
-            }
-        }
         
-        $this->mail->Subject = $Asunto;
-        $this->mail->Body    = $Cuerpo;
-        $this->mail->AltBody = $CuerpoAlt;
-        
-        if($this->mail->send()) {
-           return TRUE;
+        try
+        {
+            if(is_array($Para)){
+                foreach ($Para as $key => $value) {
+                    $this->mail->addAddress($key, $value);
+                }
+            }
+            if($CC != null && is_array($CC)){
+                foreach ($CC as $key => $value) {
+                    $this->mail->addCC($key, $value);
+                }
+            }
+            if($BC != null && is_array($BC)){
+                foreach ($BC as $key => $value) {
+                    $this->mail->addBCC($key, $value);
+                }
+            }
+            
+            $this->mail->Subject = $Asunto;
+            $this->mail->Body    = $Cuerpo;
+            $this->mail->AltBody = $CuerpoAlt;
+            
+            if($this->mail->send()) {
+               return TRUE;
+            }
+            else{
+                $this->ErrorInfo = $this->mail->ErrorInfo;
+                return FALSE;
+            }
         }
-        else{
-            $this->ErrorInfo = $this->mail->ErrorInfo;
+        catch(exception $e)
+        {
+            $this->ErrorInfo = $e->getMessage();
             return FALSE;
         }
+    }
+
+    public function enviarCorreoCreacionSolicitud($idSolicitud){
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT
+                        tick.tic_nombre,
+                        tick.tic_descripcion,
+                        tick.tsg_tic_correo_en_copia,
+                        est_tick.est_nombre,
+                        pry.pro_nombre,
+                        cat.cat_nombre,
+                        prio.pri_nombre,
+                        clie.cli_empresa,
+                        usu.usu_nombre,
+                        usu.usu_correo
+                FROM tsg_ticket tick
+                    INNER JOIN tsg_estado_ticket est_tick
+                    ON tick.tsg_estado_ticketest_id = est_tick.est_id AND est_tick.est_activo = 1
+                    
+                    INNER JOIN tsg_proyecto pry
+                    ON tick.tsg_proyectopro_id = pry.pro_id AND pry.pro_activo = 1
+                    
+                    INNER JOIN tsg_cliente clie
+                    ON pry.tsg_clientecli_id = clie.cli_id
+                    
+                    INNER JOIN tsg_categoria cat
+                    ON tick.tsg_categoriacat_id = cat.cat_id
+                    
+                    INNER JOIN tsg_prioridad prio
+                    ON tick.tsg_prioridadpri_id = prio.pri_id
+                    
+                    INNER JOIN tsg_usuario usu
+                    ON tick.tsg_usuariousu_id = usu.usu_id
+                WHERE 
+                    tick.tic_id = $idSolicitud ";
+
+        if ($mySqli->connect_errno) {
+            return FALSE;
+        }
+        
+        $res = $mySqli->query($query);
+
+        if ($mySqli->affected_rows > 0) {
+            while ($row = $res->fetch_assoc()) {
+                        
+                $subject = "Se ha creado la solicitud $idSolicitud";
+                $pry = $row["pro_nombre"];
+                $tipo = $row["cat_nombre"];
+                $estado = $row["est_nombre"];
+                $user = $row["usu_nombre"];
+                $nombre = $row["tic_nombre"];
+                $desc = $row["tic_descripcion"];
+                $correo = array($row["usu_correo"] => $row["usu_nombre"]);
+                $copia = $row["tsg_tic_correo_en_copia"];
+                $priori = $row["pri_nombre"];
+            }
+        }
+        
+        $body = "<h4>Estimados(as):</h4>
+                  <p>Con fecha ".date("d-M-Y H:m:s")." se ha creado 
+                  exitosamente la solicitud <b>$idSolicitud</b> con el siguiente detalle:</p>
+                  <br>
+                  <ul>
+                      <li>Proyecto: $pry</li>
+                      <li>Tipo: $tipo</li>
+                      <li>Prioridad: $priori</li>
+                      <li>Estado: $estado</li>
+                      <li>Usuario creador: $user</li>
+                      <li>Nombre: $nombre</li>
+                      <li>Descripci&oacute;n: $desc</li>
+                  </ul>
+                  <br>
+                  <h5>Proyecto SGM</h5>
+                  <small>Mensaje generado autom&aacute;ticamente</small>";
+        
+        if(strlen($copia) > 0)
+        {
+            $copia = preg_split('/;/', $copia);    
+        }
+        else{
+            $copia = NULL;
+        }
+        
+        // remover
+        $BC = array("luis.lizama05@inacapmail.cl" => "Luxo lizama");
+
+        $this->EnviarCorreo($subject, $body, $correo, $copia, $BC);
+    }
+    
+    public function enviarCorreoModificacionSolicitud($idSolicitud){
+        
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+        $query = "SELECT
+                        tick.tic_nombre,
+                        tick.tic_descripcion,
+                        tick.tsg_tic_correo_en_copia,
+                        clie.cli_empresa,
+                        pry.pro_nombre,
+                        
+                        est_tick_h.est_nombre AS est_nombre_anterior,
+                        est_tick.est_nombre   AS est_nombre_actual,
+                        
+                        cat_h.cat_nombre AS cat_nombre_anterior,
+                        cat.cat_nombre   AS cat_nombre_actual,
+                        
+                        prio_h.pri_nombre AS pri_nombre_anterior,
+                        prio.pri_nombre   AS pri_nombre_actual,
+                        
+                        usu_h.usu_nombre  AS usu_nombre_anterior,
+                        usu.usu_nombre    AS usu_nombre_actual,
+                        
+                        usu_h.usu_correo  AS usu_correo_anterior,
+                        usu.usu_correo    AS usu_correo_actual
+                        
+                FROM tsg_ticket tick
+                    INNER JOIN tsg_estado_ticket est_tick
+                    ON tick.tsg_estado_ticketest_id = est_tick.est_id AND est_tick.est_activo = 1
+                    
+                    INNER JOIN tsg_proyecto pry
+                    ON tick.tsg_proyectopro_id = pry.pro_id AND pry.pro_activo = 1
+                    
+                    INNER JOIN tsg_cliente clie
+                    ON pry.tsg_clientecli_id = clie.cli_id
+                    
+                    INNER JOIN tsg_categoria cat
+                    ON tick.tsg_categoriacat_id = cat.cat_id
+                    
+                    INNER JOIN tsg_prioridad prio
+                    ON tick.tsg_prioridadpri_id = prio.pri_id
+                    
+                    INNER JOIN tsg_usuario usu
+                    ON tick.tsg_usuariousu_id = usu.usu_id
+                    
+                    LEFT JOIN tsg_historico_ticket his_tick
+                    ON his_tick.tsg_tickettic_id = tick.tic_id 
+                        AND his_tick.his_id = (SELECT t.his_id FROM 
+                                               tsg_historico_ticket t
+                                               WHERE t.tsg_tickettic_id = tick.tic_id
+                                               ORDER BY t.his_id DESC
+                                               LIMIT 1)
+                    INNER JOIN tsg_estado_ticket est_tick_h
+                    ON his_tick.tsg_estado_ticketest_id = est_tick_h.est_id   
+                    
+                    INNER JOIN tsg_categoria cat_h
+                    ON his_tick.tsg_categoriacat_id = cat_h.cat_id
+                    
+                    INNER JOIN tsg_prioridad prio_h
+                    ON his_tick.tsg_prioridadpri_id = prio_h.pri_id
+                    
+                    INNER JOIN tsg_usuario usu_h
+                    ON his_tick.tsg_usuariousu_id = usu_h.usu_id                    
+                                               
+                WHERE 
+                    tick.tic_id = $idSolicitud ";
+
+        if ($mySqli->connect_errno) {
+            return FALSE;
+        }
+        
+        $res = $mySqli->query($query);
+
+        if ($mySqli->affected_rows > 0) {
+            while ($row = $res->fetch_assoc()) {
+                        
+                $subject = "Se ha modificado la solicitud $idSolicitud";
+                $pry = $row["pro_nombre"];
+                $nombre = $row["tic_nombre"];
+                $desc = $row["tic_descripcion"];
+                $copia = $row["tsg_tic_correo_en_copia"];
+                
+                $estado_anterior = $row["est_nombre_anterior"];
+                $estado_actual = $row["est_nombre_actual"];
+                
+                $tipo_anterior = $row["cat_nombre_anterior"];
+                $tipo_actual = $row["cat_nombre_actual"];
+                
+                $user_anterior = $row["usu_nombre_anterior"];
+                $user_actual = $row["usu_nombre_actual"];
+                
+                $correo_anterior = array($row["usu_correo_anterior"] => $row["usu_nombre_anterior"]);
+                $correo_actual = array($row["usu_correo_actual"] => $row["usu_nombre_actual"]);
+                
+                $priori_anterior = $row["pri_nombre_anterior"];
+                $priori_actual = $row["pri_nombre_actual"];
+            }
+        }
+        
+        $body = "<h4>Estimados(as):</h4>
+                  <p>Con fecha ".date("d-M-Y H:m:s")." se ha modificado 
+                  exitosamente la solicitud <b>$idSolicitud</b> con el siguiente detalle:</p>
+                  <br>
+                  <ul>
+                      <li>Proyecto: $pry</li>";
+                      
+        if($tipo_anterior != $priori_actual)
+        {
+            $body .= "<li>Tipo: De $tipo_anterior a $tipo_actual</li>";
+        }
+        else
+        {
+            $body .= "<li>Tipo: $tipo_anterior</li>";
+        }
+                      
+        if($priori_anterior != $priori_actual)
+        {
+            $body .= "<li>Prioridad: De $priori_anterior a $priori_actual</li>";
+        }
+        else
+        {
+            $body .= "<li>Prioridad: $priori_anterior</li>";
+        }
+        
+        if($estado_anterior != $estado_actual)
+        {
+            $body .= "<li>Estado: De $estado_anterior a $estado_actual</li>";
+        }
+        else
+        {
+            $body .= "<li>Estado: $estado_anterior</li>";
+        }
+        
+        if($user_anterior != $user_actual)
+        {
+            $body .= "<li>Usuario: De $user_anterior a $user_actual</li>";
+        }
+        else
+        {
+            $body .= "<li>Usuario: $user_anterior</li>";
+        }
+        
+        
+            $body .= "<li>Nombre: $nombre</li>
+                      <li>Descripci&oacute;n: $desc</li>
+                  </ul>
+                  <br>
+                  <h5>Proyecto SGM</h5>
+                  <small>Mensaje generado autom&aacute;ticamente</small>";
+        
+        if(strlen($copia) > 0)
+        {
+            $copia = preg_split('/;/', $copia);    
+        }
+        else{
+            $copia = NULL;
+        }
+        
+        $correo = array_merge($correo_anterior, $correo_actual);
+        
+        // remover
+        $BC = array("luis.lizama05@inacapmail.cl" => "Luxo lizama");
+
+        $this->EnviarCorreo($subject, $body, $correo, $copia, $BC);
     }
     
     public function toString()
@@ -626,5 +904,6 @@ class EnvioMail
 // http://eternicode.github.io/bootstrap-datepicker/
 // http://bootboxjs.com/
 // https://github.com/PHPMailer/PHPMailer
+// https://developers.google.com/chart/?hl=es
 
 ?>

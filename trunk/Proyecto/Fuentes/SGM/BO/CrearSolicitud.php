@@ -57,6 +57,9 @@ if(strlen($usu_id) > 0)
             $mySqli->commit();
             $mySqli->close();
             $data["estado"] = "OK";
+            
+            $objMail = new EnvioMail($V_HOST_SMTP,$V_PORT_SMTP,$V_USER_SMTP,$V_PASS_SMTP,$V_FROM,$V_FROM_NAME);
+            $objMail->enviarCorreoCreacionSolicitud($mySqli->insert_id);
         }
         else {
            $mySqli->rollback(); 
