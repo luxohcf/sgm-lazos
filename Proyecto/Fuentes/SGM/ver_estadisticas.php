@@ -99,9 +99,9 @@ if (!ValidaAcceso("ver_estadisticas.php", $_SESSION["paginas"])) {
     
     if(grafico != null)
     {
+        var x = 0;
         for(var id_cliente in grafico){
             
-            var x = 0;
             for(var id_proyecto in grafico[id_cliente]){
                 
                 var data = google.visualization.arrayToDataTable(grafico[id_cliente][id_proyecto]);
