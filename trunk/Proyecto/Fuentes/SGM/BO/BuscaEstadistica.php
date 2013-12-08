@@ -31,7 +31,7 @@ $query = "SELECT DATE_FORMAT(est.dis_fecha, '%d-%m-%Y') AS dis_fecha,
                  
           FROM tsg_estadistica_diaria est 
                INNER JOIN tsg_proyecto pry
-               ON est.tsg_proyectopro_id = pry.pro_id 
+               ON est.tsg_proyectopro_id = pry.pro_id AND pry.pro_activo = 1
                INNER JOIN tsg_cliente cli
                ON cli.cli_id = pry.tsg_clientecli_id 
           WHERE 1 = 1 ";
@@ -69,6 +69,8 @@ if($txtFechaInicioDesde != null && strlen($txtFechaInicioDesde) > 0){
 if($txtFechaInicioHasta != null && strlen($txtFechaInicioHasta) > 0){
     $query .= " AND DATE_FORMAT(est.dis_fecha,'%d-%m-%Y') <= '$txtFechaInicioHasta'";
 }
+
+$query .= " ORDER BY est.tsg_proyectopro_id, est.dis_fecha ASC; ";
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 

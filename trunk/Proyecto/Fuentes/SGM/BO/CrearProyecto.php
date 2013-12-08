@@ -56,22 +56,26 @@ if(strlen($usu_id) > 0)
         {
             if($mySqli->affected_rows > 0)
             {
+                $idProyecto = $mySqli->insert_id;
                 if($ddlJefeProyecto != null && is_array($ddlJefeProyecto) && count($ddlJefeProyecto) > 0)
                 {
                     
                     foreach($ddlTipoProyecto as $obj){
                                 
                          $query = "INSERT INTO tsg_usuario_tsg_proyecto (tsg_usuariousu_id, tsg_proyectopro_id, rol_id)
-                                   VALUES ($obj, $mySqli->insert_id, 3);";
+                                   VALUES ($obj, $idProyecto, 3);";
                                    
                          $res = $mySqli->query($query);          
                     }
                 }
 
-                $msg = "Se ha creado el proyecto $mySqli->insert_id correctamente";
+                $msg = "Se ha creado el proyecto $idProyecto correctamente";
                 $mySqli->commit();
                 $mySqli->close();
                 $data["estado"] = "OK";
+                
+                $objEstadistica = new RegistraEstadistica($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+                $objEstadistica->IniciaEstadistica($idProyecto);
             }
             else {
                $mySqli->rollback(); 
