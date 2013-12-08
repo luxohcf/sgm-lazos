@@ -52,7 +52,6 @@ if(strlen($usu_id) > 0)
 	                        
 	                         `pro_nombre` = '$txtNombreProyecto'
 	                        ,`pro_duracion` = '$txtDuracion'
-	                        ,`pro_usu_id_jefepro` = '$ddlJefeProyecto'
 	                        ,`tsg_clientecli_id` = '$ddlCliente' 
 	                        ,`pro_descrip` = '$txtDescripcion'
 	                        ,`pro_fecha_ini` = STR_TO_DATE('$txtFechaInicio','%d-%m-%Y')
@@ -70,6 +69,20 @@ if(strlen($usu_id) > 0)
 	    {
 	        if($mySqli->affected_rows > 0)
 	        {
+	            if($ddlJefeProyecto != null && is_array($ddlJefeProyecto) && count($ddlJefeProyecto) > 0)
+                {
+                    $query = "DELETE FROM tsg_usuario_tsg_proyecto WHERE tsg_proyectopro_id = $hdnIdProyecto AND rol_id = 3;";
+                    $res = $mySqli->query($query);
+                    
+                    foreach($ddlJefeProyecto as $obj){
+                                
+                         $query = "INSERT INTO tsg_usuario_tsg_proyecto (tsg_usuariousu_id, tsg_proyectopro_id, rol_id)
+                                   VALUES ($obj, $hdnIdProyecto, 3);";
+                                   
+                         $res = $mySqli->query($query);
+                    }
+                }
+	            
 	            $msg = "Se han guardado los cambios correctamente";
 	            $mySqli->commit();
 	            $mySqli->close();

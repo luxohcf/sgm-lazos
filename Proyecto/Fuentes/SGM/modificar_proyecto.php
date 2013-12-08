@@ -74,7 +74,7 @@ if ($mySqli -> affected_rows > 0)
 	function cargarCampos()
 	{
 		var id = "<?php echo $proyecto["pro_id"] ?>";
-		var idJP = "<?php echo $proyecto["pro_usu_id_jefepro"] ?>";
+		var idJP = <?php echo $proyecto["pro_usu_id_jefepro"] ?>;
 		var idCliente = "<?php echo $proyecto["tsg_clientecli_id"] ?>";
 		var idEstado = "<?php echo $proyecto["tsg_estado_proyectoest_id"] ?>";
 		var idTipo = "<?php echo $proyecto["sqi_tipo_proyectotip_id"] ?>";
