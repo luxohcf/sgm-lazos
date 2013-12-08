@@ -164,6 +164,23 @@ VALUES
 (8,'Observación de prueba 8',1,2,2,now()),
 (9,'Observación de prueba 9',1,1,1,now());
 
+/* Estadistica de pruebas */
+
+INSERT INTO tsg_estadistica_diaria (dis_fecha,dis_total,dis_creadas,dis_asignadas,dis_resueltas,dis_rechazadas,dis_cerradas,dis_desestimadas,tsg_proyectopro_id) 
+VALUES 
+(DATE_ADD(CURDATE(),INTERVAL 1 DAY),0,0,0,0,0,0,0,1),
+(DATE_ADD(CURDATE(),INTERVAL 2 DAY),1,0,0,1,0,0,0,1),
+(DATE_ADD(CURDATE(),INTERVAL 3 DAY),2,1,0,0,0,1,0,1),
+(DATE_ADD(CURDATE(),INTERVAL 4 DAY),5,2,0,0,0,3,0,1),
+(DATE_ADD(CURDATE(),INTERVAL 5 DAY),2,0,0,1,0,1,1,1),
+(DATE_ADD(CURDATE(),INTERVAL 6 DAY),4,1,0,1,0,0,2,1),
+(DATE_ADD(CURDATE(),INTERVAL 1 DAY),0,0,0,0,0,0,0,2),
+(DATE_ADD(CURDATE(),INTERVAL 2 DAY),1,0,0,1,0,0,0,2),
+(DATE_ADD(CURDATE(),INTERVAL 3 DAY),2,1,0,0,0,1,0,2),
+(DATE_ADD(CURDATE(),INTERVAL 4 DAY),5,2,0,0,0,3,0,2),
+(DATE_ADD(CURDATE(),INTERVAL 5 DAY),2,0,0,1,0,1,1,2),
+(DATE_ADD(CURDATE(),INTERVAL 6 DAY),4,1,0,1,0,0,2,2);
+
 
 
 
