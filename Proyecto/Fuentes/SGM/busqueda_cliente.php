@@ -115,9 +115,9 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		}
 	}
 	
-	function ModificarCliente(idProyecto)
+	function ModificarCliente(idCliente)
 	{
-	    Ir("modificar_cliente.php?idCliente="+idProyecto);
+	    $().redirect('modificar_cliente.php', {'idCliente': idCliente});
 	}
 	
 </script>

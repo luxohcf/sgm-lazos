@@ -5,13 +5,7 @@ $msg = "";
 
 $usu_id = $_SESSION["id_usuario"];
 
-$hdnIdCliente = (isset($_POST['hdnIdCliente']))? $_POST['hdnIdCliente'] : "";
-$txtCorreo = (isset($_POST['txtCorreo']))? $_POST['txtCorreo'] : "";
-$txtRut = (isset($_POST['txtRut']))? $_POST['txtRut'] : "";
-$txtDireccion = (isset($_POST['txtDireccion']))? $_POST['txtDireccion'] : "";
-$txtApellido = (isset($_POST['txtApellido']))? $_POST['txtApellido'] : "";
-$txtNombreCliente = (isset($_POST['txtNombreCliente']))? $_POST['txtNombreCliente'] : "";
-$txtNombreEmpresa = (isset($_POST['txtNombreEmpresa']))? $_POST['txtNombreEmpresa'] : "";
+$IdCliente = (isset($_POST['IdCliente']))? $_POST['IdCliente'] : "";
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 if($mySqli->connect_errno)
@@ -19,9 +13,7 @@ if($mySqli->connect_errno)
     $data["Error conexion MySql"] = $mySqli->connect_error;
 }
 
-$pass = generar_Hash($pass, $V_LLAVE);
-
-if(strlen($usu_id) > 0 && strlen($hdnIdCliente) > 0)
+if(strlen($usu_id) > 0 && strlen($IdCliente) > 0)
 {
     $querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
     $res = $mySqli->query($querySelect);
@@ -33,22 +25,16 @@ if(strlen($usu_id) > 0 && strlen($hdnIdCliente) > 0)
         $mySqli->query("SET CHARACTER SET 'utf8'");
 
         $queryUpdUsu = "UPDATE tsg_cliente SET
-                             cli_nombre = '$txtNombreCliente'
-                            ,cli_apellido = '$txtApellido'
-                            ,cli_correo = '$txtCorreo'
-                            ,cli_empresa = '$txtNombreEmpresa' 
-                            ,cli_rut = '$txtRut'
-                            ,cli_direccion = '$txtDireccion'
-                            ,usu_fecha_mod = NOW()
-                        WHERE cli_id = $hdnIdCliente AND cli_activo = 1  ";
+                              cli_activo = 0
+                        WHERE cli_id = $IdCliente ";
         
         $res = $mySqli->query($queryUpdUsu);
-        
+
         if($mySqli->errno == 0)
         {
             if($mySqli->affected_rows > 0)
             {
-                $msg = "Se han guardado los cambios correctamente";
+                $msg = "Se ha eliminado el cliente correctamente";
                 $mySqli->commit();
                 $mySqli->close();
                 $data["estado"] = "OK";
@@ -63,7 +49,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdCliente) > 0)
         else {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "Error al modificar los datos";
+           $msg = "Error al eliminar el cliente";
            $data["estado"] = "KO";
         }
     }
@@ -80,7 +66,7 @@ else{
 
 if($V_DEPURAR == TRUE)
 {
-    $data["html"] = "$msg - $querySelect - $queryInsUsu - $queryUpdUsu ";
+    $data["html"] = "$msg - $querySelect - $queryUpdUsu ";
 }
 else 
 {
