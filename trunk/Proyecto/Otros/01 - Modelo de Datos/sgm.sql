@@ -248,7 +248,7 @@ CREATE TABLE tsg_proyecto (
   pro_id int(10) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del proyecto, identificador único',
   pro_nombre varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'nombre del proyecto',
   pro_descrip varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'descripción del proyecto',
-  pro_usu_id_jefepro int(10) NOT NULL COMMENT 'Identificador del jefe de proyecto',
+  pro_usu_id_jefepro int(10) NULL COMMENT 'Identificador del jefe de proyecto',
   pro_duracion varchar(255) COLLATE utf8_spanish_ci NOT NULL COMMENT 'duración del proyecto',
   pro_fecha_ini datetime NOT NULL COMMENT 'Fecha inicio del proyecto',
   pro_fecha_term datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'fecha termino del proyecto',

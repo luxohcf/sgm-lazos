@@ -57,15 +57,15 @@ if(strlen($usu_id) > 0)
             if($mySqli->affected_rows > 0)
             {
                 $idProyecto = $mySqli->insert_id;
+                
                 if($ddlJefeProyecto != null && is_array($ddlJefeProyecto) && count($ddlJefeProyecto) > 0)
                 {
-                    
-                    foreach($ddlTipoProyecto as $obj){
+                    foreach($ddlJefeProyecto as $obj){
                                 
                          $query = "INSERT INTO tsg_usuario_tsg_proyecto (tsg_usuariousu_id, tsg_proyectopro_id, rol_id)
                                    VALUES ($obj, $idProyecto, 3);";
                                    
-                         $res = $mySqli->query($query);          
+                         $res = $mySqli->query($query);
                     }
                 }
 
