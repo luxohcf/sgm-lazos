@@ -19,14 +19,12 @@ if($mySqli->connect_errno)
     $data["Error conexion MySql"] = $mySqli->connect_error;
 }
 
-$pass = generar_Hash($pass, $V_LLAVE);
-
 if(strlen($usu_id) > 0 && strlen($hdnIdCliente) > 0)
 {
     $querySelect = "SELECT 1 FROM `tsg_usuario` WHERE `usu_id` = $usu_id ";
     $res = $mySqli->query($querySelect);
         
-    if($mySqli->affected_rows > 0) // No existe el nombre
+    if($mySqli->affected_rows > 0)
     {
         $mySqli->autocommit(FALSE);
         $mySqli->query("SET NAMES 'utf8'");
@@ -39,7 +37,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdCliente) > 0)
                             ,cli_empresa = '$txtNombreEmpresa' 
                             ,cli_rut = '$txtRut'
                             ,cli_direccion = '$txtDireccion'
-                            ,usu_fecha_mod = NOW()
+                            ,cli_fecha_mod = NOW()
                         WHERE cli_id = $hdnIdCliente AND cli_activo = 1  ";
         
         $res = $mySqli->query($queryUpdUsu);

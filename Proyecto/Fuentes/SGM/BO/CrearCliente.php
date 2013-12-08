@@ -39,7 +39,7 @@ if(strlen($usu_id) > 0)
                          '$txtDireccion',
                          NOW(),
                          1,
-                         $usu_nom);";
+                         '$usu_nom');";
         
         $res = $mySqli->query($queryIns);
         
