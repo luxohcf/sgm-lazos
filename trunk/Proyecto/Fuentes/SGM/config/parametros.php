@@ -900,6 +900,105 @@ class EnvioMail
     }
 };
 
+class RegistraEstadistica
+{
+    private $V_HOST;
+    private $V_USER;
+    private $V_PASS;
+    private $V_BBDD;
+    
+    function __construct($V_HOST, $V_USER, $V_PASS, $V_BBDD)
+    {
+        $this->V_HOST=$V_HOST;
+        $this->V_USER=$V_USER;
+        $this->V_PASS=$V_PASS;
+        $this->V_BBDD=$V_BBDD;
+    }
+    
+    public function RegistraEstadistica($idEstado, $idProyecto)
+    {
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+
+        if ($mySqli->connect_errno) {
+            $html = "$mySqli->error";
+            return $html;
+        }
+        
+        $query = "SELECT 1 FROM tsg_estadistica_diaria 
+                  WHERE dis_fecha = CURDATE() AND tsg_proyectopro_id = $idProyecto;";
+        
+        $res = $mySqli->query($query);
+
+        if ($mySqli->affected_rows > 0) { // update
+           
+            $query = "UPDATE tsg_estadistica_diaria SET dis_total = dis_total + 1,";
+            
+            switch($idEstado)
+            {
+                case "1":
+                    $query .= "dis_creadas = dis_creadas + 1 ";
+                    break;
+                case "2":
+                    $query .= "dis_asignadas = dis_asignadas + 1 ";
+                    break;
+                case "3":
+                    $query .= "dis_resueltas = dis_resueltas + 1 ";
+                    break;
+                case "4":
+                    $query .= "dis_rechazadas = dis_rechazadas + 1 ";
+                    break;
+                case "5":
+                    $query .= "dis_cerradas = dis_cerradas + 1 ";
+                    break;
+                case "6":
+                    $query .= "dis_desestimadas = dis_desestimadas + 1 ";
+                    break;
+            }
+            
+            $query .= " WHERE dis_fecha = CURDATE() AND tsg_proyectopro_id = $idProyecto;";
+            
+            $res = $mySqli -> query($query);
+            $mySqli->commit();
+            $mySqli->close();
+        }
+        else // Insert
+        {
+            $query = "INSERT INTO tsg_estadistica_diaria (dis_fecha,dis_total,dis_creadas,dis_asignadas,dis_resueltas,dis_rechazadas,dis_cerradas,dis_desestimadas,tsg_proyectopro_id) 
+                      VALUES (CURDATE(),1,";
+
+            switch($idEstado)
+            {
+                case "1":
+                    $query .= "1,0,0,0,0,0,$idProyecto);";
+                    break;
+                case "2":
+                    $query .= "0,1,0,0,0,0,$idProyecto);";
+                    break;
+                case "3":
+                    $query .= "0,0,1,0,0,0,$idProyecto);";
+                    break;
+                case "4":
+                    $query .= "0,0,0,1,0,0,$idProyecto);";
+                    break;
+                case "5":
+                    $query .= "0,0,0,0,1,0,$idProyecto);";
+                    break;
+                case "6":
+                    $query .= "0,0,0,0,0,1,$idProyecto);";
+                    break;
+            }
+            $res = $mySqli -> query($query);
+            $mySqli->commit();
+            $mySqli->close();
+        }  
+    }
+    
+    public function toString()
+    {
+        return var_dump($this);
+    }
+};
+
 // http://silviomoreto.github.io/bootstrap-select/
 // http://eternicode.github.io/bootstrap-datepicker/
 // http://bootboxjs.com/

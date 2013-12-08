@@ -80,6 +80,9 @@ if(strlen($usu_id) > 0 && strlen($hdnIdSolicitud) > 0 )
                 $mySqli->close();
                 $data["estado"] = "OK";
                 
+                $objEstadistica = new RegistraEstadistica($V_HOST, $V_USER, $V_PASS, $V_BBDD);
+                $objEstadistica->RegistraEstadistica($ddlEstado, $ddlProyecto);
+                
                 $objMail = new EnvioMail($V_HOST_SMTP,$V_PORT_SMTP,$V_USER_SMTP,$V_PASS_SMTP,$V_FROM,$V_FROM_NAME,$V_HOST, $V_USER, $V_PASS, $V_BBDD);
                 $objMail->enviarCorreoModificacionSolicitud($hdnIdSolicitud);
             }

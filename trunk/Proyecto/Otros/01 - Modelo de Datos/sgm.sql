@@ -131,11 +131,14 @@ CREATE TABLE tsg_comentario_ticket (
 
 CREATE TABLE tsg_estadistica_diaria (
   dis_id int(10) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único de la tabla',
-  dis_fecha int(10) NOT NULL COMMENT 'Fecha',
+  dis_fecha datetime NOT NULL COMMENT 'Fecha',
   dis_total int(10) NOT NULL COMMENT 'Total de tickets',
-  dis_procesadas int(10) NOT NULL COMMENT 'Total procesados',
-  dis_pendientes int(10) NOT NULL COMMENT 'Total pendientes',
-  dis_cerradas int(10) NOT NULL COMMENT 'Total cerradas',
+  dis_creadas int(10) NOT NULL,
+  dis_asignadas int(10) NOT NULL,
+  dis_resueltas int(10) NOT NULL,
+  dis_rechazadas int(10) NOT NULL,
+  dis_cerradas int(10) NOT NULL,
+  dis_desestimadas int(10) NOT NULL,
   tsg_proyectopro_id int(10) NOT NULL,
   PRIMARY KEY (dis_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Tabla de registro estadístico diario' AUTO_INCREMENT=1 ;
