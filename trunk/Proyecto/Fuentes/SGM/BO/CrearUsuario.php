@@ -2,6 +2,7 @@
 require("../config/parametros.php");
 $data = array();
 $msg = "";
+$usu_id = $_SESSION["id_usuario"];
 
 $txtNombreUsuario = (isset($_POST['txtNombreUsuario']))? $_POST['txtNombreUsuario'] : "";
 $txtApellido = (isset($_POST['txtApellido']))? $_POST['txtApellido'] : "";

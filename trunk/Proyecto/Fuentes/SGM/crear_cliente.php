@@ -15,36 +15,99 @@ if(!ValidaAcceso("crear_cliente.php", $_SESSION["paginas"]))
 $(function() {
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/CrearCliente.php", $('#FormPrincipal').serialize(),
-                function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    
-                    var msj = obj.html;
-                    var sub_msj = obj.errores; 
-                    
-                    var estado =  obj.estado;
-                    if(estado == 'OK') // Exito
-                    {
-                        MostrarExito(msj, sub_msj);
-                        Limpiar();
+            
+            bootbox.dialog({
+              message: "¿Seguro que desea crear el cliente?",
+              title: null,
+              buttons: {
+                Si: {
+                  label: "Si",
+                  className: "btn-success",
+                  callback: function() {
+                        $.post("./BO/CrearCliente.php", $('#FormPrincipal').serialize(),
+                            function(data) {
+                                var obj = jQuery.parseJSON(data);
+                                
+                                var msj = obj.html;
+                                var sub_msj = obj.errores; 
+                                
+                                var estado =  obj.estado;
+                                if(estado == 'OK') // Exito
+                                {
+                                    MostrarExito(msj, sub_msj);
+                                    Limpiar();
+                                }
+                                else // Error
+                                {
+                                    MostrarError(msj, sub_msj);
+                                }
+                        });
                     }
-                    else // Error
-                    {
-                        MostrarError(msj, sub_msj);
-                    }
+                },
+                No: {
+                  label: "No",
+                  className: "btn-info",
+                  callback: function() {
+                    
+                  }
+                }
+              }
             });
         }
+    });
+    
+    $("#btnLimpiar").click(function(){
+        Limpiar();
     });
 });
 
 function Limpiar(){
-    // Pendiente
+    $("#txtCorreo").val("");
+    $("#txtRut").val("");
+    $("#txtDireccion").val("");
+    $("#txtApellido").val("");
+    $("#txtNombreCliente").val("");
+    $("#txtNombreEmpresa").val("");
 }
 
 function ValidarDatos(){
       var errores = [];
       
-      // Pendiente
+      var txtNombreEmpresa = $("#txtNombreEmpresa").val();
+      
+      if(!ValidaTexto(txtNombreEmpresa,255)){
+        errores.push(" - El Nombre empresa es inválido.");
+      }
+      
+       var txtNombreCliente = $("#txtNombreCliente").val();
+      
+      if(!ValidaTexto(txtNombreCliente,255)){
+        errores.push(" - El Nombre es inválido.");
+      }
+      
+      var txtApellido = $("#txtApellido").val();
+      
+      if(!ValidaTexto(txtApellido,255)){
+        errores.push(" - El Apellido es inválido.");
+      }
+      
+      var txtDireccion = $("#txtDireccion").val();
+      
+      if(!ValidaTexto(txtDireccion,255)){
+        errores.push(" - La Dirección es inválida.");
+      }
+      
+      var txtRut = $("#txtRut").val();
+
+      if(!ValidaRut(txtRut)){
+        errores.push(" - El Rut es inválido.");
+        }
+      
+      var correo = $("#txtCorreo").val();
+      
+      if(!ValidaCorreo(correo)){
+        errores.push(" - El Correo es inválido.");
+      }
       
       if(errores.length > 0)
       {
@@ -91,7 +154,11 @@ function ValidarDatos(){
                 Rut <small class="text-error req">*</small>
             </div></label>
         <input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
-        
+        <label>
+            <div>
+                Nombre Empresa <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
         <label>
             <div>
                 Correo <small class="text-error req">*</small>
@@ -110,6 +177,9 @@ function ValidarDatos(){
         <p>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
                 Crear Cliente
+            </button>
+            <button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
+                Limpiar
             </button>
         </p>
     </div>

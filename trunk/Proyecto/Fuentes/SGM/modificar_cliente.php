@@ -1,19 +1,16 @@
 <?php
-
 include("cabecera.php");
 include("menu.php");
 
 $usu_id = $_SESSION["id_usuario"];
-$proyecto = array();
+$cliente = array();
 
-$idCliente = $_GET["idCliente"];
+$idCliente = $_POST["idCliente"];
 
 if ($idCliente == NULL || $usu_id == NULL || strlen($idCliente) < 1) {
 	echo $V_ACCES_DENIED;
 	exit();
 }
-
-//---------------------------------------------------
 
 $query = "SELECT pry.cli_id, 
 				 pry.cli_nombre,
@@ -31,76 +28,159 @@ $mySqli->query("SET NAMES 'utf8'");
 $mySqli->query("SET CHARACTER SET 'utf8'");
 $res = $mySqli -> query($query);
 
-if ($mySqli -> affected_rows > 0)// Si los datos son validos
+if ($mySqli -> affected_rows > 0)
 {
 	while ($row = $res -> fetch_assoc()) {
-		$proyecto["cli_id"] = $row['cli_id'];
-		$proyecto["cli_nombre"] = $row['cli_nombre'];
-		$proyecto["cli_apellido"] = $row['cli_apellido'];
-		$proyecto["cli_correo"] = $row['cli_correo'];
-		$proyecto["cli_empresa"] = $row["cli_empresa"];
-		$proyecto["cli_rut"] = $row["cli_rut"];
-		$proyecto["cli_direccion"] = $row["cli_direccion"];
+		$cliente["cli_id"] = $row['cli_id'];
+		$cliente["cli_nombre"] = $row['cli_nombre'];
+		$cliente["cli_apellido"] = $row['cli_apellido'];
+		$cliente["cli_correo"] = $row['cli_correo'];
+		$cliente["cli_empresa"] = $row["cli_empresa"];
+		$cliente["cli_rut"] = $row["cli_rut"];
+		$cliente["cli_direccion"] = $row["cli_direccion"];
 		}
 	$mySqli -> close();
 }
 
-//---------------------------------------------------------
-
 ?>
 <script type="text/javascript">
 
+function cargarCampos()
+{
+    var cli_id = "<?php echo $cliente["cli_id"] ?>";
+    var cli_nombre = "<?php echo $cliente["cli_nombre"] ?>";
+    var cli_apellido = "<?php echo $cliente["cli_apellido"] ?>";
+    var cli_correo = "<?php echo $cliente["cli_correo"] ?>";
+    var cli_empresa = "<?php echo $cliente["cli_empresa"] ?>";
+    var cli_rut = "<?php echo $cliente["cli_rut"] ?>";
+    var cli_direccion = "<?php echo $cliente["cli_direccion"] ?>";
+    
+    $("#txtNombreEmpresa").val(cli_empresa);
+    $("#txtNombreCliente").val(cli_nombre);
+    $("#txtApellido").val(cli_apellido);
+    $("#txtDireccion").val(cli_direccion);
+    $("#txtRut").val(cli_rut);
+    $("#txtCorreo").val(cli_correo);
+    $("#hdnIdCliente").val(cli_id);
+}
+
 $(function() {
+    cargarCampos();
+    
+    $("#btnVolver").click(function(){
+        Ir("busqueda_cliente.php");
+    });
+    
+    $("#btnEliminar").click(function(){
+        bootbox.dialog({
+          message: "¿Seguro que desea eliminar el cliente?",
+          title: null,
+          buttons: {
+            Si: {
+              label: "Si",
+              className: "btn-success",
+              callback: function() {
+                    $.post("./BO/EliminarCliente.php", {IdCliente : $('#hdnIdCliente').val()},
+                        function(data) {
+                            var obj = jQuery.parseJSON(data);
+                            
+                            var msj = obj.html;
+                            var sub_msj = obj.errores; 
+                            
+                            var estado =  obj.estado;
+                            if(estado == 'OK') // Exito
+                            {
+                                bootbox.alert(msj, function() {
+                                  Ir("busqueda_cliente.php");
+                                });
+                            }
+                            else // Error
+                            {
+                                MostrarError(msj, sub_msj);
+                            }
+                    });
+                }
+            },
+            No: {
+              label: "No",
+              className: "btn-info",
+              callback: function() {
+                
+              }
+            }
+          }
+        });
+    });
+    
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
-            $.post("./BO/ModificarDatosCliente.php", $('#FormPrincipal').serialize(),
-                function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    
-                    var msj = obj.html;
-                    var sub_msj = obj.errores; 
-                    
-                    var estado =  obj.estado;
-                    if(estado == 'OK') // Exito
-                    {
-                        MostrarExito(msj, sub_msj);
-                        Limpiar();
+            
+            bootbox.dialog({
+                  message: "¿Seguro que desea modificar el cliente?",
+                  title: null,
+                  buttons: {
+                    Si: {
+                      label: "Si",
+                      className: "btn-success",
+                      callback: function() {
+                            $.post("./BO/ModificarDatosCliente.php", $('#FormPrincipal').serialize(),
+                                function(data) {
+                                    var obj = jQuery.parseJSON(data);
+                                    
+                                    var msj = obj.html;
+                                    var sub_msj = obj.errores; 
+                                    
+                                    var estado =  obj.estado;
+                                    if(estado == 'OK') // Exito
+                                    {
+                                        MostrarExito(msj, sub_msj);
+                                    }
+                                    else // Error
+                                    {
+                                        MostrarError(msj, sub_msj);
+                                    }
+                            });
+                        }
+                    },
+                    No: {
+                      label: "No",
+                      className: "btn-info",
+                      callback: function() {
+                        
+                      }
                     }
-                    else // Error
-                    {
-                        MostrarError(msj, sub_msj);
-                    }
-            });
+                  }
+                });
         }
     });
 });
 
-function Limpiar(){
-    // Pendiente
-}
-
 function ValidarDatos(){
       var errores = [];
-      
-//      -------------------------------------------------
   
-	  var nombre = $("#txtNombreCliente").val();
+	  var txtNombreEmpresa = $("#txtNombreEmpresa").val();
 	  
-	  if(!ValidaTexto(nombre)){
+	  if(!ValidaTexto(txtNombreEmpresa,255)){
+	  	errores.push(" - El Nombre empresa es inválido.");
+	  }
+	  
+	   var txtNombreCliente = $("#txtNombreCliente").val();
+	  
+	  if(!ValidaTexto(txtNombreCliente,255)){
 	  	errores.push(" - El Nombre es inválido.");
 	  }
 	  
-	   var apellido = $("#txtApellidoCliente").val();
+	  var txtApellido = $("#txtApellido").val();
 	  
-	  if(!ValidaTexto(apellido)){
+	  if(!ValidaTexto(txtApellido,255)){
 	  	errores.push(" - El Apellido es inválido.");
 	  }
 	  
-	  var direccion = $("#txtdireccion").val();
-	  
-	  if(!ValidaTexto(direccion)){
-	  	errores.push(" - La Dirección es inválida.");
-	  }
+	  var txtDireccion = $("#txtDireccion").val();
+      
+      if(!ValidaTexto(txtDireccion,255)){
+        errores.push(" - La Dirección es inválida.");
+      }
 	  
 	  var txtRut = $("#txtRut").val();
 
@@ -110,12 +190,10 @@ function ValidarDatos(){
 	  
 	  var correo = $("#txtCorreo").val();
 	  
-  	  if(!ValidaTexto(correo)){
+  	  if(!ValidaCorreo(correo)){
 	  	errores.push(" - El Correo es inválido.");
 	  }
 	  
-
-  //----------------------------------------------------------    
       if(errores.length > 0)
       {
         MostrarError("Datos incorrectos, ingrese nuevamente lo siguiente:",errores);
@@ -161,7 +239,11 @@ function ValidarDatos(){
                 Rut <small class="text-error req">*</small>
             </div></label>
         <input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
-        
+        <label>
+            <div>
+                Nombre Empresa <small class="text-error req">*</small>
+            </div></label>
+        <input type="text" placeholder="" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
         <label>
             <div>
                 Correo <small class="text-error req">*</small>
@@ -196,6 +278,9 @@ function ValidarDatos(){
 </div>
 <div>
     &nbsp;
+</div>
+<div style="display: none;">
+    <input type="hidden" id="hdnIdCliente" name="hdnIdCliente" />
 </div>
 
 <?php
