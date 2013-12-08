@@ -168,6 +168,18 @@ VALUES
 
 INSERT INTO tsg_estadistica_diaria (dis_fecha,dis_total,dis_creadas,dis_asignadas,dis_resueltas,dis_rechazadas,dis_cerradas,dis_desestimadas,tsg_proyectopro_id) 
 VALUES 
+('12-01-2013',0,0,0,0,0,0,0,1),
+('12-02-2013',0,0,0,0,0,0,0,1),
+('12-01-2013',0,0,0,0,0,0,0,2),
+('12-02-2013',0,0,0,0,0,0,0,2),
+('12-01-2013',0,0,0,0,0,0,0,3),
+('12-02-2013',0,0,0,0,0,0,0,3),
+('12-01-2013',0,0,0,0,0,0,0,4),
+('12-02-2013',0,0,0,0,0,0,0,4),
+('12-01-2013',0,0,0,0,0,0,0,5),
+('12-02-2013',0,0,0,0,0,0,0,5),
+('12-01-2013',0,0,0,0,0,0,0,6),
+('12-02-2013',0,0,0,0,0,0,0,6),
 (DATE_ADD(CURDATE(),INTERVAL 1 DAY),0,0,0,0,0,0,0,1),
 (DATE_ADD(CURDATE(),INTERVAL 2 DAY),1,0,0,1,0,0,0,1),
 (DATE_ADD(CURDATE(),INTERVAL 3 DAY),2,1,0,0,0,1,0,1),

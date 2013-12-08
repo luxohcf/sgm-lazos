@@ -993,6 +993,25 @@ class RegistraEstadistica
         }  
     }
     
+    public function IniciaEstadistica($idProyecto)
+    {
+        $mySqli = new mysqli($this->V_HOST, $this->V_USER, $this->V_PASS, $this->V_BBDD);
+
+        if ($mySqli->connect_errno) {
+            $html = "$mySqli->error";
+            return $html;
+        }
+        $query = "INSERT INTO tsg_estadistica_diaria (dis_fecha,dis_total,dis_creadas,dis_asignadas,dis_resueltas,dis_rechazadas,dis_cerradas,dis_desestimadas,tsg_proyectopro_id) 
+                      VALUES ('0',0,0,0,0,0,0,0,$idProyecto);";
+        
+        $res = $mySqli->query($query);
+
+        if ($mySqli->affected_rows > 0) {
+            $mySqli->commit();
+            $mySqli->close();
+        }
+    }
+    
     public function toString()
     {
         return var_dump($this);
