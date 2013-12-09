@@ -18,14 +18,29 @@ else{
 
 /**/
 
-$objMail = new EnvioMail($V_HOST_SMTP,$V_PORT_SMTP,$V_USER_SMTP,$V_PASS_SMTP,$V_FROM,$V_FROM_NAME);
+$copia = preg_split('/;/', "padilla.tracy.s@gmail.com;luxohcf@gmail.com");
+$copia_aux = array();
+
+debug($copia);
+
+foreach ($copia as $obj) {
+    $copia_aux[$obj] = $obj;
+}
+$copia = $copia_aux;
+            
+debug($copia);
+
+$BC = array("luis.lizama05@inacapmail.cl" => "Luxo lizama");
+
+debug($BC);
+
+$objMail = new EnvioMail($V_HOST_SMTP,$V_PORT_SMTP,$V_USER_SMTP,$V_PASS_SMTP,$V_FROM,$V_FROM_NAME,$V_HOST, $V_USER, $V_PASS, $V_BBDD);
 //debug($objMail);
-$objMail->enviarCorreoCreacionSolicitud("3");
+$objMail->enviarCorreoCreacionSolicitud("4");
 
 debug($objMail);
 
-$copia = preg_split('/;/', "xx@x.cl");
-debug($copia);
+
 die;
             $subject = "Se ha creado la solicitud $mySqli->insert_id";
             $pry = "";

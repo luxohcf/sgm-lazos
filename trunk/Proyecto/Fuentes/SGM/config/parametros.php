@@ -684,8 +684,7 @@ class EnvioMail
 
         if ($mySqli->affected_rows > 0) {
             while ($row = $res->fetch_assoc()) {
-                        
-                $subject = "Se ha creado la solicitud $idSolicitud";
+
                 $pry = $row["pro_nombre"];
                 $tipo = $row["cat_nombre"];
                 $estado = $row["est_nombre"];
@@ -697,6 +696,8 @@ class EnvioMail
                 $priori = $row["pri_nombre"];
             }
         }
+        
+        $subject = "Se ha creado la solicitud $idSolicitud";
         
         $body = "<h4>Estimados(as):</h4>
                   <p>Con fecha ".date("d-M-Y H:m:s")." se ha creado 
@@ -717,7 +718,13 @@ class EnvioMail
         
         if(strlen($copia) > 0)
         {
-            $copia = preg_split('/;/', $copia);    
+            $copia = preg_split('/;/', $copia);
+            $copia_aux = array();
+            
+            foreach ($copia as $obj) {
+                $copia_aux[$obj] = $obj;
+            }
+            $copia = $copia_aux;
         }
         else{
             $copia = NULL;
@@ -880,7 +887,13 @@ class EnvioMail
         
         if(strlen($copia) > 0)
         {
-            $copia = preg_split('/;/', $copia);    
+            $copia = preg_split('/;/', $copia);
+            $copia_aux = array();
+            
+            foreach ($copia as $obj) {
+                $copia_aux[$obj] = $obj;
+            }
+            $copia = $copia_aux;
         }
         else{
             $copia = NULL;
