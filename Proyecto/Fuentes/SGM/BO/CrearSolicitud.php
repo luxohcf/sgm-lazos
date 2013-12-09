@@ -53,7 +53,8 @@ if(strlen($usu_id) > 0)
     {
         if($mySqli->affected_rows > 0)
         {
-            $msg = "Se ha creado la solicitud $mySqli->insert_id correctamente";
+            $idSolicitud = $mySqli->insert_id;
+            $msg = "Se ha creado la solicitud $idSolicitud correctamente";
             $mySqli->commit();
             $mySqli->close();
             $data["estado"] = "OK";
@@ -62,7 +63,7 @@ if(strlen($usu_id) > 0)
             $objEstadistica->RegistraEstadistica("1", $ddlProyecto);
             
             $objMail = new EnvioMail($V_HOST_SMTP,$V_PORT_SMTP,$V_USER_SMTP,$V_PASS_SMTP,$V_FROM,$V_FROM_NAME,$V_HOST, $V_USER, $V_PASS, $V_BBDD);
-            $objMail->enviarCorreoCreacionSolicitud($mySqli->insert_id);
+            $objMail->enviarCorreoCreacionSolicitud($idSolicitud);
         }
         else {
            $mySqli->rollback(); 
