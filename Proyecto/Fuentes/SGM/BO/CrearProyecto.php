@@ -87,7 +87,7 @@ if(strlen($usu_id) > 0)
         else {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "Error al crear el proyecto";
+           $msg = "Error al registrar el proyecto";
            $data["estado"] = "KO";
         }
     }

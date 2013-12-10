@@ -75,7 +75,7 @@ if(strlen($usu_id) > 0)
     else {
        $mySqli->rollback(); 
        $mySqli->close();
-       $msg = "Error al crear la solicitud";
+       $msg = "Error al registrar la solicitud";
        $data["estado"] = "KO";
     }
 }

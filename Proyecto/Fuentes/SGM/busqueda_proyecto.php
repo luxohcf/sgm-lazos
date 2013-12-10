@@ -193,11 +193,11 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 	<div class="row-fluid filtroAvanzado">
 		<div class="span1"></div>
 		<div class="span5">
-			<label>Fecha de inicio desde</label>
+			<label>Fecha de Inicio Desde</label>
 			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
-            <label>Fecha de término desde</label>
+            <label>Fecha de Término Desde</label>
             <input type="text" class="txtFecha" id="txtFechaTerminoDesde" name="txtFechaTerminoDesde">
-            <label>Fecha de garantía desde</label>
+            <label>Fecha de Garantía Desde</label>
             <input type="text" class="txtFecha" id="txtFechaGarantiaDesde" name="txtFechaGarantiaDesde">
             
 <?php
@@ -206,11 +206,11 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
  ?>
 		</div>
 		<div class="span5">
-	        <label>Fecha de inicio hasta</label>
+	        <label>Fecha de Inicio Hasta</label>
             <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
-            <label>Fecha de término hasta</label>
+            <label>Fecha de Término Hasta</label>
             <input type="text" class="txtFecha" id="txtFechaTerminoHasta" name="txtFechaTerminoHasta">
-            <label>Fecha de garantía hasta</label>
+            <label>Fecha de Garantía Hasta</label>
             <input type="text" class="txtFecha" id="txtFechaGarantiaHasta" name="txtFechaGarantiaHasta">
             
 <?php

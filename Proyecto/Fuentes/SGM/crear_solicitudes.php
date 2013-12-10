@@ -18,7 +18,7 @@ $(function() {
         if(ValidarDatos()){
 
             bootbox.dialog({
-              message: "¿Seguro que desea crear la solicitud?",
+              message: "¿Seguro que desea registrar la solicitud?",
               title: null,
               buttons: {
                 Si: {
@@ -116,7 +116,7 @@ function ValidarDatos(){
 </script>
 <!--  -->
 <fieldset>
-    <legend>Crear Solicitud</legend>
+    <legend>Registrar Solicitud</legend>
     
     <div id="divErrores" style="width: 60%;"></div>
     
@@ -165,7 +165,7 @@ function ValidarDatos(){
     <div class="container theme-showcase pagination-centered">
         <p>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardar">
-                Crear Solicitud
+                Registrar Solicitud
             </button>
             <button type="button" class="btn btn-lg btn-primary" id="btnLimpiar">
                 Limpiar

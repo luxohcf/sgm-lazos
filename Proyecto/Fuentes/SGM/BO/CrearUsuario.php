@@ -65,7 +65,7 @@ if(strlen($usu_id) > 0)
         else {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "Error al crear el usuario";
+           $msg = "Error al registrar el usuario";
            $data["estado"] = "KO";
         }
     }

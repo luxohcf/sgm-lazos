@@ -154,13 +154,13 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 	<div class="row-fluid filtroAvanzado">
 		<div class="span1"></div>
 		<div class="span5">
-			<label>Fecha de creación desde</label>
+			<label>Fecha de creación Desde</label>
 			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
 			<label>Empresa</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtEmpresa" name="txtEmpresa">
 		</div>
 		<div class="span5">
-	        <label>Fecha de creación hasta</label>
+	        <label>Fecha de Creación Hasta</label>
             <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
 			<label>Apellido(s)</label>
 			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
