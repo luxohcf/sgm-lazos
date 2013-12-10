@@ -35,7 +35,7 @@ $V_TITULO = "Proyecto SGM";
 $V_EXT_VALIDAS = "doc,docx,xls,xlsx,jpg,png,pdf";
 $V_MAXIMO_MB = "2";
 
-/* Ambiente testing */
+/* Ambiente testing 
 
 $V_HOST = "mysql.hostinger.es";
 $V_USER = "u643183889_sgm";
@@ -50,10 +50,10 @@ $V_FROM      = "noreply@sgm-lazos.esy.es";
 $V_FROM_NAME = "SGM-Lazos";
 
   
-$V_DEPURAR = FALSE;
+$V_DEPURAR = FALSE;*/
 
 
-/* Ambiente desarrollo 
+/* Ambiente desarrollo */
 $V_HOST = "localhost";
 $V_USER = "sgm";
 $V_PASS = "sgm";
@@ -66,7 +66,7 @@ $V_PORT_SMTP = 2525;
 $V_USER_SMTP = "admin@sgm-lazos.esy.es";
 $V_PASS_SMTP = "sgmlazos";
 $V_FROM      = "noreply@sgm-lazos.esy.es";
-$V_FROM_NAME = "SGM-Lazos";*/
+$V_FROM_NAME = "SGM-Lazos";
 
 // Clase para generar cosas genericas
 class Utilidades
@@ -1015,7 +1015,7 @@ class RegistraEstadistica
             return $html;
         }
         $query = "INSERT INTO tsg_estadistica_diaria (dis_fecha,dis_total,dis_creadas,dis_asignadas,dis_resueltas,dis_rechazadas,dis_cerradas,dis_desestimadas,tsg_proyectopro_id) 
-                      VALUES ('0',0,0,0,0,0,0,0,$idProyecto);";
+                      VALUES (CURDATE(),0,0,0,0,0,0,0,$idProyecto);";
         
         $res = $mySqli->query($query);
 

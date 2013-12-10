@@ -37,6 +37,7 @@ if(isset($_SESSION['usuario']) == FALSE)
 <!-- DatePicker -->
 <link href="css/datepicker.css" rel="stylesheet" />
 <script src="js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="js/bootstrap-datepicker.es.js" type="text/javascript"></script>
 <!-- Dialogos -->
 <script src="js/bootbox.min.js" type="text/javascript"></script>
 
@@ -48,7 +49,7 @@ if(isset($_SESSION['usuario']) == FALSE)
 	{
 		if(flag == true)
 		{
-			$("#txtbtnFiltros").html("Búsqueda Basica");
+			$("#txtbtnFiltros").html("Búsqueda Básica");
 			$("#btnFiltros").removeClass( "icon-chevron-down" ).addClass( "icon-chevron-up" );
 			$(".filtroAvanzado").show();
 			flag = false;

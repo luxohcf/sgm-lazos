@@ -28,6 +28,8 @@ if (!ValidaAcceso("ver_estadisticas.php", $_SESSION["paginas"])) {
                         var estado =  obj.estado;
                         if(estado == 'OK') // Exito
                         {
+                            $('#graficos').html("");
+                            $("#graficos").append("<div id='chart_div0' style='width: 100%; height: 500px;'></div>");
                             grafico = obj.array;
                             proyectos = obj.proyectos;
                             drawChart();
