@@ -33,7 +33,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
         {
            $mySqli->rollback(); 
            $mySqli->close();
-           $msg = "No se puede eliminar el cliente, tiene solicitudes en curso";
+           $msg = "No se puede eliminar el proyecto, tiene solicitudes en curso";
            $data["estado"] = "KO";
         }
         else
@@ -74,7 +74,7 @@ if(strlen($usu_id) > 0 && strlen($hdnIdProyecto) > 0)
     }
 }
 else{
-    $msg = "Usuario inválido";
+    $msg = "El Usuario no es válido";
     $data["estado"] = "KO";
 }
 

@@ -11,6 +11,7 @@ if(!ValidaAcceso("crear_usuario.php", $_SESSION["paginas"]))
 
 ?>
 <script type="text/javascript">
+var validoRut = false;
 
 $(function() {
     
@@ -63,6 +64,17 @@ $(function() {
     $("#btnLimpiar").click(function(){
         Limpiar();
     });
+    
+    $('#txtNombreRut').Rut({
+        validation: true,
+        format_on: 'keyup',
+        on_error: function(){
+            validoRut = false;
+        },
+        on_success: function(){
+            validoRut = true;
+        }
+    });
 });
 
 function Limpiar(){
@@ -74,6 +86,7 @@ function Limpiar(){
     $("#txtPass").val("");
     $("#txtCorreo").val("");
     $("#txtPassConfirmar").val("");
+    validoRut = false;
 }
 
 function ValidarDatos(){
@@ -107,10 +120,8 @@ function ValidarDatos(){
               errores.push(" - El número de teléfono es inválido.");
           }
       }
-      
-      var txtNombreRut = $("#txtNombreRut").val();
-      
-      if(!ValidaRut(txtNombreRut)){
+
+      if(!validoRut){
         errores.push(" - El rut es inválido.");
       }
       

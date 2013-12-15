@@ -79,9 +79,9 @@ $V_MSG_PH_MAIL = "Ingrese Correo";
 $V_MSG_PH_FECHA = "Seleccione";
 $V_MSG_PH_NUMERO = "Ingrese Número";
 $V_MSG_PH_RUT = "Ingrese Rut";
-$V_MSG_PH_PASS = "Ingrese Contraseña";
+$V_MSG_PH_PASS = "Ingrese Contraseña";*/
  
-  */
+  
 
 // Clase para generar cosas genericas
 class Utilidades

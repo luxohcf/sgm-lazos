@@ -197,12 +197,6 @@ function ValidarDatos(){
       }
   }
   
-  var txtNombreRut = $("#txtNombreRut").val();
-  
-  if(!ValidaRut(txtNombreRut)){
-    errores.push(" - El rut es inválido.");
-  }
-  
   var txtPass = $("#txtPass").val();
   
   if(txtPass != ""){

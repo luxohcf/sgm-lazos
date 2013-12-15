@@ -12,6 +12,8 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 ?>
 
 <script type="text/javascript" >
+    var validoRut = false;
+    
 	$(function() {
 	    
 	    $("#collapse<?php echo "2"; ?>").collapse('show');
@@ -70,7 +72,19 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
             $("#txtEmpresa").val("");
             $("#txtFechaInicioDesde").val("");
             $("#txtFechaInicioHasta").val("");
+            validoRut = false;
             oTabla.fnReloadAjax();
+        });
+        
+        $('#txtRut').Rut({
+            validation: true,
+            format_on: 'keyup',
+            on_error: function(){
+                validoRut = false;
+            },
+            on_success: function(){
+                validoRut = true;
+            }
         });
 
 	}); 
@@ -81,9 +95,9 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		
 	    var txtRut = $("#txtRut").val();
 	    if(txtRut != ""){
-	    	if(!ValidaRut(txtRut)){
-	    		errores.push(" - El Rut es inválido.");
-	    	}
+	    	if(!validoRut){
+                errores.push(" - El rut es inválido.");
+            }
 	    }
 	    
 	    var txtNombre = $("#txtNombre").val();

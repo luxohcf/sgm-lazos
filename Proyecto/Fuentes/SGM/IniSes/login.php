@@ -37,11 +37,11 @@ else /* Si no lo son retornar un mensaje */
 {
     if($V_DEPURAR == TRUE)
     {
-        $data["html"] = "Nombre de usuario o contraseña invalidos - ".$query;
+        $data["html"] = "- Debe ingresar un RUT y/o Contraseña válida. - ".$query;
     }
     else 
     {
-        $data["html"] = "Nombre de usuario o contraseña invalidos";  
+        $data["html"] = "- Debe ingresar un RUT y/o Contraseña válida.";  
     }
 	$data["error"] = TRUE;
 }
