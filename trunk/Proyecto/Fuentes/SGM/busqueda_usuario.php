@@ -13,6 +13,9 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 
 <script type="text/javascript" >
 	$(function() {
+	    
+	    $("#collapse<?php echo "3"; ?>").collapse('show');
+        $("#busqueda_usuario").addClass("btn-info");
 
 		var oTabla = $('#tblResultados').dataTable({
 			bJQueryUI : true,
@@ -127,11 +130,11 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Rut</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge" id="txtRut" name="txtRut">
 		</div>
 		<div class="span5">
 			<label>Nombre Usuario</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" name="txtNombre">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombre" name="txtNombre">
 		</div>
 		<div class="span1"></div>
 	</div>
@@ -139,11 +142,11 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Fecha de Creación Desde</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
 		</div>
 		<div class="span5">
 	        <label>Fecha de Creación Hasta</label>
-            <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
 		</div>
 		<div class="span1"></div>
 	</div>

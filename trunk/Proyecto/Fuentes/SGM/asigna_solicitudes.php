@@ -131,6 +131,9 @@ if ($mySqli -> affected_rows > 0)
 
     $(function() {
         
+        $("#collapse<?php echo "4"; ?>").collapse('show');
+        $("#busqueda_solicitudes").addClass("btn-info");
+        
         cargarCampos();
         
         $("#btnVolver").click(function(){
@@ -357,7 +360,7 @@ if ($mySqli -> affected_rows > 0)
       
       var nombre = $("#txtNombre").val();
       
-      if(!ValidaTexto(nombre, 255)){
+      if(!ValidaTexto(nombre, 100)){
         errores.push(" - El nombre es inválido.");
       }
       var Descripcion = $("#txtDescripcion").val();
@@ -413,12 +416,12 @@ if ($mySqli -> affected_rows > 0)
                 <div>
                     Código <small class="text-error req"></small>
                 </div></label>
-            <input type="text" placeholder="" class="input-xlarge" id="txtCodigo" name="txtCodigo" disabled >
+            <input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtCodigo" name="txtCodigo" disabled >
             <label>
                 <div>
                     Nombre <small class="text-error req">*</small>
                 </div></label>
-            <input type="text" placeholder="" class="input-xlarge" id="txtNombre" name="txtNombre" >
+            <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombre" name="txtNombre" >
     
             <?php
             $obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
@@ -430,7 +433,7 @@ if ($mySqli -> affected_rows > 0)
                 <div>
                     Descripción <small class="text-error req">*</small>
                 </div></label>
-            <textarea rows="3" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
+            <textarea rows="3" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
               
         </div>
         <div class="span5">
@@ -441,8 +444,11 @@ if ($mySqli -> affected_rows > 0)
             echo $obj->GeneraSelectCategoriaSolicitud("ddlCategoria", false, true, 5);
             ?>
     
-            <label>Correo en copia</label>
-            <textarea rows="3" class="input-xlarge" id="txtCorreoCopia" name="txtCorreoCopia" ></textarea>
+            <label>
+            <div>
+                Correo(s) en copia <small class="text-error req">(Separar correos con un <b>;</b> )</small>
+            </div></label>
+            <textarea rows="3" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreoCopia" name="txtCorreoCopia" ></textarea>
         </div>
         <div class="span1"></div>
     </div>
@@ -491,7 +497,7 @@ if ($mySqli -> affected_rows > 0)
                 <div>
                     Observación <small class="text-error req">*</small>
                 </div></label>
-            <textarea rows="5" style="width: 90%;" id="txtObservacion" name="txtObservacion"></textarea>
+            <textarea rows="5" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" style="width: 90%;" id="txtObservacion" name="txtObservacion"></textarea>
             <label></label>
             <button type="button" class="btn btn-lg btn-primary" id="btnGuardaObservacion">
                 Agregar Observación/Archivo
@@ -499,7 +505,7 @@ if ($mySqli -> affected_rows > 0)
         </div>
         <div class="span5">
             <label>Archivo</label>
-            <input type="file"  id="txtArchivo" name="txtArchivo" />
+            <input type="file" id="txtArchivo" name="txtArchivo" />
             <label></label>
             <label>
                 <div><small class="text-error req">(Extensiones:<?php echo $V_EXT_VALIDAS; ?>. Tamaño máximo: <?php echo $V_MAXIMO_MB; ?>MB.)</small>

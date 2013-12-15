@@ -13,6 +13,9 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 
 <script type="text/javascript" >
 	$(function() {
+	    
+	    $("#collapse<?php echo "1"; ?>").collapse('show');
+	    $("#busqueda_proyecto").addClass("btn-info");
 
 		var oTabla = $('#tblResultados').dataTable({
 			bJQueryUI : true,
@@ -175,9 +178,9 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Código Proyecto</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtCodigoProyecto" name="txtCodigoProyecto">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtCodigoProyecto" name="txtCodigoProyecto">
 			<label>Nombre Proyecto</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtNombreProyecto" name="txtNombreProyecto">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreProyecto" name="txtNombreProyecto">
 		</div>
 		<div class="span5">
 <?php
@@ -194,11 +197,11 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Fecha de Inicio Desde</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
             <label>Fecha de Término Desde</label>
-            <input type="text" class="txtFecha" id="txtFechaTerminoDesde" name="txtFechaTerminoDesde">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaTerminoDesde" name="txtFechaTerminoDesde">
             <label>Fecha de Garantía Desde</label>
-            <input type="text" class="txtFecha" id="txtFechaGarantiaDesde" name="txtFechaGarantiaDesde">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaGarantiaDesde" name="txtFechaGarantiaDesde">
             
 <?php
     echo $obj->GeneraSelectDestacado("ddlDestacado");
@@ -207,11 +210,11 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 		</div>
 		<div class="span5">
 	        <label>Fecha de Inicio Hasta</label>
-            <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
             <label>Fecha de Término Hasta</label>
-            <input type="text" class="txtFecha" id="txtFechaTerminoHasta" name="txtFechaTerminoHasta">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaTerminoHasta" name="txtFechaTerminoHasta">
             <label>Fecha de Garantía Hasta</label>
-            <input type="text" class="txtFecha" id="txtFechaGarantiaHasta" name="txtFechaGarantiaHasta">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaGarantiaHasta" name="txtFechaGarantiaHasta">
             
 <?php
     echo $obj->GeneraSelectTipoProyecto("ddlTipoProyecto", true,true,5);

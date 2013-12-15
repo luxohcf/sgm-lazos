@@ -13,6 +13,9 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 	$(function() {
 		
 		$("#hdnIdUsuarioAux").val("<?php echo $_SESSION["id_usuario"] ?>");
+		
+		$("#collapse<?php echo "4"; ?>").collapse('show');
+        $("#busqueda_solicitudes").addClass("btn-info");
 
 		var oTabla = $('#tblResultados').dataTable({
 			bJQueryUI : true,
@@ -174,9 +177,9 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Código Solicitud</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtCodigoSolicitud" name="txtCodigoSolicitud">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtCodigoSolicitud" name="txtCodigoSolicitud">
 			<label>Nombre Solicitud</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtNombreSolicitud" name="txtNombreSolicitud">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtNombreSolicitud" name="txtNombreSolicitud">
 		</div>
 		<div class="span5">
 			<?php
@@ -195,9 +198,9 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 			echo $obj->GeneraSelectPrioridad("ddlPrioridad", true, true, 5);
 			?>
 			<label>Fecha de creación desde</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
 			<label>Fecha de creación hasta</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
 		</div>
 		<div class="span5">
 			<?php

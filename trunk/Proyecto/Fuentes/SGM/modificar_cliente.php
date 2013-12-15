@@ -67,6 +67,47 @@ function cargarCampos()
 $(function() {
     cargarCampos();
     
+    $("#collapse<?php echo "2"; ?>").collapse('show');
+    $("#busqueda_cliente").addClass("btn-info");
+    
+    var oTabla = $('#tblResultados').dataTable({
+            bJQueryUI : true,
+            sPaginationType : "full_numbers", //tipo de paginacion
+            "bFilter" : false, // muestra el cuadro de busqueda
+            "iDisplayLength" : 5, // cantidad de filas que muestra
+            "bLengthChange" : false, // cuadro que deja cambiar la cantidad de filas
+            "oLanguage" : {// mensajes y el idio,a
+                "sLengthMenu" : "Mostrar _MENU_ registros",
+                "sZeroRecords" : "No hay resultados",
+                "sInfo" : "Resultados del _START_ al _END_ de _TOTAL_ registros",
+                "sInfoEmpty" : "0 Resultados",
+                "sInfoFiltered" : "(filtrado desde _MAX_ registros)",
+                "sInfoPostFix" : "",
+                "sSearch" : "Buscar:",
+                "sUrl" : "",
+                "sInfoThousands" : ",",
+                "sLoadingRecords" : "Cargando...",
+                "oPaginate" : {
+                    "sFirst" : "Primero",
+                    "sLast" : "Último",
+                    "sNext" : "Siguiente",
+                    "sPrevious" : "Anterior"
+                }
+            },
+            "bProcessing" : true, //para procesar desde servidor
+            "sServerMethod" : "POST",
+            "sAjaxSource" : './BO/BuscaProyectos.php', // fuente del json
+            "fnServerData" : function(sSource, aoData, fnCallback) {// Para buscar con el boton
+                $.ajax({
+                    "dataType" : 'json',
+                    "type" : "POST",
+                    "url" : sSource,
+                    "data" : {ddlCliente:[$("#hdnIdCliente").val()]},
+                    "success" : fnCallback
+                });
+            }
+        });
+    
     $("#btnVolver").click(function(){
         Ir("busqueda_cliente.php");
     });
@@ -151,34 +192,34 @@ $(function() {
                     }
                   }
                 });
-        }
+            }
+        });
     });
-});
 
-function ValidarDatos(){
+    function ValidarDatos(){
       var errores = [];
   
 	  var txtNombreEmpresa = $("#txtNombreEmpresa").val();
 	  
-	  if(!ValidaTexto(txtNombreEmpresa,255)){
+	  if(!ValidaTexto(txtNombreEmpresa,100)){
 	  	errores.push(" - El Nombre empresa es inválido.");
 	  }
 	  
 	   var txtNombreCliente = $("#txtNombreCliente").val();
 	  
-	  if(!ValidaTexto(txtNombreCliente,255)){
+	  if(!ValidaTexto(txtNombreCliente,100)){
 	  	errores.push(" - El Nombre es inválido.");
 	  }
 	  
 	  var txtApellido = $("#txtApellido").val();
 	  
-	  if(!ValidaTexto(txtApellido,255)){
+	  if(!ValidaTexto(txtApellido,100)){
 	  	errores.push(" - El Apellido es inválido.");
 	  }
 	  
 	  var txtDireccion = $("#txtDireccion").val();
       
-      if(!ValidaTexto(txtDireccion,255)){
+      if(!ValidaTexto(txtDireccion,100)){
         errores.push(" - La Dirección es inválida.");
       }
 	  
@@ -204,6 +245,51 @@ function ValidarDatos(){
         return true;
       }
     }
+    
+    function NoDestacarProyecto(idProyecto)
+    {
+        var opcion = $("#fila"+idProyecto).val();
+        
+        if(opcion != "0")
+        {
+            MarcarProyecto(idProyecto,0);
+            $("#fila"+idProyecto).removeClass("icon-star").addClass("icon-star-empty");
+            $("#fila"+idProyecto).val("0"); 
+        }
+        else
+        {
+            MarcarProyecto(idProyecto,1);
+            $("#fila"+idProyecto).removeClass("icon-star-empty").addClass("icon-star");
+            $("#fila"+idProyecto).val("1");
+        }
+    }
+    
+    function DestacarProyecto(idProyecto)
+    {
+        var opcion = $("#fila"+idProyecto).val();
+        
+        if(opcion == "1")
+        {
+            MarcarProyecto(idProyecto,0);
+            $("#fila"+idProyecto).removeClass("icon-star").addClass("icon-star-empty");
+            $("#fila"+idProyecto).val("0");
+        }
+        else
+        {
+            MarcarProyecto(idProyecto,1);
+            $("#fila"+idProyecto).removeClass("icon-star-empty").addClass("icon-star");
+            $("#fila"+idProyecto).val("1");
+        }
+    }
+    
+    function MarcarProyecto(idProyecto, marca){
+        $.post("./BO/MarcarProyecto.php", {idProyecto: idProyecto, marca: marca});
+    }
+    
+    function ModificarProyecto(idProyecto)
+    {
+        $().redirect('modificar_proyecto.php', {'idProyecto': idProyecto});
+    }
 </script>
 <!--  -->
 <fieldset>
@@ -218,19 +304,19 @@ function ValidarDatos(){
             <div>
                 Nombre(s) <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreCliente" name="txtNombreCliente">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreCliente" name="txtNombreCliente">
 
         <label>
             <div>
                 Apellido(s) <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtApellido" name="txtApellido">
         
         <label>
             <div>
                 Dirección <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtDireccion" name="txtDireccion">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDireccion" name="txtDireccion">
           
     </div>
     <div class="span5">
@@ -238,17 +324,17 @@ function ValidarDatos(){
             <div>
                 Rut <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge" id="txtRut" name="txtRut">
         <label>
             <div>
                 Nombre Empresa <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
         <label>
             <div>
                 Correo <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtCorreo" name="txtCorreo">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreo" name="txtCorreo">
     </div>
     <div class="span1"></div>
 </div>
@@ -272,6 +358,35 @@ function ValidarDatos(){
         </p>
     </div>
 </div>
+
+<fieldset>
+    <legend>
+        Proyectos
+    </legend>
+    <div class="row-fluid">
+        <div  class="span12">
+            <table id="tblResultados" class="table table-striped table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Dest.</th>
+                        <th>Código</th>
+                        <th>Nombre Proyecto</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Inicio</th>
+                        <th>Término</th>
+                        <th>Garantía</th>
+                        <th>Cliente</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <fieldset>
 
 <div>
     &nbsp;

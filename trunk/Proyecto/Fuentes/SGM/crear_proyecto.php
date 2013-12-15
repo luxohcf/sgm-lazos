@@ -14,6 +14,9 @@ if(!ValidaAcceso("crear_proyecto.php", $_SESSION["paginas"]))
 
 $(function() {
     
+    $("#collapse<?php echo "1"; ?>").collapse('show');
+    $("#crear_proyecto").addClass("btn-info");
+    
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
             
@@ -66,6 +69,7 @@ $(function() {
 function Limpiar(){
     $("#txtNombreProyecto").val("");
     $("#txtDuracion").val("");
+    $("#hdnDuracion").val("");
     $("#txtDescripcion").val("");
     $("#txtFechaInicio").val("");
     $("#txtFechaTermino").val("");
@@ -84,12 +88,12 @@ function ValidarDatos(){
       
       var nombre = $("#txtNombreProyecto").val();
       
-      if(!ValidaTexto(nombre,255)){
+      if(!ValidaTexto(nombre,100)){
         errores.push(" - El nombre es inválido.");
       }
       var duracion = $("#txtDuracion").val();
       
-      if(!ValidaTexto(duracion, 255)){
+      if(!ValidaTexto(duracion, 100)){
         errores.push(" - La duración es inválida.");
       }
       
@@ -137,6 +141,44 @@ function ValidarDatos(){
         return true;
       }
     }
+    
+    function CalcularDuracion()
+    {
+        var txtFechaInicio = $("#txtFechaInicio").val();
+        var txtFechaGarantia = $("#txtFechaGarantia").val();
+        
+        if(ValidaFecha(txtFechaInicio) && ValidaFecha(txtFechaGarantia) && ValidaFechaDiff(txtFechaInicio, txtFechaGarantia))
+        {
+            var minutes = 1000 * 60;
+            var hours   = minutes * 60;
+            var days    = hours * 24;
+            var years   = days * 365;
+            var x = txtFechaInicio.split("-");
+            txtFechaInicio = x[1] + "/" + x[0] + "/" + x[2];
+            var d1 = new Date(txtFechaInicio);
+            x = txtFechaGarantia.split("-");
+            txtFechaGarantia = x[1] + "/" + x[0] + "/" + x[2];
+            var d2 = new Date(txtFechaGarantia);
+            var dif = d2.getTime() - d1.getTime();
+            
+            var difYears = Math.round(dif/years);
+            var num_months = (dif % 31536000000)/2628000000;
+            var num_days = ((dif % 31536000000) % 2628000000)/86400000;
+            
+            var duracion = Math.round(difYears) + " año(s), " + Math.round(num_months) + " mes(es) " + Math.round(num_days) + " día(s)";
+            
+            $("#txtDuracion").val(duracion);
+            $("#hdnDuracion").val(duracion);
+        }
+    }
+    
+    function monthDiff(d1, d2) {
+        var months;
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth() + 1;
+        months += d2.getMonth();
+        return months <= 0 ? 0 : months;
+    }
 </script>
 <!--  -->
 <fieldset>
@@ -151,35 +193,35 @@ function ValidarDatos(){
             <div>
                 Nombre Proyecto <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreProyecto" name="txtNombreProyecto">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreProyecto" name="txtNombreProyecto">
 
         <label>
             <div>
                 Duración <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtDuracion" name="txtDuracion">
+        <input type="text" placeholder="" class="input-xlarge" id="txtDuracion" name="txtDuracion" disabled>
         <?php
         $obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
 
         echo $obj->GeneraSelectEncargado("ddlJefeProyecto", true, true, 5);
         
-        echo $obj -> GeneraSelectClientes("ddlCliente", false, true, 5);
+        echo $obj->GeneraSelectClientes("ddlCliente", false, true, 5);
         ?>
 
         <label>Descripción</label>
-        <textarea rows="3" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
+        <textarea rows="3" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
           
     </div>
     <div class="span5">
         <label><div>Fecha de inicio <small class="text-error req">*</small>
             </div></label>
-        <input type="text" class="txtFecha" id="txtFechaInicio" name="txtFechaInicio" >
+        <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicio" name="txtFechaInicio" onchange="CalcularDuracion();">
         <label><div>Fecha de término <small class="text-error req">*</small>
             </div></label>
-        <input type="text" class="txtFecha" id="txtFechaTermino" name="txtFechaTermino" >
+        <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaTermino" name="txtFechaTermino" >
         <label><div>Fecha de garantía <small class="text-error req">*</small>
             </div></label>
-        <input type="text" class="txtFecha" id="txtFechaGarantia" name="txtFechaGarantia" >
+        <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaGarantia" name="txtFechaGarantia" onchange="CalcularDuracion();">
 
         <?php
         echo $obj -> GeneraSelectTipoProyecto("ddlTipoProyecto", false, true, 5);
@@ -211,6 +253,10 @@ function ValidarDatos(){
 </div>
 <div>
     &nbsp;
+</div>
+
+<div style="display: none;">
+    <input type="hidden" id="hdnDuracion" name="hdnDuracion" />
 </div>
 
 <?php

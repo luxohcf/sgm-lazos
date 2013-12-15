@@ -13,6 +13,10 @@ if(!ValidaAcceso("crear_cliente.php", $_SESSION["paginas"]))
 <script type="text/javascript">
 
 $(function() {
+    
+    $("#collapse<?php echo "2"; ?>").collapse('show');
+    $("#crear_cliente").addClass("btn-info");
+    
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
             
@@ -75,25 +79,25 @@ function ValidarDatos(){
       
       var txtNombreEmpresa = $("#txtNombreEmpresa").val();
       
-      if(!ValidaTexto(txtNombreEmpresa,255)){
+      if(!ValidaTexto(txtNombreEmpresa,100)){
         errores.push(" - El Nombre empresa es inválido.");
       }
       
        var txtNombreCliente = $("#txtNombreCliente").val();
       
-      if(!ValidaTexto(txtNombreCliente,255)){
+      if(!ValidaTexto(txtNombreCliente,100)){
         errores.push(" - El Nombre es inválido.");
       }
       
       var txtApellido = $("#txtApellido").val();
       
-      if(!ValidaTexto(txtApellido,255)){
+      if(!ValidaTexto(txtApellido,100)){
         errores.push(" - El Apellido es inválido.");
       }
       
       var txtDireccion = $("#txtDireccion").val();
       
-      if(!ValidaTexto(txtDireccion,255)){
+      if(!ValidaTexto(txtDireccion,100)){
         errores.push(" - La Dirección es inválida.");
       }
       
@@ -133,19 +137,19 @@ function ValidarDatos(){
             <div>
                 Nombre(s) <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreCliente" name="txtNombreCliente">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreCliente" name="txtNombreCliente">
 
         <label>
             <div>
                 Apellido(s) <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtApellido" name="txtApellido">
         
         <label>
             <div>
                 Dirección <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtDireccion" name="txtDireccion">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDireccion" name="txtDireccion">
           
     </div>
     <div class="span5">
@@ -153,17 +157,17 @@ function ValidarDatos(){
             <div>
                 Rut <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge" id="txtRut" name="txtRut">
         <label>
             <div>
                 Nombre Empresa <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreEmpresa" name="txtNombreEmpresa">
         <label>
             <div>
                 Correo <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtCorreo" name="txtCorreo">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreo" name="txtCorreo">
     </div>
     <div class="span1"></div>
 </div>

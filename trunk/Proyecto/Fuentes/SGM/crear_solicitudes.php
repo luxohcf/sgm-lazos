@@ -14,6 +14,9 @@ if(!ValidaAcceso("crear_solicitudes.php", $_SESSION["paginas"]))
 
 $(function() {
     
+    $("#collapse<?php echo "4"; ?>").collapse('show');
+    $("#crear_solicitudes").addClass("btn-info");
+    
     $("#btnGuardar").click(function(){
         if(ValidarDatos()){
 
@@ -74,7 +77,7 @@ function ValidarDatos(){
       var errores = [];
       var nombre = $("#txtNombre").val();
       
-      if(!ValidaTexto(nombre, 255)){
+      if(!ValidaTexto(nombre, 100)){
         errores.push(" - El nombre es inválido.");
       }
       var Descripcion = $("#txtDescripcion").val();
@@ -127,7 +130,7 @@ function ValidarDatos(){
             <div>
                 Nombre <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombre" name="txtNombre" >
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombre" name="txtNombre" >
 
         <?php
         $obj = new Utilidades($V_HOST, $V_USER, $V_PASS, $V_BBDD);
@@ -138,7 +141,7 @@ function ValidarDatos(){
             <div>
                 Descripción <small class="text-error req">*</small>
             </div></label>
-        <textarea rows="3" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
+        <textarea rows="3" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDescripcion" name="txtDescripcion"></textarea>
           
     </div>
     <div class="span5">
@@ -152,7 +155,7 @@ function ValidarDatos(){
             <div>
                 Correo(s) en copia <small class="text-error req">(Separar correos con un <b>;</b> )</small>
             </div></label>
-        <textarea rows="3" class="input-xlarge" id="txtCorreoCopia" name="txtCorreoCopia" ></textarea>
+        <textarea rows="3" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreoCopia" name="txtCorreoCopia" ></textarea>
     </div>
     <div class="span1"></div>
 </div>

@@ -54,6 +54,9 @@ if ($mySqli -> affected_rows > 0)
 <script type="text/javascript">
 
 $(function() {
+    
+    $("#collapse<?php echo "3"; ?>").collapse('show');
+    $("#busqueda_usuario").addClass("btn-info");
 	
 	$('#btn-add').click(function(){
         $('#PerAsignados option:selected').each( function() {

@@ -15,6 +15,9 @@ if (!ValidaAcceso("ver_estadisticas.php", $_SESSION["paginas"])) {
     var proyectos = null;
     
 	$(function() {
+	    
+	    $("#collapse<?php echo "5"; ?>").collapse('show');
+        $("#ver_estadisticas").addClass("btn-info");
 		
 		$("#btnBuscar").click(function() {
 
@@ -157,9 +160,9 @@ if (!ValidaAcceso("ver_estadisticas.php", $_SESSION["paginas"])) {
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Fecha desde</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
 			<label>Fecha hasta</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
 		</div>
 		<div class="span5">
 			<?php
