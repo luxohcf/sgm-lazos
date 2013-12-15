@@ -7,7 +7,7 @@ $usu_id = $_SESSION["id_usuario"];
 
 $hdnIdProyecto = (isset($_POST['hdnIdProyecto']))? $_POST['hdnIdProyecto'] : "";
 $txtNombreProyecto = (isset($_POST['txtNombreProyecto']))? $_POST['txtNombreProyecto'] : "";
-$txtDuracion = (isset($_POST['txtDuracion']))? $_POST['txtDuracion'] : "";
+$txtDuracion = (isset($_POST['hdnDuracion']))? $_POST['hdnDuracion'] : "";
 $ddlJefeProyecto = (isset($_POST['ddlJefeProyecto']))? $_POST['ddlJefeProyecto'] : "";
 $ddlCliente = (isset($_POST['ddlCliente']))? $_POST['ddlCliente'] : "";
 $txtDescripcion = (isset($_POST['txtDescripcion']))? $_POST['txtDescripcion'] : "";

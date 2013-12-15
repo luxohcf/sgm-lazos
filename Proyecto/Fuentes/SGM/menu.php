@@ -77,7 +77,7 @@ else
 
 ?>
 
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: 490px;">
   <div class="row-fluid">
     <div class="span3">
         <div id="myAccordion" class="accordion">
@@ -103,9 +103,16 @@ foreach ($Menu as $titulo => $opciones)
       
       foreach ($grupo as $opcion) 
       {
-          echo "<div class='span1'>
+          /*echo "<div class='span1'>
                     <img src='".$opcion['IMAGEN']."' style='width: 55px;height: 55px;' onclick='Ir(\"".$opcion['RUTA']."\");' /><p>".$opcion['TITULO']."</p>
-                </div>";
+                </div>";*/
+                
+          echo "<div class='span1'>
+                    
+                    <img class='btn btn-small' src='".$opcion['IMAGEN']."' style='width: 55px;height: 55px;' onclick='Ir(\"".$opcion['RUTA']."\");' id='".preg_replace("/\\.php$/", "",$opcion['RUTA'])."' />
+                    <p> ".$opcion['TITULO']." </p>
+                    
+                </div>"; 
       }
       
       echo "</div></div>";

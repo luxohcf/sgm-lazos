@@ -13,6 +13,9 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 
 <script type="text/javascript" >
 	$(function() {
+	    
+	    $("#collapse<?php echo "2"; ?>").collapse('show');
+        $("#busqueda_cliente").addClass("btn-info");
 
 		var oTabla = $('#tblResultados').dataTable({
 			bJQueryUI : true,
@@ -143,11 +146,11 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Rut</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtRut" name="txtRut">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge" id="txtRut" name="txtRut">
 		</div>
 		<div class="span5">
 			<label>Nombre</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" name="txtNombre">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombre" name="txtNombre">
 		</div>
 		<div class="span1"></div>
 	</div>
@@ -155,15 +158,15 @@ if(!ValidaAcceso("busqueda_cliente.php", $_SESSION["paginas"]))
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Fecha de creación Desde</label>
-			<input type="text" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioDesde" name="txtFechaInicioDesde">
 			<label>Empresa</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtEmpresa" name="txtEmpresa">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtEmpresa" name="txtEmpresa">
 		</div>
 		<div class="span5">
 	        <label>Fecha de Creación Hasta</label>
-            <input type="text" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
+            <input type="text" placeholder="<?php echo $V_MSG_PH_FECHA; ?>" class="txtFecha" id="txtFechaInicioHasta" name="txtFechaInicioHasta">
 			<label>Apellido(s)</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtApellido" name="txtApellido">
 		</div>
 		<div class="span1"></div>
 	</div>

@@ -40,25 +40,30 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 	  var errores = [];
 	  var nombre = $("#txtNombre").val();
 	  
-	  if(!ValidaTexto(nombre)){
+	  if(!ValidaTexto(nombre, 100)){
 	  	errores.push(" - El nombre es inválido.");
 	  }
 	  var apellido = $("#txtApellido").val();
 	  
-	  if(!ValidaTexto(apellido)){
+	  if(!ValidaTexto(apellido, 100)){
 	  	errores.push(" - El apellido es inválido.");
 	  }
 	  
 	  var telefono = $("#txtTelefono").val();
 	  
 	  if(!ValidaNumerico(telefono)){
-	  	errores.push(" - El número es inválido.");
+	  	errores.push(" - El número de teléfono es inválido.");
+	  }
+	  else{
+	      if(telefono.length < 8){
+	          errores.push(" - El número de teléfono es inválido.");
+	      }
 	  }
 	  
 	  var direccion = $("#txtDireccion").val();
 	  
 	  if(direccion != ""){ // Opcional
-	  	if(!ValidaTexto(direccion)){
+	  	if(!ValidaTexto(direccion, 100)){
 		  	errores.push(" - La dirección es inválida.");
 		  }
 	  }
@@ -88,23 +93,42 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 			
 			if(ValidarDatos())
 			{
-				$.post("./BO/ModificarDatosUsuario.php", $('#FormPrincipal').serialize(),
-					function(data) {
-					   	var obj = jQuery.parseJSON(data);
-				   		
-				   		var msj = obj.html;
-				   		var sub_msj = obj.errores; 
-				   		
-				   		var estado =  obj.estado;
-				   		if(estado == 'OK') // Exito
-				   		{
-				   			MostrarExito(msj, sub_msj);
-				   		}
-				   		else // Error
-				   		{
-				   			MostrarError(msj, sub_msj);
-				   		}
-			    });
+			    bootbox.dialog({
+                  message: "¿Está seguro de modificar sus datos?",
+                  title: null,
+                  buttons: {
+                    Si: {
+                      label: "Si",
+                      className: "btn-success",
+                      callback: function() {
+                            $.post("./BO/ModificarDatosUsuario.php", $('#FormPrincipal').serialize(),
+                                function(data) {
+                                    var obj = jQuery.parseJSON(data);
+                                    
+                                    var msj = obj.html;
+                                    var sub_msj = obj.errores; 
+                                    
+                                    var estado =  obj.estado;
+                                    if(estado == 'OK') // Exito
+                                    {
+                                        MostrarExito(msj, sub_msj);
+                                    }
+                                    else // Error
+                                    {
+                                        MostrarError(msj, sub_msj);
+                                    }
+                            });
+                        }
+                    },
+                    No: {
+                      label: "No",
+                      className: "btn-info",
+                      callback: function() {
+                        
+                      }
+                    }
+                  }
+                });
 			}
 		});
 
@@ -189,19 +213,19 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 		<div class="span1"></div>
 		<div class="span5">
 			<label>Rut</label>
-			<input type="text" placeholder="" class="input-xlarge disabled" value="<?php echo $usuario["rut"]; ?>" name="rut" disabled >
+			<input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge disabled" value="<?php echo $usuario["rut"]; ?>" name="rut" disabled >
 			<label><div>Nombre(s) <small class="text-error req">*</small></div></label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtNombre" value="<?php echo $usuario["usu_nombre"]; ?>" name="txtNombre">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombre" value="<?php echo $usuario["usu_nombre"]; ?>" name="txtNombre">
 			<label><div>Apellido(s) <small class="text-error req">*</small></div></label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtApellido" value="<?php echo $usuario["usu_apellido"]; ?>" name="txtApellido" >
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtApellido" value="<?php echo $usuario["usu_apellido"]; ?>" name="txtApellido" >
 		</div>
 		<div class="span5">
 			<label><div>Teléfono <small class="text-error req">*</small></div></label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtTelefono" value="<?php echo $usuario["usu_telefono"]; ?>" name="txtTelefono">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtTelefono" value="<?php echo $usuario["usu_telefono"]; ?>" name="txtTelefono">
 			<label>Dirección</label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtDireccion" value="<?php echo $usuario["usu_direccion"]; ?>" name="txtDireccion" >
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDireccion" value="<?php echo $usuario["usu_direccion"]; ?>" name="txtDireccion" >
 			<label><div>Correo <small class="text-error req">*</small></div></label>
-			<input type="text" placeholder="" class="input-xlarge" id="txtCorreo" value="<?php echo $usuario["usu_correo"]; ?>" name="txtCorreo">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreo" value="<?php echo $usuario["usu_correo"]; ?>" name="txtCorreo">
 		</div>
 		<div class="span1"></div>
 	</div>
@@ -229,11 +253,11 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 		<div class="span1"></div>
 		<div class="span5">
 			<label><div>Contraseña Actual <small class="text-error req">*</small></div></label>
-			<input type="password" placeholder="" class="input-xlarge" id="txtPassActual" name="txtPassActual">
+			<input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPassActual" name="txtPassActual">
 			<label><div>Nueva Contraseña <small class="text-error req">*</small></div></label>
-			<input type="password" placeholder="" class="input-xlarge" id="txtPassNueva" name="txtPassNueva">
+			<input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPassNueva" name="txtPassNueva">
 			<label><div>Confirmar Contraseña <small class="text-error req">*</small></div></label>
-			<input type="password" placeholder="" class="input-xlarge" id="txtPassConfirmar" name="txtPassConfirmar">
+			<input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPassConfirmar" name="txtPassConfirmar">
 			<button type="button" class="btn btn-lg btn-primary" id="btnCambiaPass">
 				Cambiar Contraseña
 			</button>

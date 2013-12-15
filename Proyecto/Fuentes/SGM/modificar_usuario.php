@@ -67,6 +67,9 @@ function cargarCampos()
 
 $(function() {
     
+    $("#collapse<?php echo "3"; ?>").collapse('show');
+    $("#busqueda_usuario").addClass("btn-info");
+    
     cargarCampos();
     
     $("#btnVolver").click(function(){
@@ -167,26 +170,31 @@ function ValidarDatos(){
   
   var txtNombreUsuario = $("#txtNombreUsuario").val();
       
-  if(!ValidaTexto(txtNombreUsuario,255)){
+  if(!ValidaTexto(txtNombreUsuario,100)){
     errores.push(" - El nombre es inválido.");
   }
   
   var txtApellido = $("#txtApellido").val();
   
-  if(!ValidaTexto(txtApellido,255)){
+  if(!ValidaTexto(txtApellido,100)){
     errores.push(" - El apellido es inválido.");
   }
   
   var txtDireccion = $("#txtDireccion").val();
   
-  if(!ValidaTexto(txtDireccion,255)){
+  if(!ValidaTexto(txtDireccion,100)){
     errores.push(" - La dirección es inválida.");
   }
   
   var txtTelefono = $("#txtTelefono").val();
   
   if(!ValidaNumerico(txtTelefono)){
-    errores.push(" - El telefóno es inválido.");
+    errores.push(" - El número de telefóno es inválido.");
+  }
+  else{
+      if(txtTelefono.length < 8){
+          errores.push(" - El número de teléfono es inválido.");
+      }
   }
   
   var txtNombreRut = $("#txtNombreRut").val();
@@ -200,7 +208,7 @@ function ValidarDatos(){
   if(txtPass != ""){
     if(!validaFormatoPass(txtPass)){
         errores.push(" - La contraseña es inválida.");
-    }    
+    }
   }
   
   var txtCorreo = $("#txtCorreo").val();
@@ -233,25 +241,25 @@ function ValidarDatos(){
             <div>
                 Nombre(s) Usuario <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreUsuario" name="txtNombreUsuario">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreUsuario" name="txtNombreUsuario">
 
         <label>
             <div>
                 Apellido(s) <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtApellido" name="txtApellido">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtApellido" name="txtApellido">
         
         <label>
             <div>
                 Dirección <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtDireccion" name="txtDireccion">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDireccion" name="txtDireccion">
         
         <label>
             <div>
                 Telefóno <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtTelefono" name="txtTelefono">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtTelefono" name="txtTelefono">
           
     </div>
     <div class="span5">
@@ -259,19 +267,19 @@ function ValidarDatos(){
             <div>
                 Rut <small class="text-error req"></small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtNombreRut" name="txtNombreRut" disabled >
+        <input type="text" placeholder="<?php echo $V_MSG_PH_RUT; ?>" class="input-xlarge" id="txtNombreRut" name="txtNombreRut" disabled >
 
         <label>
             <div>
                 Contraseña <small class="text-error req"></small>
             </div></label>
-        <input type="password" placeholder="" class="input-xlarge" id="txtPass" name="txtPass">
+        <input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPass" name="txtPass">
         
         <label>
             <div>
                 Correo <small class="text-error req">*</small>
             </div></label>
-        <input type="text" placeholder="" class="input-xlarge" id="txtCorreo" name="txtCorreo">
+        <input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtCorreo" name="txtCorreo">
     </div>
     <div class="span1"></div>
 </div>
