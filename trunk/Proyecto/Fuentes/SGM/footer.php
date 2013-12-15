@@ -18,10 +18,19 @@ if($V_DEPURAR){
             <div class="span2">
                 <center><img src="css/images/logo.gif" title="logo" alt="logo" style="height: 50px;" ></center>
             </div>
-            <div class="span10">
+            <div class="span5">
                 <p style="vertical-align: bottom;">
                     Designed and built with all the love in the world by <a href="#">Tracy Padilla</a> and <a href="#">Luis Lizama</a>.
                 </p>
+            </div>
+            <div class="span4 pagination-right">
+                    <p style="vertical-align: bottom;">
+                    <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><?php echo $V_TITULO; ?></span> está distribuido bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Licencia Creative Commons Atribución-CompartirIgual 4.0 Internacional</a>.
+                    </p>
+            </div>
+            <div class="span1">
+                <center><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                    <img alt="Licencia Creative Commons" style="border-width:0;" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></center>
             </div>
         </div>
     </div>

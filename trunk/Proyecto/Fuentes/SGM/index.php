@@ -17,7 +17,11 @@ if(isset($_SESSION['usuario']) == TRUE)
     <script src="bootstrap/js/bootstrap.min.js"></script>  
     <script src="js/jquery.js"></script>
     
+    <!-- Rut -->
+    <script src="js/jquery.Rut.js" type="text/javascript"></script>
+    
     <script type="text/javascript">
+    var validoRut = false;
     $(function() {
         
         $('#divError').hide();
@@ -60,7 +64,7 @@ if(isset($_SESSION['usuario']) == TRUE)
          
          function validaInicioSesion(nombre, pass){
             
-            if(!/^[0-9kK\-]{9,10}$/.test(nombre)){
+            if(!validoRut){
                 return false;
             }
 
@@ -76,6 +80,29 @@ if(isset($_SESSION['usuario']) == TRUE)
             if(!regex.test(key)){
                 event.preventDefault();
                 return false;
+            }
+        });
+        
+        $('#txtUser').Rut({
+          validation: true,
+          format_on: 'keyup',
+          on_error: function(){
+              validoRut = false;
+          },
+          on_success: function(){
+              validoRut = true;
+          }
+        });
+        
+        $('#txtUser').keypress(function(e) {
+            if (e.which == '13') {
+                $("#txtPass").focus();
+            }
+        });
+        
+        $('#txtPass').keypress(function(e) {
+            if (e.which == '13') {
+                $('#formIniciosSesion').submit();
             }
         });
 
@@ -96,7 +123,7 @@ if(isset($_SESSION['usuario']) == TRUE)
                 <h2 class="form-signin-heading">Inicio de sesión</h2>
                 <br>
                 <div class="alert alert-error" style="width: 210px;" id="divError" >
-                  Usuario o Contraseña Invalidos!
+                  - Debe ingresar un RUT y/o Contraseña válida.
                 </div>
                 <input id="txtUser" type="text" class="form-control texto" placeholder="Usuario" autofocus> 
                 <br>
@@ -108,5 +135,6 @@ if(isset($_SESSION['usuario']) == TRUE)
         </div>
     </section>
 </center>
+
 </body>
 </html>  

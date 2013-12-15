@@ -73,7 +73,7 @@ if(strlen($usu_id) > 0)
 	}
 }
 else{
-	$msg = "Usuario inválido";
+	$msg = "El Usuario no es válido";
 	$data["estado"] = "KO";
 }
 

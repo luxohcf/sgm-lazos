@@ -11,6 +11,7 @@ if(!ValidaAcceso("crear_cliente.php", $_SESSION["paginas"]))
 
 ?>
 <script type="text/javascript">
+var validoRut = false;
 
 $(function() {
     
@@ -63,6 +64,17 @@ $(function() {
     $("#btnLimpiar").click(function(){
         Limpiar();
     });
+    
+    $('#txtRut').Rut({
+        validation: true,
+        format_on: 'keyup',
+        on_error: function(){
+            validoRut = false;
+        },
+        on_success: function(){
+            validoRut = true;
+        }
+    });
 });
 
 function Limpiar(){
@@ -72,6 +84,7 @@ function Limpiar(){
     $("#txtApellido").val("");
     $("#txtNombreCliente").val("");
     $("#txtNombreEmpresa").val("");
+    validoRut = false;
 }
 
 function ValidarDatos(){
@@ -101,11 +114,9 @@ function ValidarDatos(){
         errores.push(" - La Dirección es inválida.");
       }
       
-      var txtRut = $("#txtRut").val();
-
-      if(!ValidaRut(txtRut)){
-        errores.push(" - El Rut es inválido.");
-        }
+      if(!validoRut){
+        errores.push(" - El rut es inválido.");
+      }
       
       var correo = $("#txtCorreo").val();
       

@@ -12,6 +12,8 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 ?>
 
 <script type="text/javascript" >
+    var validoRut = false;
+
 	$(function() {
 	    
 	    $("#collapse<?php echo "3"; ?>").collapse('show');
@@ -63,11 +65,23 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 		    }
 		});
 		
+		$('#txtRut').Rut({
+            validation: true,
+            format_on: 'keyup',
+            on_error: function(){
+                validoRut = false;
+            },
+            on_success: function(){
+                validoRut = true;
+            }
+        });
+		
 		$("#btnLimpiar").click(function(){
             $("#txtRut").val("");
             $("#txtNombre").val("");
             $("#txtFechaInicioDesde").val("");
             $("#txtFechaInicioHasta").val("");
+            validoRut = false;
             oTabla.fnReloadAjax();
         });
 
@@ -79,9 +93,9 @@ if(!ValidaAcceso("busqueda_usuario.php", $_SESSION["paginas"]))
 		
 	    var txtRut = $("#txtRut").val();
 	    if(txtRut != ""){
-	    	if(!ValidaRut(txtRut)){
-	    		errores.push(" - El Rut es inválido.");
-	    	}
+	    	if(!validoRut){
+                errores.push(" - El rut es inválido.");
+            }
 	    }
 	    
 	    var txtNombre = $("#txtNombre").val();
