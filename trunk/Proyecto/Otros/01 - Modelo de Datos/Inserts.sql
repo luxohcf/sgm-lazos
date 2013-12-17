@@ -48,7 +48,8 @@ VALUES
 (11,'Buscar','busqueda_usuario.php',1,'tracy',now(),null,3,'css/images/Search.png'),
 (12,'Registrar','crear_solicitudes.php',1,'tracy',now(),null,4,'css/images/registrar.jpg'),
 (13,'Buscar','busqueda_solicitudes.php',1,'tracy',now(),null,4,'css/images/Search.png'),
-(14,'Buscar','ver_estadisticas.php',1,'tracy',now(),null,5,'css/images/Search.png');
+(14,'Buscar','ver_estadisticas.php',1,'tracy',now(),null,5,'css/images/Search.png'),
+(15,'Actual','situacion_actual.php',1,'tracy',now(),null,5,'css/images/Search.png');
 
 /* Asociacion de modulos a roles */
 INSERT INTO `tsg_modulo_tsg_rol`(`tsg_rolrol_id`,`tsg_modulomod_id`) 
@@ -66,6 +67,7 @@ VALUES
 (1,12),
 (1,13),
 (1,14),
+(1,15),
 (2,6),
 (2,7),
 (2,8),
@@ -74,6 +76,7 @@ VALUES
 (2,11),
 (2,13),
 (2,14),
+(2,15),
 (3,6),
 (3,7),
 (3,9),

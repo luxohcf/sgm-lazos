@@ -17,7 +17,7 @@ else{
 }*/
 
 /**/
-
+/*
 $copia = preg_split('/;/', "padilla.tracy.s@gmail.com;luxohcf@gmail.com");
 $copia_aux = array();
 
@@ -80,5 +80,48 @@ if($ret == TRUE){
 }
 else{
     echo $objMail->ErrorInfo;
+}*/
+
+
+$ddlEstadoSolicitud = array();
+
+if($ddlEstadoSolicitud != null && is_array($ddlEstadoSolicitud) && count($ddlEstadoSolicitud) > 0)
+{
+    echo "if 1";
+    
+    if(isset($ddlEstadoSolicitud["2"]))
+    {
+        echo "if 2";
+    }
+    else{
+        echo "else 2";
+    }
 }
+else{
+    echo "else 1";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
