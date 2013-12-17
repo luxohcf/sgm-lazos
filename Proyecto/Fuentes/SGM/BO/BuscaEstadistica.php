@@ -93,39 +93,134 @@ if($mySqli->affected_rows > 0)
             $pry = $row["tsg_proyectopro_id"];
             $proyectos[$row["tsg_proyectopro_id"]] = "Cliente: ".$row["cli_nombre"] ." - Proyecto: ". $row["pro_nombre"];
             $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Fecha";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Total";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Creadas";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Asignadas";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Resueltas";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Rechazadas";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Cerradas";
-            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";
-        }
-        else{
-            if($pry != $row["tsg_proyectopro_id"])
+            
+            if($ddlEstadoSolicitud != null && is_array($ddlEstadoSolicitud) && count($ddlEstadoSolicitud) > 0)
             {
-                $pry = $row["tsg_proyectopro_id"];
-                $x = 0;
-                $proyectos[$row["tsg_proyectopro_id"]] = "Cliente: ".$row["cli_nombre"] ." - Proyecto: ". $row["pro_nombre"];
-                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Fecha";
+                
+                if(in_array("1", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Creadas";
+                }
+                if(in_array("2", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Asignadas";
+                }
+                if(in_array("3", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Resueltas";
+                }
+                if(in_array("4", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Rechazadas";
+                }
+                if(in_array("5", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Cerradas";
+                }
+                if(in_array("6", $ddlEstadoSolicitud))
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";
+                }
+            }
+            else
+            {
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Total";
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Creadas";
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Asignadas";
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Resueltas";
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Rechazadas";
                 $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Cerradas";
-                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";    
+            }
+        }
+        else
+        {
+            if($pry != $row["tsg_proyectopro_id"])
+            {
+                $pry = $row["tsg_proyectopro_id"];
+                $x = 0;
+                $proyectos[$row["tsg_proyectopro_id"]] = "Cliente: ".$row["cli_nombre"] ." - Proyecto: ". $row["pro_nombre"];
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Fecha";
+                
+                if($ddlEstadoSolicitud != null && is_array($ddlEstadoSolicitud) && count($ddlEstadoSolicitud) > 0)
+                {
+                    if(in_array("1", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Creadas";
+                    }
+                    if(in_array("2", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Asignadas";
+                    }
+                    if(in_array("3", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Resueltas";
+                    }
+                    if(in_array("4", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Rechazadas";
+                    }
+                    if(in_array("5", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Cerradas";
+                    }
+                    if(in_array("6", $ddlEstadoSolicitud))
+                    {
+                        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";
+                    }
+                }
+                else 
+                {
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Total";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Creadas";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Asignadas";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Resueltas";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Rechazadas";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Cerradas";
+                    $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = "Desestimadas";	
+                }
             }
         }
         $x++;
         $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_fecha"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_total"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_creadas"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_asignadas"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_resueltas"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_rechazadas"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_cerradas"];
-        $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_desestimadas"];
+        
+        if($ddlEstadoSolicitud != null && is_array($ddlEstadoSolicitud) && count($ddlEstadoSolicitud) > 0)
+        {
+            if(in_array("1", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_creadas"];
+            }
+            if(in_array("2", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_asignadas"];
+            }
+            if(in_array("3", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_resueltas"];
+            }
+            if(in_array("4", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_rechazadas"];
+            }
+            if(in_array("5", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_cerradas"];
+            }
+            if(in_array("6", $ddlEstadoSolicitud))
+            {
+                $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_desestimadas"];
+            }
+        }
+        else
+        {
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_total"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_creadas"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_asignadas"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_resueltas"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_rechazadas"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_cerradas"];
+            $super_array[$row["tsg_clientecli_id"]][$row["tsg_proyectopro_id"]][$x][] = $row["dis_desestimadas"];   
+        }
     }
 }
 else {
@@ -134,16 +229,6 @@ else {
     echo json_encode($data);
     die;
 }
-    
-/*
-
-var array = [
-              ['Year', 'Sales', 'Expenses'],
-              ['2004',  1000,      400],
-              ['2005',  1170,      460],
-              ['2006',  660,       1120],
-              ['2007',  1030,      540]
-            ]; */
 
 $data["array"] = $super_array;
 $data["proyectos"] = $proyectos;

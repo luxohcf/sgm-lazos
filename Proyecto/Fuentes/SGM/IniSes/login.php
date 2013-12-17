@@ -26,12 +26,34 @@ if($mySqli->affected_rows > 0) // Si los datos son validos
 		$nombre = $row['usu_nombre'];
 		$usu_id = $row['usu_id'];
 	}
-	$mySqli->close();
 	
 	@session_start(); // Guardo la sesion
     $_SESSION['usuario'] = $nombre;
     $_SESSION['id_usuario'] = $usu_id;
-    $data["error"] = FALSE; 
+    $data["error"] = FALSE;
+    
+    // Obtener los roles asociados
+    $query = "SELECT rol.rol_id, rol.rol_nombre
+              FROM tsg_rol rol
+              INNER JOIN tsg_usuario_tsg_rol usu_rol
+              ON rol.rol_id = usu_rol.tsg_rolrol_id
+              WHERE rol.rol_activo = 1 AND
+                    usu_rol.tsg_usuariousu_id = $usu_id ";
+                    
+    $res = $mySqli->query($query);
+    {
+        if($mySqli->affected_rows > 0) 
+        {
+            $roles = array();
+            
+            while($row = $res->fetch_assoc())
+            {
+                 $roles[$row["rol_id"]] = $row["rol_nombre"]; 
+            }
+            $_SESSION['roles'] = $roles;
+        }
+    }
+    $mySqli->close();
 }
 else /* Si no lo son retornar un mensaje */
 {

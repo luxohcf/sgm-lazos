@@ -299,7 +299,7 @@ if(isset($_SESSION['usuario']) == FALSE)
 <style type="text/css">
 @import "css/dataTables.bootstrap.css";
 </style>
-<style>
+<style type="text/css">
 
 #divLoading{
   position: fixed;
