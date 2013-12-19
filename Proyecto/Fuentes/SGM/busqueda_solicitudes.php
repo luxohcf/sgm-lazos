@@ -100,7 +100,7 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 
 		var txtNombreSolicitud = $("#txtNombreSolicitud").val();
 		if (txtNombreSolicitud != "") {
-			if (!ValidaTexto(txtNombreSolicitud)) {
+			if (!ValidaTexto(txtNombreSolicitud, 100)) {
 				errores.push(" - El nombre es inválido.");
 			}
 		}
@@ -179,7 +179,7 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 			<label>Código Solicitud</label>
 			<input type="text" placeholder="<?php echo $V_MSG_PH_NUMERO; ?>" class="input-xlarge" id="txtCodigoSolicitud" name="txtCodigoSolicitud">
 			<label>Nombre Solicitud</label>
-			<input type="text" placeholder="<?php echo $V_MSG_PH_MAIL; ?>" class="input-xlarge" id="txtNombreSolicitud" name="txtNombreSolicitud">
+			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtNombreSolicitud" name="txtNombreSolicitud">
 		</div>
 		<div class="span5">
 			<?php

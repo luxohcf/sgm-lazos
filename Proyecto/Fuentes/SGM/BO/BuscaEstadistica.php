@@ -64,10 +64,10 @@ if($ddlCliente != null && is_array($ddlCliente) && count($ddlCliente) > 0)
 }
 
 if($txtFechaInicioDesde != null && strlen($txtFechaInicioDesde) > 0){
-    $query .= " AND DATE_FORMAT(est.dis_fecha,'%d-%m-%Y') >= '$txtFechaInicioDesde'";
+    $query .= " AND est.dis_fecha >= STR_TO_DATE('$txtFechaInicioDesde','%d-%m-%Y')";
 }
 if($txtFechaInicioHasta != null && strlen($txtFechaInicioHasta) > 0){
-    $query .= " AND DATE_FORMAT(est.dis_fecha,'%d-%m-%Y') <= '$txtFechaInicioHasta'";
+    $query .= " AND est.dis_fecha <= STR_TO_DATE('$txtFechaInicioHasta','%d-%m-%Y')";
 }
 
 $query .= " ORDER BY est.tsg_proyectopro_id, est.dis_fecha ASC; ";

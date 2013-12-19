@@ -92,22 +92,22 @@ if($ddlDestacado != null && strlen($ddlDestacado) > 0 && $ddlDestacado != "-1"){
 }
 
 if($FechaInicioDesde != null && strlen($FechaInicioDesde) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_ini,'%d-%m-%Y') >= '$FechaInicioDesde'";
+	$query .= " AND pry.pro_fecha_ini >= STR_TO_DATE('$FechaInicioDesde','%d-%m-%Y')";
 }
 if($FechaTerminoDesde != null && strlen($FechaTerminoDesde) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_term,'%d-%m-%Y') >= '$FechaTerminoDesde'";
+	$query .= " AND pry.pro_fecha_term >= STR_TO_DATE('$FechaTerminoDesde','%d-%m-%Y')";
 }
 if($FechaGarantiaDesde != null && strlen($FechaGarantiaDesde) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_garan,'%d-%m-%Y') >= '$FechaGarantiaDesde'";
+	$query .= " AND pry.pro_fecha_garan >= STR_TO_DATE('$FechaGarantiaDesde','%d-%m-%Y')";
 }
 if($FechaInicioHasta != null && strlen($FechaInicioHasta) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_ini,'%d-%m-%Y') <= '$FechaInicioHasta'";
+	$query .= " AND pry.pro_fecha_ini <= STR_TO_DATE('$FechaInicioHasta','%d-%m-%Y')";
 }
 if($FechaTerminoHasta != null && strlen($FechaTerminoHasta) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_term,'%d-%m-%Y') <= '$FechaTerminoHasta'";
+	$query .= " AND pry.pro_fecha_term <= STR_TO_DATE('$FechaTerminoHasta','%d-%m-%Y')";
 }
 if($FechaGarantiaHasta != null && strlen($FechaGarantiaHasta) > 0){
-	$query .= " AND DATE_FORMAT(pry.pro_fecha_garan,'%d-%m-%Y') <= '$FechaGarantiaHasta'";
+	$query .= " AND pry.pro_fecha_garan <= STR_TO_DATE('$FechaGarantiaHasta','%d-%m-%Y')";
 }
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);

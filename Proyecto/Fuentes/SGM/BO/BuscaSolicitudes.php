@@ -120,10 +120,10 @@ else // Búsqueda normal
 		$query = substr($query,0, -1).")";
 	}
 	if($txtFechaInicioDesde != null && strlen($txtFechaInicioDesde) > 0){
-		$query .= " AND DATE_FORMAT(tick.tic_fecha_crea,'%d-%m-%Y') >= '$txtFechaInicioDesde'";
+		$query .= " AND tick.tic_fecha_crea >= STR_TO_DATE('$txtFechaInicioDesde','%d-%m-%Y')";
 	}
 	if($txtFechaInicioHasta != null && strlen($txtFechaInicioHasta) > 0){
-		$query .= " AND DATE_FORMAT(tick.tic_fecha_crea,'%d-%m-%Y') <= '$txtFechaInicioHasta'";
+		$query .= " AND tick.tic_fecha_crea <= STR_TO_DATE('$txtFechaInicioHasta','%d-%m-%Y')";
 	}
 }
 

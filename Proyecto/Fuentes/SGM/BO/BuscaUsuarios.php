@@ -30,10 +30,10 @@ if($Nombre != null && strlen($Nombre) > 0){
 
 
 if($FechaInicioDesde != null && strlen($FechaInicioDesde) > 0){
-	$query .= " AND DATE_FORMAT(usu.usu_fecha_crea,'%d-%m-%Y') >= '$FechaInicioDesde'";
+	$query .= " AND usu.usu_fecha_crea >= STR_TO_DATE('$FechaInicioDesde','%d-%m-%Y')";
 }
 if($FechaInicioHasta != null && strlen($FechaInicioHasta) > 0){
-	$query .= " AND DATE_FORMAT(usu.usu_fecha_crea,'%d-%m-%Y') <= '$FechaInicioHasta'";
+	$query .= " AND usu.usu_fecha_crea <= STR_TO_DATE('$FechaInicioHasta','%d-%m-%Y')";
 }
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);

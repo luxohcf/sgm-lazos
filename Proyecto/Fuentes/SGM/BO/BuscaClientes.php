@@ -37,10 +37,10 @@ if($Empresa != null && strlen($Empresa) > 0){
 }
 
 if($FechaInicioDesde != null && strlen($FechaInicioDesde) > 0){
-	$query .= " AND DATE_FORMAT(cli_fecha_ini,'%d-%m-%Y') >= '$FechaInicioDesde'";
+	$query .= " AND cli_fecha_ini >= STR_TO_DATE('$FechaInicioDesde','%d-%m-%Y')";
 }
 if($FechaInicioHasta != null && strlen($FechaInicioHasta) > 0){
-	$query .= " AND DATE_FORMAT(cli_fecha_ini,'%d-%m-%Y') <= '$FechaInicioHasta'";
+	$query .= " AND cli_fecha_ini <= STR_TO_DATE('$FechaInicioHasta','%d-%m-%Y')";
 }
 
 $mySqli = new mysqli($V_HOST, $V_USER, $V_PASS, $V_BBDD);

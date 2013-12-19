@@ -95,7 +95,7 @@ if(!ValidaAcceso("busqueda_proyecto.php", $_SESSION["paginas"]))
 	    
 	    var txtNombreProyecto = $("#txtNombreProyecto").val();
 	    if(txtNombreProyecto != ""){
-	    	if(!ValidaTexto(txtNombreProyecto)){
+	    	if(!ValidaTexto(txtNombreProyecto, 100)){
 	    		errores.push(" - El nombre de proyecto es inválido.");
 	    	}
 	    }
