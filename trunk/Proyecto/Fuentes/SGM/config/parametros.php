@@ -81,7 +81,7 @@ $V_PASS_SMTP = "sgmlazos";
 $V_FROM      = "noreply@sgm-lazos.esy.es";
 $V_FROM_NAME = "SGM-Lazos";
 
-$V_DEPURAR = TRUE;*/
+$V_DEPURAR = TRUE; */
  
 
 require_once("comunes.php");
