@@ -47,8 +47,18 @@ if ($mySqli -> affected_rows > 0)
     $mySqli -> close();
 }
 
+// determino si soy desarrollador
+$roles = $_SESSION['roles'];
+$soy_dev = false;
+
+if(is_array($roles) && count($roles) == 1 && $roles[4] != ""){
+    $soy_dev = true;
+}
+
 ?>
 <script type="text/javascript">
+
+    var guardoObs = false;
 
     function cargarCampos()
     {
@@ -231,6 +241,14 @@ if ($mySqli -> affected_rows > 0)
                         if(estado == 'OK') // Exito
                         {
                             MostrarExito(msj, sub_msj);
+                            <?php
+                            if($soy_dev == TRUE){
+                            ?>
+                                $("#btnGuardar").prop('disabled', true);
+                                $("#btnGuardaObservacion").prop('disabled', true);
+                            <?php
+                            }
+                            ?>
                             oTablaH.fnReloadAjax();
                         }
                         else // Error
@@ -277,6 +295,39 @@ if ($mySqli -> affected_rows > 0)
                 }
             }
         });
+        
+        <?php
+        if($soy_dev == TRUE){
+        ?>
+            $("#txtNombre").prop('disabled', true);
+            $("#txtDescripcion").prop('disabled', true);
+            $("#txtCorreoCopia").prop('disabled', true);
+            
+            $('#ddlProyecto').prop('disabled',true);
+            $('#ddlProyecto').selectpicker('refresh');
+            
+            $('#ddlPrioridad').prop('disabled',true);
+            $('#ddlPrioridad').selectpicker('refresh');
+            
+            $('#ddlCategoria').prop('disabled',true);
+            $('#ddlCategoria').selectpicker('refresh');
+            
+            $('#ddlEstado').find('[value=6]').prop('disabled',true);
+            $('#ddlEstado').find('[value=5]').prop('disabled',true);
+            $('#ddlEstado').find('[value=1]').prop('disabled',true);
+            $('#ddlEstado').find('[value=2]').prop('disabled',true);
+            $('#ddlEstado').selectpicker('refresh');
+            
+            // Si no esta asignada a mi, deshabilito botones
+            var usu = $('#ddlUsuario').val();
+            if(<?php echo $usu_id; ?> != usu){
+                $("#btnGuardar").prop('disabled', true);
+                $("#btnGuardaObservacion").prop('disabled', true);
+            }
+            
+        <?php
+        }
+        ?>
 
     });
     
@@ -291,6 +342,7 @@ if ($mySqli -> affected_rows > 0)
                 var estado =  obj.estado;
                 if(estado == 'OK') // Exito
                 {
+                    guardoObs = true;
                     MostrarExito(msj, sub_msj);
                 }
                 else // Error
@@ -388,6 +440,27 @@ if ($mySqli -> affected_rows > 0)
               });
           }
       }
+      
+      if(guardoObs == false){
+         errores.push(" - Debe ingresar al menos una observación."); 
+      }
+      
+      <?php // Si soy desarrollador
+      if($soy_dev == TRUE){
+      ?>
+        var estado = $('#ddlEstado').val();
+        if(estado != 3 && estado != 4){
+            errores.push(" - Debe seleccionar un estado válido para la solicitud.");
+        }
+        
+        var usu = $('#ddlUsuario').val();
+        if(<?php echo $usu_id; ?> == usu){
+            errores.push(" - Debe asignar la solicitud a un usuario válido.");
+        }
+
+      <?php
+      }
+      ?>
 
       if(errores.length > 0)
       {

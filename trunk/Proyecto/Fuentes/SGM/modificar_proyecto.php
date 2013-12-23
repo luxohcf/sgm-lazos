@@ -471,7 +471,7 @@ if ($mySqli -> affected_rows > 0)
 
 			<label>
 				<div>
-					Duración <small class="text-error req">*</small>
+					Duración garantía <small class="text-error req">*</small>
 				</div></label>
 			<input type="text" placeholder="<?php echo $V_MSG_PH_TEXT; ?>" class="input-xlarge" id="txtDuracion" value="<?php echo $proyecto["pro_duracion"]; ?>" name="txtDuracion" disabled>
 			<?php

@@ -55,6 +55,31 @@ if(strlen($usu_id) > 0)
         {
             $idSolicitud = $mySqli->insert_id;
             $msg = "Se ha creado la solicitud $idSolicitud correctamente";
+            
+            $queryInsertH = "INSERT INTO tsg_historico_ticket (his_nombre,
+                                                          his_fecha,
+                                                          his_descrip,
+                                                          tsg_estado_ticketest_id,
+                                                          tsg_tickettic_id,
+                                                          tsg_usuariousu_id,
+                                                          tsg_proyectopro_id,
+                                                          tsg_prioridadpri_id,
+                                                          tsg_categoriacat_id)
+                        SELECT tick.tic_nombre,
+                               tick.tic_fecha_crea,
+                               tick.tic_descripcion,
+                               tick.tsg_estado_ticketest_id,
+                               tick.tic_id,
+                               tick.tsg_usuariousu_id,
+                               tick.tsg_proyectopro_id,
+                               tick.tsg_prioridadpri_id,
+                               tick.tsg_categoriacat_id
+
+                        FROM tsg_ticket tick
+                        WHERE tick.tic_id = $idSolicitud ";
+                        
+            $res = $mySqli->query($queryInsertH);
+                        
             $mySqli->commit();
             $mySqli->close();
             $data["estado"] = "OK";
