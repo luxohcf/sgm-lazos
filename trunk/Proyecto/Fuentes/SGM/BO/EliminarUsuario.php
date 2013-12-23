@@ -25,7 +25,7 @@ if(strlen($usu_id) > 0 && strlen($IdUsuario) > 0)
         $mySqli->query("SET CHARACTER SET 'utf8'");
         
         $queryS = "SELECT 1 FROM tsg_ticket tick
-                   WHERE tick.tsg_usuariousu_id = $usu_id AND tick.tsg_estado_ticketest_id NOT IN (5,6); ";
+                   WHERE tick.tsg_usuariousu_id = $IdUsuario AND tick.tsg_estado_ticketest_id NOT IN (5,6); ";
         
         $res = $mySqli->query($queryS);
         
