@@ -17,6 +17,12 @@ $ddlUsuario = (isset($_POST['ddlUsuario']))? $_POST['ddlUsuario'] : NULL;
 $ddlCliente = (isset($_POST['ddlCliente']))? $_POST['ddlCliente'] : NULL;
 $hdnIdUsuario = (isset($_POST['hdnIdUsuario']))? $_POST['hdnIdUsuario'] : NULL;
 
+$roles = $_SESSION['roles'];
+
+if(is_array($roles) && count($roles) == 1 && $roles[4] != ""){
+    $hdnIdUsuario = $_SESSION['id_usuario'];
+}
+
 
 $query = "SELECT DISTINCT 
 				tick.tic_destcado,

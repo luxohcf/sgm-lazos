@@ -7,6 +7,14 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 	echo $V_ACCES_DENIED;
 	exit();
 }
+
+$roles = $_SESSION['roles'];
+$soy_dev = false;
+
+if(is_array($roles) && count($roles) == 1 && $roles[4] != ""){
+    $soy_dev = true;
+}
+
 ?>
 
 <script type="text/javascript" >
@@ -14,7 +22,20 @@ if (!ValidaAcceso("busqueda_solicitudes.php", $_SESSION["paginas"])) {
 		
 		$("#hdnIdUsuarioAux").val("<?php echo $_SESSION["id_usuario"] ?>");
 		
-		$("#collapse<?php echo "4"; ?>").collapse('show');
+		<?php
+		if($soy_dev == TRUE){
+	    ?>
+	       $("#collapse1").collapse('show');
+        <?php    
+        } 
+        else
+        {
+        ?>
+            $("#collapse4").collapse('show');
+        <?php
+        }
+        ?>
+
         $("#busqueda_solicitudes").addClass("btn-info");
 
 		var oTabla = $('#tblResultados').dataTable({

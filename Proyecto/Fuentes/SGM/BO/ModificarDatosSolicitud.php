@@ -32,31 +32,17 @@ if(strlen($usu_id) > 0 && strlen($hdnIdSolicitud) > 0 )
         $mySqli->query("SET NAMES 'utf8'");
         $mySqli->query("SET CHARACTER SET 'utf8'");
         
-        $queryInsert = "INSERT INTO tsg_historico_ticket (his_nombre,
-                                                          his_fecha,
-                                                          his_descrip,
-                                                          tsg_estado_ticketest_id,
-                                                          tsg_tickettic_id,
-                                                          tsg_usuariousu_id,
-                                                          tsg_proyectopro_id,
-                                                          tsg_prioridadpri_id,
-                                                          tsg_categoriacat_id)
-                        SELECT tick.tic_nombre,
-                               tick.tic_fecha_crea,
-                               tick.tic_descripcion,
-                               tick.tsg_estado_ticketest_id,
-                               tick.tic_id,
-                               tick.tsg_usuariousu_id,
-                               tick.tsg_proyectopro_id,
-                               tick.tsg_prioridadpri_id,
-                               tick.tsg_categoriacat_id
-
-                        FROM tsg_ticket tick
-                        WHERE tick.tic_id = $hdnIdSolicitud ";
-        
-        $res = $mySqli->query($queryInsert);
-
-        $queryUpdUsu = "UPDATE tsg_ticket SET
+        $roles = $_SESSION['roles'];
+        if(is_array($roles) && count($roles) == 1 && $roles[4] != ""){
+            $queryUpdUsu = "UPDATE tsg_ticket SET
+                             tic_fecha_crea = NOW()
+                            ,tsg_estado_ticketest_id = '$ddlEstado'
+                            ,tsg_usuariousu_id = '$ddlUsuario'
+                            
+                        WHERE tic_id = $hdnIdSolicitud ";
+        }
+        else{
+            $queryUpdUsu = "UPDATE tsg_ticket SET
                             
                              tic_nombre = '$txtNombre'
                             ,tic_fecha_crea = NOW()
@@ -66,8 +52,10 @@ if(strlen($usu_id) > 0 && strlen($hdnIdSolicitud) > 0 )
                             ,tsg_proyectopro_id = '$ddlProyecto'
                             ,tsg_prioridadpri_id = '$ddlPrioridad'
                             ,tsg_categoriacat_id = '$ddlCategoria'
+                            ,tsg_tic_correo_en_copia = '$txtCorreoCopia'
                             
-                        WHERE tic_id = $hdnIdSolicitud ";
+                        WHERE tic_id = $hdnIdSolicitud ";   
+        }
 
         $res = $mySqli->query($queryUpdUsu);
 
@@ -76,6 +64,31 @@ if(strlen($usu_id) > 0 && strlen($hdnIdSolicitud) > 0 )
             if($mySqli->affected_rows > 0)
             {
                 $msg = "Se han guardado los cambios correctamente";
+                
+                        $queryInsert = "INSERT INTO tsg_historico_ticket (his_nombre,
+                                                          his_fecha,
+                                                          his_descrip,
+                                                          tsg_estado_ticketest_id,
+                                                          tsg_tickettic_id,
+                                                          tsg_usuariousu_id,
+                                                          tsg_proyectopro_id,
+                                                          tsg_prioridadpri_id,
+                                                          tsg_categoriacat_id)
+                                SELECT tick.tic_nombre,
+                                       tick.tic_fecha_crea,
+                                       tick.tic_descripcion,
+                                       tick.tsg_estado_ticketest_id,
+                                       tick.tic_id,
+                                       tick.tsg_usuariousu_id,
+                                       tick.tsg_proyectopro_id,
+                                       tick.tsg_prioridadpri_id,
+                                       tick.tsg_categoriacat_id
+        
+                                FROM tsg_ticket tick
+                                WHERE tick.tic_id = $hdnIdSolicitud ";
+                
+                $res = $mySqli->query($queryInsert);
+        
                 $mySqli->commit();
                 $mySqli->close();
                 $data["estado"] = "OK";

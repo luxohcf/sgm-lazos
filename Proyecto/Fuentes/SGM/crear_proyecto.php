@@ -197,7 +197,7 @@ function ValidarDatos(){
 
         <label>
             <div>
-                Duración <small class="text-error req">*</small>
+                Duración garantía <small class="text-error req">*</small>
             </div></label>
         <input type="text" placeholder="" class="input-xlarge" id="txtDuracion" name="txtDuracion" disabled>
         <?php

@@ -200,10 +200,14 @@ function ValidarDatos(){
   var txtPass = $("#txtPass").val();
   
   if(txtPass != ""){
-    if(!validaFormatoPass(txtPass)){
-        errores.push(" - La contraseña es inválida.");
-    }
+      var passV = $("#txtPassConfirmar").val();
+    
+      if (!validaFormatoPass(txtPass) || !validaFormatoPass(passV) || (txtPass != passV)) {
+        errores.push(" - Contraseña invalida, o no coinciden");
+      } 
   }
+  
+
   
   var txtCorreo = $("#txtCorreo").val();
   
@@ -269,6 +273,12 @@ function ValidarDatos(){
             </div></label>
         <input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPass" name="txtPass">
         
+        <label>
+            <div>
+                Confirmar Contraseña <small class="text-error req">*</small>
+            </div></label>
+        <input type="password" placeholder="<?php echo $V_MSG_PH_PASS; ?>" class="input-xlarge" id="txtPassConfirmar" name="txtPassConfirmar">
+            
         <label>
             <div>
                 Correo <small class="text-error req">*</small>

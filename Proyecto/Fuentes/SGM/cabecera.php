@@ -190,8 +190,8 @@ if(isset($_SESSION['usuario']) == FALSE)
         $('.txtFecha').datepicker({
             format: "dd-mm-yyyy",
             todayBtn: "linked",
-            language: "es"//,
-            //endDate: "+"
+            language: "es",
+            autoclose: true
         });
 	  	
 	});
