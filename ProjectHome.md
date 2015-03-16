@@ -1,0 +1,1 @@
+La empresa Lazos S.A solicita un sistema para la gestión de la post-entrega de sus sistemas desarrollados, actualmente se encuentra un sistema de ticket para la atención al cliente, pero no se encuentra un sistema que cubra la necesidad tanto para la empresa y también para sus propios clientes
